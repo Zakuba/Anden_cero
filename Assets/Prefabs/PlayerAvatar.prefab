@@ -13,7 +13,8 @@ GameObject:
   - component: {fileID: 5322985985516838060}
   - component: {fileID: 72523261959232536}
   - component: {fileID: 8231072240389664256}
-  - component: {fileID: 1477715810013756358}
+  - component: {fileID: 7084398118801446634}
+  - component: {fileID: 8469811128505122388}
   m_Layer: 0
   m_Name: PlayerAvatar
   m_TagString: Untagged
@@ -143,7 +144,7 @@ MonoBehaviour:
   AutoObjectParentSync: 1
   SyncOwnerTransformWhenParented: 1
   AllowOwnerToParent: 0
---- !u!114 &1477715810013756358
+--- !u!114 &7084398118801446634
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -152,11 +153,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 6023118608644461741}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e96cb6065543e43c4a752faaa1468eb1, type: 3}
+  m_Script: {fileID: 11500000, guid: 690dade1818d815459b64e3a2b05820e, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.Components.NetworkTransform
+  m_EditorClassIdentifier: Assembly-CSharp::ClientNetworkTransform
   ShowTopMostFoldoutHeaderGroup: 1
-  NetworkTransformExpanded: 0
+  NetworkTransformExpanded: 1
   AutoOwnerAuthorityTickOffset: 1
   PositionInterpolationType: 0
   RotationInterpolationType: 0
@@ -189,3 +190,17 @@ MonoBehaviour:
   SwitchTransformSpaceWhenParented: 0
   Interpolate: 1
   SlerpPosition: 0
+--- !u!114 &8469811128505122388
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6023118608644461741}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 00fa75de104177b45b4a91e448d16a70, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::TempMovementForSync
+  ShowTopMostFoldoutHeaderGroup: 1
+  speed: 3
