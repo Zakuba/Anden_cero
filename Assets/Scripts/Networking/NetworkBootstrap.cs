@@ -1,5 +1,6 @@
 using Unity.Netcode;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class NetworkBootstrap : MonoBehaviour
@@ -9,15 +10,32 @@ public class NetworkBootstrap : MonoBehaviour
 
     private void Awake()
     {
-        hostButton.onClick.AddListener(OnHostClicked);
+        if (hostButton != null)
+        {
+            hostButton.onClick.AddListener(OnHostClicked);
+        }
     }
 
     private void OnHostClicked()
     {
+        if (NetworkManager.Singleton == null)
+        {
+            Debug.LogError("No se encontró el NetworkManager en la escena.");
+            return;
+        }
+
+        // Verificamos que Scene Management esté habilitado
+        if (!NetworkManager.Singleton.NetworkConfig.EnableSceneManagement)
+        {
+            Debug.LogWarning("Enable Scene Management debe estar tildado en el NetworkManager para cargar escenas en red.");
+        }
+
         if (NetworkManager.Singleton.StartHost())
         {
             Debug.Log("Host inicializado correctamente.");
-            NetworkManager.Singleton.SceneManager.LoadScene(gameSceneName, UnityEngine.SceneManagement.LoadSceneMode.Single);
+            
+            // Carga autoritativa en red: traslada a todos los clientes a la escena de juego
+            NetworkManager.Singleton.SceneManager.LoadScene(gameSceneName, LoadSceneMode.Single);
         }
         else
         {
