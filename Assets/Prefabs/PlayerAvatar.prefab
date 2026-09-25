@@ -16,6 +16,7 @@ GameObject:
   - component: {fileID: 7084398118801446634}
   - component: {fileID: 8469811128505122388}
   - component: {fileID: 6785377418466255797}
+  - component: {fileID: 262425994612966626}
   m_Layer: 0
   m_Name: PlayerAvatar
   m_TagString: Untagged
@@ -235,3 +236,26 @@ CharacterController:
   m_SkinWidth: 0.08
   m_MinMoveDistance: 0.001
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &262425994612966626
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6023118608644461741}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 52f079781eb8d7b429f51dcd0888b6c0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerControladorBomba
+  ShowTopMostFoldoutHeaderGroup: 1
+  bombPrefab: {fileID: 6099856826827984316, guid: a368f4f3cc921e943942c1791fea6f11, type: 3}
+  gridSize: 2.5
+  bombTimer: 3
+  explosionRange: 1
+  explosionLayerMask:
+    serializedVersion: 2
+    m_Bits: 0
+  plantKey: 32
+  explosionVfx: {fileID: 2166424615258412459, guid: 1c885b6e2d957ae4f9db2133251a8790, type: 3}
+  fireVfx: {fileID: 2166424615258412459, guid: 1c885b6e2d957ae4f9db2133251a8790, type: 3}
