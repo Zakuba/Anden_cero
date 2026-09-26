@@ -33,47 +33,35 @@ public class PlayerMovimientoOnline : NetworkBehaviour
 
         if (IsOwner)
         {
-            StartCoroutine(SetupCameraRoutine());
+            StartCoroutine(BindCameraWhenReady());
         }
     }
 
-    private System.Collections.IEnumerator SetupCameraRoutine()
+    private System.Collections.IEnumerator BindCameraWhenReady()
     {
-        CinemachineCamera vcam = null;
-        int maxAttempts = 20; // Reintentar durante varios frames
-        int currentAttempt = 0;
+        // Espera hasta que la cámara exista y esté inicializada
+        float timeout = 5f;
+        float elapsed = 0f;
 
-        // Busca la cámara hasta encontrarla o agotar intentos
-        while (vcam == null && currentAttempt < maxAttempts)
+        while (CinemachineCameraRegistrar.Instance == null && elapsed < timeout)
         {
-            // 1. Intento por tipo
-            vcam = FindAnyObjectByType<CinemachineCamera>();
-
-            // 2. Si no la encuentra por tipo, buscar por GameObject directo en la escena
-            if (vcam == null)
-            {
-                GameObject camObj = GameObject.Find("CinemachineCamera");
-                if (camObj != null)
-                {
-                    vcam = camObj.GetComponent<CinemachineCamera>();
-                }
-            }
-
-            if (vcam != null)
-            {
-                // Asignar el Transform del jugador como objetivo en Unity 6
-                vcam.Target.TrackingTarget = transform;
-                Debug.Log($"[Cámara] ¡Objetivo asignado con éxito a: {gameObject.name} en el intento {currentAttempt}!");
-                yield break;
-            }
-
-            currentAttempt++;
-            yield return null; // Esperar al siguiente frame
+            elapsed += Time.unscaledDeltaTime;
+            yield return null;
         }
 
-        if (vcam == null)
+        if (CinemachineCameraRegistrar.Instance != null)
         {
-            Debug.LogError("[Cámara] Error crítico: No se pudo localizar la CinemachineCamera tras varios intentos.");
+            CinemachineCamera vcam = CinemachineCameraRegistrar.Instance;
+            
+            // Asignación de target para Unity 6
+            vcam.Target.TrackingTarget = transform;
+            vcam.Follow = transform;
+
+            Debug.Log($"[Cámara Build] Vinculada exitosamente al jugador {gameObject.name}");
+        }
+        else
+        {
+            Debug.LogError("[Cámara Build] Timeout: No se encontró CinemachineCameraRegistrar.");
         }
     }
 
