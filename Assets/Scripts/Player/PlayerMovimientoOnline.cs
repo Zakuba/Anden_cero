@@ -5,7 +5,7 @@ using Unity.Cinemachine;
 // Movimiento simple, SOLO para validar la sincronizacion de HU-01.3.
 // El movimiento real en cuadricula es responsabilidad de HU-02.1.
 [RequireComponent(typeof(CharacterController))]
-public class TempMovementForSync : NetworkBehaviour
+public class PlayerMovimientoOnline : NetworkBehaviour
 {
 [Header("Configuración de Velocidad")]
     [SerializeField] private float moveSpeed = 5f;
@@ -31,26 +31,49 @@ public class TempMovementForSync : NetworkBehaviour
     {
         base.OnNetworkSpawn();
 
-        // Esta condición es obligatoria: solo el dueño local configura su propia cámara
         if (IsOwner)
         {
-            SetupLocalCamera();
+            StartCoroutine(SetupCameraRoutine());
         }
     }
 
-private void SetupLocalCamera()
+    private System.Collections.IEnumerator SetupCameraRoutine()
     {
-        CinemachineCamera vcam = FindAnyObjectByType<CinemachineCamera>();
-        if (vcam != null)
-        {
-            vcam.Target.TrackingTarget = transform;
+        CinemachineCamera vcam = null;
+        int maxAttempts = 20; // Reintentar durante varios frames
+        int currentAttempt = 0;
 
-            var composer = vcam.GetComponent<CinemachinePositionComposer>();
-            if (composer != null)
+        // Busca la cámara hasta encontrarla o agotar intentos
+        while (vcam == null && currentAttempt < maxAttempts)
+        {
+            // 1. Intento por tipo
+            vcam = FindAnyObjectByType<CinemachineCamera>();
+
+            // 2. Si no la encuentra por tipo, buscar por GameObject directo en la escena
+            if (vcam == null)
             {
-                composer.CameraDistance = 15f; 
-                composer.TargetOffset = new Vector3(0f, 1f, 0f);
+                GameObject camObj = GameObject.Find("CinemachineCamera");
+                if (camObj != null)
+                {
+                    vcam = camObj.GetComponent<CinemachineCamera>();
+                }
             }
+
+            if (vcam != null)
+            {
+                // Asignar el Transform del jugador como objetivo en Unity 6
+                vcam.Target.TrackingTarget = transform;
+                Debug.Log($"[Cámara] ¡Objetivo asignado con éxito a: {gameObject.name} en el intento {currentAttempt}!");
+                yield break;
+            }
+
+            currentAttempt++;
+            yield return null; // Esperar al siguiente frame
+        }
+
+        if (vcam == null)
+        {
+            Debug.LogError("[Cámara] Error crítico: No se pudo localizar la CinemachineCamera tras varios intentos.");
         }
     }
 

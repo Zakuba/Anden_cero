@@ -14,9 +14,9 @@ GameObject:
   - component: {fileID: 72523261959232536}
   - component: {fileID: 8231072240389664256}
   - component: {fileID: 7084398118801446634}
-  - component: {fileID: 8469811128505122388}
   - component: {fileID: 6785377418466255797}
   - component: {fileID: 262425994612966626}
+  - component: {fileID: 5769002067245888163}
   m_Layer: 0
   m_Name: PlayerAvatar
   m_TagString: Untagged
@@ -192,25 +192,6 @@ MonoBehaviour:
   SwitchTransformSpaceWhenParented: 0
   Interpolate: 1
   SlerpPosition: 0
---- !u!114 &8469811128505122388
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6023118608644461741}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 00fa75de104177b45b4a91e448d16a70, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::TempMovementForSync
-  ShowTopMostFoldoutHeaderGroup: 1
-  moveSpeed: 5
-  rotationSpeed: 15
-  keyUp: 119
-  keyDown: 115
-  keyLeft: 97
-  keyRight: 100
 --- !u!143 &6785377418466255797
 CharacterController:
   m_ObjectHideFlags: 0
@@ -257,5 +238,25 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 0
   plantKey: 32
+  alturaspawnbomba: -1
   explosionVfx: {fileID: 2166424615258412459, guid: 1c885b6e2d957ae4f9db2133251a8790, type: 3}
   fireVfx: {fileID: 2166424615258412459, guid: 1c885b6e2d957ae4f9db2133251a8790, type: 3}
+--- !u!114 &5769002067245888163
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6023118608644461741}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 00fa75de104177b45b4a91e448d16a70, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::TempMovementForSync
+  ShowTopMostFoldoutHeaderGroup: 1
+  moveSpeed: 5
+  rotationSpeed: 15
+  keyUp: 119
+  keyDown: 115
+  keyLeft: 97
+  keyRight: 100
