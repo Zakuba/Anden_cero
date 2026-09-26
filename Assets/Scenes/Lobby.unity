@@ -803,8 +803,8 @@ MonoBehaviour:
   m_MaxPacketQueueSize: 128
   m_MaxPayloadSize: 6144
   m_HeartbeatTimeoutMS: 500
-  m_ConnectTimeoutMS: 1000
-  m_MaxConnectAttempts: 60
+  m_ConnectTimeoutMS: 500
+  m_MaxConnectAttempts: 3
   m_DisconnectTimeoutMS: 30000
   ConnectionData:
     Address: 0.0.0.0
@@ -1021,6 +1021,38 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6260907167063984114, guid: 8097ac01cc8cb04478ab63c742930d74, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6260907167063984114, guid: 8097ac01cc8cb04478ab63c742930d74, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6260907167063984114, guid: 8097ac01cc8cb04478ab63c742930d74, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6260907167063984114, guid: 8097ac01cc8cb04478ab63c742930d74, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6315627520915266781, guid: 8097ac01cc8cb04478ab63c742930d74, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6315627520915266781, guid: 8097ac01cc8cb04478ab63c742930d74, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6315627520915266781, guid: 8097ac01cc8cb04478ab63c742930d74, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6315627520915266781, guid: 8097ac01cc8cb04478ab63c742930d74, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6424718240742111986, guid: 8097ac01cc8cb04478ab63c742930d74, type: 3}
       propertyPath: m_Colors.m_HighlightedColor.b
       value: 0.78431374
@@ -1046,6 +1078,22 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7511605138357910823, guid: 8097ac01cc8cb04478ab63c742930d74, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9217365278277750344, guid: 8097ac01cc8cb04478ab63c742930d74, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9217365278277750344, guid: 8097ac01cc8cb04478ab63c742930d74, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9217365278277750344, guid: 8097ac01cc8cb04478ab63c742930d74, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9217365278277750344, guid: 8097ac01cc8cb04478ab63c742930d74, type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
