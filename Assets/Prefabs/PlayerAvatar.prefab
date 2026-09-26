@@ -236,7 +236,7 @@ MonoBehaviour:
   explosionRange: 1
   explosionLayerMask:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 1
   plantKey: 32
   alturaspawnbomba: -1
   explosionVfx: {fileID: 2166424615258412459, guid: 1c885b6e2d957ae4f9db2133251a8790, type: 3}

@@ -80,53 +80,67 @@ public class PlayerBombController : NetworkBehaviour
         UpdateBombCountClientRpc(activeBombs);
     }
 
-    /// <summary>
-    /// Cálculo autoritativo en el Servidor: determina daños y obstáculos
-    /// </summary>
-    private List<Vector3> CalculateExplosionCells(Vector3 center)
+/// Cálculo autoritativo en el Servidor: determina daños y obstáculos
+private List<Vector3> CalculateExplosionCells(Vector3 center)
+{
+    List<Vector3> cells = new List<Vector3> { center };
+    Vector3[] directions = { Vector3.forward, Vector3.back, Vector3.right, Vector3.left };
+
+    foreach (Vector3 dir in directions)
     {
-        List<Vector3> cells = new List<Vector3> { center };
-        Vector3[] directions = { Vector3.forward, Vector3.back, Vector3.right, Vector3.left };
-
-        foreach (Vector3 dir in directions)
+        for (int i = 1; i <= explosionRange; i++)
         {
-            for (int i = 1; i <= explosionRange; i++)
+            Vector3 targetCell = center + (dir * gridSize * i);
+            Collider[] hits = Physics.OverlapSphere(targetCell, gridSize * 0.4f, explosionLayerMask);
+
+            bool hitIndestructible = false;
+            bool hitDestructible = false;
+
+            foreach (Collider hit in hits)
             {
-                Vector3 targetCell = center + (dir * gridSize * i);
-                Collider[] hits = Physics.OverlapSphere(targetCell, gridSize * 0.4f, explosionLayerMask);
-
-                bool hitIndestructible = false;
-                bool hitDestructible = false;
-
-                foreach (Collider hit in hits)
+                if (hit.CompareTag("Indestructible"))
                 {
-                    if (hit.CompareTag("Indestructible"))
-                    {
-                        hitIndestructible = true;
-                        break;
-                    }
-
-                    if (hit.CompareTag("Destructible"))
-                    {
-                        hitDestructible = true;
-                        // Aquí podés destruir el bloque en el servidor
-                    }
+                    hitIndestructible = true;
+                    break;
                 }
 
-                if (hitIndestructible) break;
+                if (hit.CompareTag("Destructible"))
+                {
+                    hitDestructible = true;
 
-                cells.Add(targetCell);
-
-                if (hitDestructible) break;
+                    // Ordena a todos los clientes (Host y Cliente) destruir el objeto en esta celda
+                    DestroyObjectAtPositionClientRpc(hit.transform.position);
+                    break;
+                }
             }
-        }
 
-        return cells;
+            if (hitIndestructible) break;
+
+            cells.Add(targetCell);
+
+            if (hitDestructible) break;
+        }
     }
 
-    /// <summary>
+    return cells;
+}
+
+/// Se ejecuta en todos los clientes para destruir el objeto estético en esa ubicación
+[ClientRpc]
+private void DestroyObjectAtPositionClientRpc(Vector3 pos)
+{
+    // Busca en la máquina local cualquier collider destructible en esa coordenada
+    Collider[] colliders = Physics.OverlapSphere(pos, 0.5f, explosionLayerMask);
+    foreach (var col in colliders)
+    {
+        if (col.CompareTag("Destructible"))
+        {
+            Destroy(col.gameObject);
+        }
+    }
+}
+
     /// Se ejecuta en TODOS los clientes para mostrar las partículas
-    /// </summary>
     [ClientRpc]
     private void SpawnVfxClientRpc(Vector3[] firePositions)
     {
