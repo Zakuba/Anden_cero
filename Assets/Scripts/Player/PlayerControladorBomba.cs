@@ -7,7 +7,7 @@ public class PlayerBombController : NetworkBehaviour
 {
     [Header("Configuración de Bomba")]
     [SerializeField] private GameObject bombPrefab;
-    [SerializeField] private float gridSize = 2.5f;
+    [SerializeField] private float gridSize = 1f;
     [SerializeField] private float bombTimer = 3f;
     [SerializeField] private int explosionRange = 2;
     [SerializeField] private LayerMask explosionLayerMask;
