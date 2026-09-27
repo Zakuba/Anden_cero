@@ -167,7 +167,7 @@ private void DestroyObjectAtPositionClientRpc(Vector3 pos)
         // Casilla central forzada a ras del piso
         if (explosionVfx != null)
         {
-            Vector3 centerPos = new Vector3(firePositions[0].x, -0.99f, firePositions[0].z);
+            Vector3 centerPos = new Vector3(firePositions[0].x, -1.99f, firePositions[0].z);
             Instantiate(explosionVfx, centerPos, Quaternion.identity);
         }
 
@@ -176,7 +176,7 @@ private void DestroyObjectAtPositionClientRpc(Vector3 pos)
         {
             if (fireVfx != null)
             {
-                Vector3 firePos = new Vector3(firePositions[i].x, -0.99f, firePositions[i].z);
+                Vector3 firePos = new Vector3(firePositions[i].x, -1.99f, firePositions[i].z);
                 Instantiate(fireVfx, firePos, Quaternion.identity);
             }
         }
