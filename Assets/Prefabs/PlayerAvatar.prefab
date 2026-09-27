@@ -239,8 +239,8 @@ MonoBehaviour:
     m_Bits: 1
   plantKey: 32
   alturaspawnbomba: -1
-  explosionVfx: {fileID: 2166424615258412459, guid: 1c885b6e2d957ae4f9db2133251a8790, type: 3}
-  fireVfx: {fileID: 2166424615258412459, guid: 1c885b6e2d957ae4f9db2133251a8790, type: 3}
+  explosionVfx: {fileID: 1737463432510393942, guid: c6e879bb9ad505341aa895aae1ef89f8, type: 3}
+  fireVfx: {fileID: 1737463432510393942, guid: c6e879bb9ad505341aa895aae1ef89f8, type: 3}
 --- !u!114 &5769002067245888163
 MonoBehaviour:
   m_ObjectHideFlags: 0

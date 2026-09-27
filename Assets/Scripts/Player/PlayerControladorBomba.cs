@@ -84,6 +84,11 @@ public class PlayerBombController : NetworkBehaviour
 private List<Vector3> CalculateExplosionCells(Vector3 center)
 {
     List<Vector3> cells = new List<Vector3> { center };
+
+    // --- CHEQUEO DE LA CASILLA CENTRAL ---
+    CheckAndDestroyCell(center);
+
+    // --- CHEQUEO DE LAS DIRECCIONES ---
     Vector3[] directions = { Vector3.forward, Vector3.back, Vector3.right, Vector3.left };
 
     foreach (Vector3 dir in directions)
@@ -91,28 +96,11 @@ private List<Vector3> CalculateExplosionCells(Vector3 center)
         for (int i = 1; i <= explosionRange; i++)
         {
             Vector3 targetCell = center + (dir * gridSize * i);
-            Collider[] hits = Physics.OverlapSphere(targetCell, gridSize * 0.4f, explosionLayerMask);
 
-            bool hitIndestructible = false;
-            bool hitDestructible = false;
+            bool hitIndestructible;
+            bool hitDestructible;
 
-            foreach (Collider hit in hits)
-            {
-                if (hit.CompareTag("Indestructible"))
-                {
-                    hitIndestructible = true;
-                    break;
-                }
-
-                if (hit.CompareTag("Destructible"))
-                {
-                    hitDestructible = true;
-
-                    // Ordena a todos los clientes (Host y Cliente) destruir el objeto en esta celda
-                    DestroyObjectAtPositionClientRpc(hit.transform.position);
-                    break;
-                }
-            }
+            CheckCell(targetCell, out hitIndestructible, out hitDestructible);
 
             if (hitIndestructible) break;
 
@@ -123,6 +111,36 @@ private List<Vector3> CalculateExplosionCells(Vector3 center)
     }
 
     return cells;
+}
+
+private void CheckCell(Vector3 cell, out bool hitIndestructible, out bool hitDestructible)
+{
+    hitIndestructible = false;
+    hitDestructible = false;
+
+    Vector3 halfExtents = new Vector3(gridSize * 0.45f, 2.0f, gridSize * 0.45f);
+    Collider[] hits = Physics.OverlapBox(cell, halfExtents, Quaternion.identity, explosionLayerMask, QueryTriggerInteraction.Collide);
+
+    foreach (Collider hit in hits)
+    {
+        if (hit.CompareTag("Indestructible"))
+        {
+            hitIndestructible = true;
+            break;
+        }
+
+        if (hit.CompareTag("Destructible"))
+        {
+            hitDestructible = true;
+            DestroyObjectAtPositionClientRpc(hit.transform.position);
+            break;
+        }
+    }
+}
+
+private void CheckAndDestroyCell(Vector3 cell)
+{
+    CheckCell(cell, out _, out _);
 }
 
 /// Se ejecuta en todos los clientes para destruir el objeto estético en esa ubicación
@@ -146,18 +164,20 @@ private void DestroyObjectAtPositionClientRpc(Vector3 pos)
     {
         if (firePositions == null || firePositions.Length == 0) return;
 
-        // Casilla central
+        // Casilla central forzada a ras del piso
         if (explosionVfx != null)
         {
-            Instantiate(explosionVfx, firePositions[0], Quaternion.identity);
+            Vector3 centerPos = new Vector3(firePositions[0].x, -0.99f, firePositions[0].z);
+            Instantiate(explosionVfx, centerPos, Quaternion.identity);
         }
 
-        // Casillas de los brazos de la cruz
+        // Casillas de los brazos de la cruz forzadas a ras del piso
         for (int i = 1; i < firePositions.Length; i++)
         {
             if (fireVfx != null)
             {
-                Instantiate(fireVfx, firePositions[i], Quaternion.identity);
+                Vector3 firePos = new Vector3(firePositions[i].x, -0.99f, firePositions[i].z);
+                Instantiate(fireVfx, firePos, Quaternion.identity);
             }
         }
     }

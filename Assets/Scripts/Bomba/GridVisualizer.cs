@@ -9,7 +9,7 @@ public class GridVisualizer : MonoBehaviour
     {
         Gizmos.color = Color.cyan;
 
-        float offset = gridSize / 2f;
+        float offset = gridSize / 2.5f;
 
         // Líneas verticales
         for (float x = -gridExtent + offset; x <= gridExtent; x += gridSize)
