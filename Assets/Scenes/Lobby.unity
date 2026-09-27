@@ -369,7 +369,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3936244128907607830, guid: c0903b588d618e446b3cf88793d9dd89, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -2.800001
+      value: -2.7999878
       objectReference: {fileID: 0}
     - target: {fileID: 4008777121793763323, guid: c0903b588d618e446b3cf88793d9dd89, type: 3}
       propertyPath: m_SizeDelta.y
@@ -397,15 +397,31 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4325735809337422025, guid: c0903b588d618e446b3cf88793d9dd89, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4325735809337422025, guid: c0903b588d618e446b3cf88793d9dd89, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4325735809337422025, guid: c0903b588d618e446b3cf88793d9dd89, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 2060902975}
+    - target: {fileID: 4325735809337422025, guid: c0903b588d618e446b3cf88793d9dd89, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
       value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4325735809337422025, guid: c0903b588d618e446b3cf88793d9dd89, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: SalirJuego
+      objectReference: {fileID: 0}
+    - target: {fileID: 4325735809337422025, guid: c0903b588d618e446b3cf88793d9dd89, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: MenuPrincipal, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 4325735809337422025, guid: c0903b588d618e446b3cf88793d9dd89, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
     - target: {fileID: 5462536598383378229, guid: c0903b588d618e446b3cf88793d9dd89, type: 3}
       propertyPath: m_fontAsset
@@ -991,6 +1007,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2060902974}
   - component: {fileID: 2060902973}
+  - component: {fileID: 2060902975}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -1027,6 +1044,18 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2060902975
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2060902972}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d65b087f25b196e41b148a384ab78b7d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MenuPrincipal
 --- !u!1 &2142634042
 GameObject:
   m_ObjectHideFlags: 0
