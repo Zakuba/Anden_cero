@@ -38,4 +38,59 @@ public class BombGridTests
         Vector3 resultadoEsperado = new Vector3(-2f, -1f, -1f);
         Assert.AreEqual(resultadoEsperado, resultadoObtenido);
     }
+
+    // --- CASOS DE BORDE (EDGE CASES) ---
+    [Test]
+    public void GetGridCenter_CoordenadasNegativas_RedondeaACasillaCorrecta()
+    {
+        // Arrange
+        Vector3 posicionJugador = new Vector3(-1.7f, 0f, -3.2f);
+        float gridSize = 1f;
+        float alturaSpawnBomba = -1f;
+
+        // Act
+        float x = Mathf.Round(posicionJugador.x / gridSize) * gridSize;
+        float z = Mathf.Round(posicionJugador.z / gridSize) * gridSize;
+        Vector3 resultado = new Vector3(x, alturaSpawnBomba, z);
+
+        // Assert
+        Vector3 esperado = new Vector3(-2f, -1f, -3f);
+        Assert.AreEqual(esperado, resultado, "El calculo de grilla debe redondear correctamente en coordenadas negativas.");
+    }
+
+    [Test]
+    public void GetGridCenter_PosicionEnOrigenCero_MantieneOrigen()
+    {
+        // Arrange
+        Vector3 posicionJugador = Vector3.zero;
+        float gridSize = 1f;
+        float alturaSpawnBomba = -1f;
+
+        // Act
+        float x = Mathf.Round(posicionJugador.x / gridSize) * gridSize;
+        float z = Mathf.Round(posicionJugador.z / gridSize) * gridSize;
+        Vector3 resultado = new Vector3(x, alturaSpawnBomba, z);
+
+        // Assert
+        Vector3 esperado = new Vector3(0f, -1f, 0f);
+        Assert.AreEqual(esperado, resultado, "El calculo de grilla en el origen debe dar (0, -1, 0).");
+    }
+
+    [Test]
+    public void GetGridCenter_CoordenadasExtremasLejanas_CalculaSinPerderPrecision()
+    {
+        // Arrange
+        Vector3 posicionJugador = new Vector3(100.4f, 0f, -250.6f);
+        float gridSize = 1f;
+        float alturaSpawnBomba = -1f;
+
+        // Act
+        float x = Mathf.Round(posicionJugador.x / gridSize) * gridSize;
+        float z = Mathf.Round(posicionJugador.z / gridSize) * gridSize;
+        Vector3 resultado = new Vector3(x, alturaSpawnBomba, z);
+
+        // Assert
+        Vector3 esperado = new Vector3(100f, -1f, -251f);
+        Assert.AreEqual(esperado, resultado, "La formula debe mantener precision matematica en coordenadas lejanas.");
+    }
 }
