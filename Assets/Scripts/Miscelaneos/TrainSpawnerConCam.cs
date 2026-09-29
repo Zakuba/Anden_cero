@@ -18,7 +18,6 @@ public class TrainSpawnerConCam : MonoBehaviour
     [SerializeField] private Transform cameraTransform;
     [SerializeField] private float shakeDuration = 3f;
     [SerializeField] private float shakeAmount = 0.05f;
-    [SerializeField] private float shakeSpeed = 20f;
 
     [Header("Parpadeo de luz")]
     [SerializeField] private Light trainLight;
@@ -26,18 +25,10 @@ public class TrainSpawnerConCam : MonoBehaviour
     [SerializeField] private float maxLightIntensity = 1f;
     [SerializeField] private float lightFlickerSpeed = 15f;
 
-    private Vector3 originalCameraPosition;
-    private Quaternion originalCameraRotation;
     private float originalLightIntensity;
 
     private void Start()
     {
-        if (cameraTransform != null)
-        {
-            originalCameraPosition = cameraTransform.localPosition;
-            originalCameraRotation = cameraTransform.localRotation;
-        }
-
         if (trainLight != null)
         {
             originalLightIntensity = trainLight.intensity;
@@ -50,23 +41,20 @@ public class TrainSpawnerConCam : MonoBehaviour
     {
         while (true)
         {
-            // Esperar antes de spawnear el siguiente tren
             yield return new WaitForSeconds(spawnInterval);
 
-            // Spawnear el tren
             GameObject train = Instantiate(
                 trainPrefab,
                 spawnPoint.position,
                 spawnPoint.rotation
             );
 
-            // Empezar cámara + luz al mismo tiempo
+            // Iniciamos el shake independientemente del movimiento del tren
             if (cameraTransform != null || trainLight != null)
             {
                 StartCoroutine(ShakeCameraAndFlickerLight());
             }
 
-            // Mover el tren
             yield return StartCoroutine(MoveTrain(train));
         }
     }
@@ -98,13 +86,21 @@ public class TrainSpawnerConCam : MonoBehaviour
     {
         float elapsed = 0f;
 
+        // Guardamos la posición LOCAL de la cámara.
+        // Como la cámara está dentro del CameraRig,
+        // normalmente será (0,0,0).
+        Vector3 posicionBase = Vector3.zero;
+        Quaternion rotacionBase = Quaternion.identity;
+
+        if (cameraTransform != null)
+        {
+            posicionBase = cameraTransform.localPosition;
+            rotacionBase = cameraTransform.localRotation;
+        }
+
         while (elapsed < shakeDuration)
         {
             elapsed += Time.deltaTime;
-
-            // =========================
-            // CÁMARA
-            // =========================
 
             if (cameraTransform != null)
             {
@@ -112,19 +108,15 @@ public class TrainSpawnerConCam : MonoBehaviour
                 float y = Random.Range(-1f, 1f) * shakeAmount;
 
                 cameraTransform.localPosition =
-                    originalCameraPosition + new Vector3(x, y, 0f);
+                    posicionBase + new Vector3(x, y, 0f);
 
                 float rotation =
                     Random.Range(-1f, 1f) * shakeAmount * 10f;
 
                 cameraTransform.localRotation =
-                    originalCameraRotation *
+                    rotacionBase *
                     Quaternion.Euler(0f, 0f, rotation);
             }
-
-            // =========================
-            // LUZ
-            // =========================
 
             if (trainLight != null)
             {
@@ -134,17 +126,16 @@ public class TrainSpawnerConCam : MonoBehaviour
                 );
             }
 
-            yield return new WaitForSeconds(1f / lightFlickerSpeed);
+            yield return null;
         }
 
-        // Restaurar cámara
+        // Restauramos únicamente el movimiento LOCAL del shake.
         if (cameraTransform != null)
         {
-            cameraTransform.localPosition = originalCameraPosition;
-            cameraTransform.localRotation = originalCameraRotation;
+            cameraTransform.localPosition = posicionBase;
+            cameraTransform.localRotation = rotacionBase;
         }
 
-        // Restaurar intensidad original
         if (trainLight != null)
         {
             trainLight.intensity = originalLightIntensity;
