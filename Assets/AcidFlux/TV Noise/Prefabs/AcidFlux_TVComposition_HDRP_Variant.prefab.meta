@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: f4215fa353a854c74b0d303fc4e77937
+PrefabImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 400186
+  packageName: TV Signal Noise Shader
+  packageVersion: 1.0.0
+  assetPath: Assets/AcidFlux/TV Noise/Prefabs/AcidFlux_TVComposition_HDRP_Variant.prefab
+  uploadId: 975670

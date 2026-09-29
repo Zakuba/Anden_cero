@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 0c80feba68a754e489ac79f191db9bb4
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 2100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 400186
+  packageName: TV Signal Noise Shader
+  packageVersion: 1.0.0
+  assetPath: Assets/AcidFlux/TV Noise/Materials/TVNoise_DefaultHorizontal_Mat.mat
+  uploadId: 975670

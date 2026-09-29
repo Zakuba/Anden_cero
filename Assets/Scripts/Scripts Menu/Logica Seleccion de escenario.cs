@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using System.Collections;
 
 public class SelectorEscenario : MonoBehaviour
 {
@@ -17,9 +18,17 @@ public class SelectorEscenario : MonoBehaviour
         "Sala de Control"
     };
 
+    [Header("Fondos de los Escenarios")]
+    [SerializeField] private GameObject[] fondosEscenarios;
+
+    [Header("Estática")]
+    [SerializeField] private GameObject estatica;
+
+    [SerializeField] private float duracionEstatica = 0.35f;
+
     [Header("Índice Actual")]
     [SerializeField] private int indiceActual = 0;
-
+    private Coroutine cambioActual;
     private void Start()
     {
         if (botonIzquierda != null)
@@ -29,28 +38,70 @@ public class SelectorEscenario : MonoBehaviour
             botonDerecha.onClick.AddListener(SiguienteEscenario);
 
         ActualizarTexto();
+        ActualizarFondos();
     }
 
     public void SiguienteEscenario()
     {
         if (escenarios.Length == 0) return;
-        
-        // Avanza y vuelve a 0 si llega al final (cíclico)
+
         indiceActual = (indiceActual + 1) % escenarios.Length;
-        ActualizarTexto();
+
+        CambiarEscenarioConEstatica();
     }
 
     public void AnteriorEscenario()
     {
         if (escenarios.Length == 0) return;
 
-        // Retrocede y vuelve al último elemento si baja de 0
         indiceActual--;
+
         if (indiceActual < 0)
         {
             indiceActual = escenarios.Length - 1;
         }
+
+        CambiarEscenarioConEstatica();
+    }
+    private void CambiarEscenarioConEstatica()
+    {
+        if (cambioActual != null)
+            StopCoroutine(cambioActual);
+
+        cambioActual = StartCoroutine(TransicionEscenario());
+    }
+
+    private IEnumerator TransicionEscenario()
+    {
+        // Mostrar estática
+        if (estatica != null)
+            estatica.SetActive(true);
+
+        // Esperar la mitad de la transición
+        yield return new WaitForSeconds(duracionEstatica / 2f);
+
+        // Cambiar fondo
+        ActualizarFondos();
+
+        // Actualizar texto
         ActualizarTexto();
+
+        // Esperar la otra mitad
+        yield return new WaitForSeconds(duracionEstatica / 2f);
+
+        // Ocultar estática
+        if (estatica != null)
+            estatica.SetActive(false);
+
+        cambioActual = null;
+    }
+
+    private void ActualizarFondos()
+    {
+        for (int i = 0; i < fondosEscenarios.Length; i++)
+        {
+            fondosEscenarios[i].SetActive(i == indiceActual);
+        }
     }
 
     private void ActualizarTexto()

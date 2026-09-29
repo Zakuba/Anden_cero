@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 86f452ef4530b4b2693519b829f07356
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 4890085278179872738
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 400186
+  packageName: TV Signal Noise Shader
+  packageVersion: 1.0.0
+  assetPath: Assets/AcidFlux/TV Noise/Settings/TVNoise-LightingSettings.lighting
+  uploadId: 975670

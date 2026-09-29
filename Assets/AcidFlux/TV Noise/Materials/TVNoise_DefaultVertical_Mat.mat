@@ -1,0 +1,106 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &-3677948810201352392
+MonoBehaviour:
+  m_ObjectHideFlags: 11
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0353a89b1f911e48b9e16bdc9f2e058, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.RenderPipelines.Universal.Editor::UnityEditor.Rendering.Universal.AssetVersion
+  version: 10
+--- !u!114 &-3127149233830269479
+MonoBehaviour:
+  m_ObjectHideFlags: 11
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 639247ca83abc874e893eb93af2b5e44, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.ShaderGraph.Editor::UnityEditor.Rendering.BuiltIn.AssetVersion
+  version: 0
+--- !u!21 &2100000
+Material:
+  serializedVersion: 8
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: TVNoise_DefaultVertical_Mat
+  m_Shader: {fileID: -6465566751694194690, guid: 6ab5e065b425c47738d4cf04243b00b6,
+    type: 3}
+  m_Parent: {fileID: 0}
+  m_ModifiedSerializedProperties: 0
+  m_ValidKeywords: []
+  m_InvalidKeywords: []
+  m_LightmapFlags: 2
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses:
+  - MOTIONVECTORS
+  m_LockedProperties: 
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - _BackgroundImage:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _SampleTexture2D_698fdf595b804e8f9d6cb8b5884e27b5_Texture_1_Texture2D:
+        m_Texture: {fileID: 2800000, guid: 23e3eb7b53c1d483c9077fc34e660373, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _SampleTexture2D_f264bf9293e34148b5bfe5b74a586b2a_Texture_1_Texture2D:
+        m_Texture: {fileID: 2800000, guid: f354c787086c54b139c8326ec7681de3, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - unity_Lightmaps:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - unity_LightmapsInd:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - unity_ShadowMasks:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Ints: []
+    m_Floats:
+    - _ColorIntensity: 0.59
+    - _Grain: 1
+    - _GrainEnabled: 1
+    - _GrainIntensity: 0.08
+    - _GrainSize: 0
+    - _GrainSpeed: 0.53
+    - _GrainVisibility: 0.33
+    - _Intencity: 0.5
+    - _Intensity: 0.35
+    - _IsNoiseHorizontal: 0
+    - _LinesFrequency: 33.3
+    - _LinesRotationAngle: 90
+    - _LinesSpeed: 0.15
+    - _Noise: 1
+    - _NoiseEnabled: 1
+    - _NoiseIntensity: 0.14
+    - _NoiseScale: 0.35
+    - _NoiseSpeed: 0.5
+    - _QueueControl: 0
+    - _QueueOffset: 0
+    - _Speed: 0.1
+    - _WarpIntence: 0
+    m_Colors:
+    - _Color: {r: 0.1, g: 0.1, b: 0.1, a: 1}
+    - _LinesSpeed: {r: 0, g: 0.2, b: 0, a: 0}
+  m_BuildTextureStacks: []
+  m_AllowLocking: 1

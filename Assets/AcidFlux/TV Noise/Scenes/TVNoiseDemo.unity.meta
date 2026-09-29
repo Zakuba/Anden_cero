@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: 3c8aaa2d192be4000b65fbfed6413695
+DefaultImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 400186
+  packageName: TV Signal Noise Shader
+  packageVersion: 1.0.0
+  assetPath: Assets/AcidFlux/TV Noise/Scenes/TVNoiseDemo.unity
+  uploadId: 975670

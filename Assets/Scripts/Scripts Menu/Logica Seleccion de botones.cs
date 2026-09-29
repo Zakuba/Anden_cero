@@ -23,8 +23,8 @@ public class SelectorOpciones : MonoBehaviour
 
     private void Awake()
     {
-        ColorUtility.TryParseHtmlString("#12E2D5", out colorCyan);
-        ColorUtility.TryParseHtmlString("#E61C7E", out colorMagenta);
+        ColorUtility.TryParseHtmlString("#adadad", out colorCyan);
+        ColorUtility.TryParseHtmlString("#ffffff", out colorMagenta);
     }
 
     private void Start()

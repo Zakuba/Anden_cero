@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 877b7ab50060542faa0f0c6b252c5ebf
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 2100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 400186
+  packageName: TV Signal Noise Shader
+  packageVersion: 1.0.0
+  assetPath: Assets/AcidFlux/TV Noise/Materials/HDRP/TVNoiseHDRP_VioletHorizontal_Mat.mat
+  uploadId: 975670
