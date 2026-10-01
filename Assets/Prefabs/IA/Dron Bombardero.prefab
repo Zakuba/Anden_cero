@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &6023118608644461741
+--- !u!1 &4445246012756607686
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,52 +8,51 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 2524906840355348132}
-  - component: {fileID: 3382371282234333325}
-  - component: {fileID: 5322985985516838060}
-  - component: {fileID: 72523261959232536}
-  - component: {fileID: 8231072240389664256}
-  - component: {fileID: 7084398118801446634}
-  - component: {fileID: 6785377418466255797}
-  - component: {fileID: 262425994612966626}
-  - component: {fileID: 5769002067245888163}
+  - component: {fileID: 3567900860045189022}
+  - component: {fileID: 304057341362428601}
+  - component: {fileID: 5996916112910600120}
+  - component: {fileID: 4932516243079319366}
+  - component: {fileID: 3219467599852715283}
+  - component: {fileID: 2718911223194195156}
+  - component: {fileID: 6951983563759267854}
+  - component: {fileID: 3125876650574946124}
   m_Layer: 0
-  m_Name: PlayerAvatar
-  m_TagString: Player
+  m_Name: Dron Bombardero
+  m_TagString: Drone
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &2524906840355348132
+--- !u!4 &3567900860045189022
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6023118608644461741}
+  m_GameObject: {fileID: 4445246012756607686}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: 3.72, y: 0.9, z: -0.76}
+  m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!33 &3382371282234333325
+--- !u!33 &304057341362428601
 MeshFilter:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6023118608644461741}
+  m_GameObject: {fileID: 4445246012756607686}
   m_Mesh: {fileID: 10208, guid: 0000000000000000e000000000000000, type: 0}
---- !u!23 &5322985985516838060
+--- !u!23 &5996916112910600120
 MeshRenderer:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6023118608644461741}
+  m_GameObject: {fileID: 4445246012756607686}
   m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
@@ -96,13 +95,13 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!136 &72523261959232536
+--- !u!136 &4932516243079319366
 CapsuleCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6023118608644461741}
+  m_GameObject: {fileID: 4445246012756607686}
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
@@ -119,26 +118,26 @@ CapsuleCollider:
   m_Height: 2
   m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &8231072240389664256
+--- !u!114 &3219467599852715283
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6023118608644461741}
+  m_GameObject: {fileID: 4445246012756607686}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.NetworkObject
-  GlobalObjectIdHash: 751227136
+  GlobalObjectIdHash: 908216234
   InScenePlacedSourceGlobalObjectIdHash: 0
   m_InScenePlacedDisabledByDefault: 0
   DeferredDespawnTick: 0
   Ownership: 1
   AlwaysReplicateAsRoot: 0
   SynchronizeTransform: 1
-  m_InScenePlaced: 0
+  m_InScenePlaced: 1
   ActiveSceneSynchronization: 0
   SceneMigrationSynchronization: 0
   SpawnWithObservers: 1
@@ -146,20 +145,20 @@ MonoBehaviour:
   AutoObjectParentSync: 1
   SyncOwnerTransformWhenParented: 1
   AllowOwnerToParent: 0
---- !u!114 &7084398118801446634
+--- !u!114 &2718911223194195156
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6023118608644461741}
+  m_GameObject: {fileID: 4445246012756607686}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 690dade1818d815459b64e3a2b05820e, type: 3}
+  m_Script: {fileID: 11500000, guid: e96cb6065543e43c4a752faaa1468eb1, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::ClientNetworkTransform
+  m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.Components.NetworkTransform
   ShowTopMostFoldoutHeaderGroup: 1
-  NetworkTransformExpanded: 1
+  NetworkTransformExpanded: 0
   AutoOwnerAuthorityTickOffset: 1
   PositionInterpolationType: 0
   RotationInterpolationType: 0
@@ -192,71 +191,42 @@ MonoBehaviour:
   SwitchTransformSpaceWhenParented: 0
   Interpolate: 1
   SlerpPosition: 0
---- !u!143 &6785377418466255797
-CharacterController:
+--- !u!195 &6951983563759267854
+NavMeshAgent:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6023118608644461741}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_ProvidesContacts: 0
+  m_GameObject: {fileID: 4445246012756607686}
   m_Enabled: 1
-  serializedVersion: 3
-  m_Height: 2
+  m_AgentTypeID: 0
   m_Radius: 0.5
-  m_SlopeLimit: 45
-  m_StepOffset: 0.3
-  m_SkinWidth: 0.08
-  m_MinMoveDistance: 0.001
-  m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &262425994612966626
+  m_Speed: 3.5
+  m_Acceleration: 8
+  avoidancePriority: 50
+  m_AngularSpeed: 120
+  m_StoppingDistance: 0
+  m_AutoTraverseOffMeshLink: 1
+  m_AutoBraking: 1
+  m_AutoRepath: 1
+  m_Height: 0.2
+  m_BaseOffset: 1.5
+  m_WalkableMask: 4294967295
+  m_ObstacleAvoidanceType: 4
+--- !u!114 &3125876650574946124
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6023118608644461741}
+  m_GameObject: {fileID: 4445246012756607686}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 52f079781eb8d7b429f51dcd0888b6c0, type: 3}
+  m_Script: {fileID: 11500000, guid: 2c3fd4f5f99652a448a784d31c0008f0, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::PlayerControladorBomba
+  m_EditorClassIdentifier: Assembly-CSharp::DroneBomberAI
   ShowTopMostFoldoutHeaderGroup: 1
-  bombPrefab: {fileID: 6099856826827984316, guid: a368f4f3cc921e943942c1791fea6f11, type: 3}
+  bombPrefab: {fileID: 6099856826827984316, guid: 6b67474c813fa7144a234c9c825e347a, type: 3}
+  dropInterval: 4
   gridSize: 2.5
-  bombTimer: 3
-  explosionRange: 1
-  explosionLayerMask:
-    serializedVersion: 2
-    m_Bits: 1
-  plantKey: 32
-  alturaspawnbomba: -1
-  explosionVfx: {fileID: 1737463432510393942, guid: c6e879bb9ad505341aa895aae1ef89f8, type: 3}
-  fireVfx: {fileID: 1737463432510393942, guid: c6e879bb9ad505341aa895aae1ef89f8, type: 3}
---- !u!114 &5769002067245888163
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6023118608644461741}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 00fa75de104177b45b4a91e448d16a70, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::TempMovementForSync
-  ShowTopMostFoldoutHeaderGroup: 1
-  moveSpeed: 5
-  rotationSpeed: 15
-  keyUp: 119
-  keyDown: 115
-  keyLeft: 97
-  keyRight: 100
+  bombSpawnHeight: -1
