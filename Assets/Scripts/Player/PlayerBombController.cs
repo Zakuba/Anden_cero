@@ -21,12 +21,21 @@ public class PlayerBombController : NetworkBehaviour
        
     private int activeBombs = 0;
     private int maxBombs = 1;
+    private PlayerStats playerStats;
+
+    private void Awake()
+{
+    playerStats = GetComponent<PlayerStats>();
+}
+
+private int EffectiveMaxBombs => maxBombs + (playerStats != null ? playerStats.MaxBombsBonus : 0);
+private int EffectiveExplosionRange => explosionRange + (playerStats != null ? playerStats.ExplosionRangeBonus : 0);
 
     private void Update()
     {
         if (!IsOwner) return;
 
-        if (Input.GetKeyDown(plantKey) && activeBombs < maxBombs)
+        if (Input.GetKeyDown(plantKey) && activeBombs < EffectiveMaxBombs)
         {
             Vector3 spawnPosition = GetGridCenter(transform.position);
             RequestPlantBombServerRpc(spawnPosition);
@@ -43,7 +52,7 @@ public class PlayerBombController : NetworkBehaviour
     [ServerRpc]
     private void RequestPlantBombServerRpc(Vector3 spawnPosition)
     {
-        if (activeBombs >= maxBombs) return;
+       if (activeBombs >= EffectiveMaxBombs) return;
 
         activeBombs++;
         UpdateBombCountClientRpc(activeBombs);
@@ -93,7 +102,7 @@ private List<Vector3> CalculateExplosionCells(Vector3 center)
 
     foreach (Vector3 dir in directions)
     {
-        for (int i = 1; i <= explosionRange; i++)
+        for (int i = 1; i <= EffectiveExplosionRange; i++)
         {
             Vector3 targetCell = center + (dir * gridSize * i);
 

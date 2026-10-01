@@ -17,6 +17,7 @@ GameObject:
   - component: {fileID: 6785377418466255797}
   - component: {fileID: 262425994612966626}
   - component: {fileID: 5769002067245888163}
+  - component: {fileID: 4121954788461909425}
   m_Layer: 0
   m_Name: PlayerAvatar
   m_TagString: Untagged
@@ -260,3 +261,22 @@ MonoBehaviour:
   keyDown: 115
   keyLeft: 97
   keyRight: 100
+--- !u!114 &4121954788461909425
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6023118608644461741}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 133bb9c24e27f974eafa4e32a7886361, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerStats
+  ShowTopMostFoldoutHeaderGroup: 1
+  powerUpDuration: 15
+  bonusExplosionRange: 1
+  bonusMaxBombs: 1
+  botasSpeedMultiplier: 1.5
+  guanteBateoMultiplier: 1.5
+  escudoVisual: {fileID: 0}
