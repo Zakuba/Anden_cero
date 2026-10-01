@@ -135,6 +135,17 @@ private void CheckCell(Vector3 cell, out bool hitIndestructible, out bool hitDes
             DestroyObjectAtPositionClientRpc(hit.transform.position);
             break;
         }
+        if (hit.CompareTag("Drone"))
+        {
+            DroneBomberAI drone = hit.GetComponent<DroneBomberAI>();
+            if (drone != null)
+            {
+                drone.TakeDamage(); 
+            }
+            
+            hitDestructible = true; 
+            break;
+        }
     }
 }
 
