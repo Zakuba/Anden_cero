@@ -14,6 +14,11 @@ public class PlayerBombController : NetworkBehaviour
     [SerializeField] private KeyCode plantKey = KeyCode.Space;
     [SerializeField] private float alturaspawnbomba = -1f; 
 
+    [Header("Power-ups (Drops)")]
+    [SerializeField] private GameObject[] powerUpPrefabs; // orden: Expansor, Bomba Extra, Botas, Guante, Escudo
+    [SerializeField] private float powerUpDropChance = 0.5f;
+    [SerializeField] private float powerUpSpawnHeight = -1f;
+
     [Header("Efectos Visuales (VFX)")]
     [SerializeField] private GameObject explosionVfx;
     [SerializeField] private GameObject fireVfx;
@@ -138,18 +143,33 @@ private void CheckCell(Vector3 cell, out bool hitIndestructible, out bool hitDes
             break;
         }
 
-        if (hit.CompareTag("Destructible"))
-        {
-            hitDestructible = true;
-            DestroyObjectAtPositionClientRpc(hit.transform.position);
-            break;
-        }
+      if (hit.CompareTag("Destructible"))
+{
+    hitDestructible = true;
+    DestroyObjectAtPositionClientRpc(hit.transform.position);
+    TrySpawnPowerUpDrop(hit.transform.position);
+    break;
+}
     }
 }
 
 private void CheckAndDestroyCell(Vector3 cell)
 {
     CheckCell(cell, out _, out _);
+}
+
+private void TrySpawnPowerUpDrop(Vector3 boxPosition)
+{
+    if (Random.value > powerUpDropChance) return;
+    if (powerUpPrefabs == null || powerUpPrefabs.Length == 0) return;
+
+    int index = Random.Range(0, powerUpPrefabs.Length);
+    GameObject prefab = powerUpPrefabs[index];
+    if (prefab == null) return;
+
+    Vector3 spawnPos = new Vector3(boxPosition.x, powerUpSpawnHeight, boxPosition.z);
+    GameObject dropInstance = Instantiate(prefab, spawnPos, Quaternion.identity);
+    dropInstance.GetComponent<NetworkObject>().Spawn();
 }
 
 /// Se ejecuta en todos los clientes para destruir el objeto estético en esa ubicación

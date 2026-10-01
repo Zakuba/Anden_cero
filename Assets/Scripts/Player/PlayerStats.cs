@@ -53,7 +53,7 @@ public class PlayerStats : NetworkBehaviour
     }
 
     // Esto lo va a llamar el pickup de HU-03.2 más adelante.
-    [ServerRpc]
+    [ServerRpc(RequireOwnership = false)]
 public void RequestPickupPowerUpServerRpc(PowerUpType type)
 {
     Debug.Log($"[PlayerStats] Power-up solicitado: {type}");
