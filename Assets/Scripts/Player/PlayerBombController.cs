@@ -14,6 +14,11 @@ public class PlayerBombController : NetworkBehaviour
     [SerializeField] private KeyCode plantKey = KeyCode.Space;
     [SerializeField] private float alturaspawnbomba = -1f; 
 
+    [Header("Power-ups (Drops)")]
+    [SerializeField] private GameObject[] powerUpPrefabs; // orden: Expansor, Bomba Extra, Botas, Guante, Escudo
+    [SerializeField] private float powerUpDropChance = 0.5f;
+    [SerializeField] private float powerUpSpawnHeight = -1f;
+
     [Header("Efectos Visuales (VFX)")]
     [SerializeField] private GameObject explosionVfx;
     [SerializeField] private GameObject fireVfx;
@@ -21,12 +26,21 @@ public class PlayerBombController : NetworkBehaviour
        
     private int activeBombs = 0;
     private int maxBombs = 1;
+    private PlayerStats playerStats;
+
+    private void Awake()
+{
+    playerStats = GetComponent<PlayerStats>();
+}
+
+private int EffectiveMaxBombs => maxBombs + (playerStats != null ? playerStats.MaxBombsBonus : 0);
+private int EffectiveExplosionRange => explosionRange + (playerStats != null ? playerStats.ExplosionRangeBonus : 0);
 
     private void Update()
     {
         if (!IsOwner) return;
 
-        if (Input.GetKeyDown(plantKey) && activeBombs < maxBombs)
+        if (Input.GetKeyDown(plantKey) && activeBombs < EffectiveMaxBombs)
         {
             Vector3 spawnPosition = GetGridCenter(transform.position);
             RequestPlantBombServerRpc(spawnPosition);
@@ -43,7 +57,7 @@ public class PlayerBombController : NetworkBehaviour
     [ServerRpc]
     private void RequestPlantBombServerRpc(Vector3 spawnPosition)
     {
-        if (activeBombs >= maxBombs) return;
+       if (activeBombs >= EffectiveMaxBombs) return;
 
         activeBombs++;
         UpdateBombCountClientRpc(activeBombs);
@@ -93,7 +107,7 @@ private List<Vector3> CalculateExplosionCells(Vector3 center)
 
     foreach (Vector3 dir in directions)
     {
-        for (int i = 1; i <= explosionRange; i++)
+        for (int i = 1; i <= EffectiveExplosionRange; i++)
         {
             Vector3 targetCell = center + (dir * gridSize * i);
 
@@ -129,18 +143,33 @@ private void CheckCell(Vector3 cell, out bool hitIndestructible, out bool hitDes
             break;
         }
 
-        if (hit.CompareTag("Destructible"))
-        {
-            hitDestructible = true;
-            DestroyObjectAtPositionClientRpc(hit.transform.position);
-            break;
-        }
+      if (hit.CompareTag("Destructible"))
+{
+    hitDestructible = true;
+    DestroyObjectAtPositionClientRpc(hit.transform.position);
+    TrySpawnPowerUpDrop(hit.transform.position);
+    break;
+}
     }
 }
 
 private void CheckAndDestroyCell(Vector3 cell)
 {
     CheckCell(cell, out _, out _);
+}
+
+private void TrySpawnPowerUpDrop(Vector3 boxPosition)
+{
+    if (Random.value > powerUpDropChance) return;
+    if (powerUpPrefabs == null || powerUpPrefabs.Length == 0) return;
+
+    int index = Random.Range(0, powerUpPrefabs.Length);
+    GameObject prefab = powerUpPrefabs[index];
+    if (prefab == null) return;
+
+    Vector3 spawnPos = new Vector3(boxPosition.x, powerUpSpawnHeight, boxPosition.z);
+    GameObject dropInstance = Instantiate(prefab, spawnPos, Quaternion.identity);
+    dropInstance.GetComponent<NetworkObject>().Spawn();
 }
 
 /// Se ejecuta en todos los clientes para destruir el objeto estético en esa ubicación
