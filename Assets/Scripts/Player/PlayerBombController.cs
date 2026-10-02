@@ -115,9 +115,10 @@ private int EffectiveExplosionRange => explosionRange + (playerStats != null ? p
 private List<Vector3> CalculateExplosionCells(Vector3 center)
 {
     List<Vector3> cells = new List<Vector3> { center };
+    HashSet<ulong> playersHitThisExplosion = new HashSet<ulong>();
 
     // --- CHEQUEO DE LA CASILLA CENTRAL ---
-    CheckAndDestroyCell(center);
+    CheckAndDestroyCell(center, playersHitThisExplosion);
 
     // --- CHEQUEO DE LAS DIRECCIONES ---
     Vector3[] directions = { Vector3.forward, Vector3.back, Vector3.right, Vector3.left };
@@ -131,7 +132,7 @@ private List<Vector3> CalculateExplosionCells(Vector3 center)
             bool hitIndestructible;
             bool hitDestructible;
 
-            CheckCell(targetCell, out hitIndestructible, out hitDestructible);
+            CheckCell(targetCell, playersHitThisExplosion, out hitIndestructible, out hitDestructible);
 
             if (hitIndestructible) break;
 
@@ -144,12 +145,12 @@ private List<Vector3> CalculateExplosionCells(Vector3 center)
     return cells;
 }
 
-private void CheckAndDestroyCell(Vector3 cell)
+private void CheckAndDestroyCell(Vector3 cell, HashSet<ulong> playersHitThisExplosion)
 {
-    CheckCell(cell, out _, out _);
+    CheckCell(cell, playersHitThisExplosion, out _, out _);
 }
 
-private void CheckCell(Vector3 cell, out bool hitIndestructible, out bool hitDestructible)
+private void CheckCell(Vector3 cell, HashSet<ulong> playersHitThisExplosion, out bool hitIndestructible, out bool hitDestructible)
 {
     hitIndestructible = false;
     hitDestructible = false;
@@ -160,7 +161,7 @@ private void CheckCell(Vector3 cell, out bool hitIndestructible, out bool hitDes
 
     foreach (Collider hit in hits)
     {
-        // 1. Detección y aplicación de daño al Jugador
+        // 1. Detección y aplicación de daño al Jugador (una sola vez por jugador, por explosión)
         PlayerStateManager player = hit.GetComponent<PlayerStateManager>();
         if (player == null)
         {
@@ -169,17 +170,22 @@ private void CheckCell(Vector3 cell, out bool hitIndestructible, out bool hitDes
 
         if (player != null)
         {
-            player.TakeDamageServerRpc();
+            ulong playerId = player.NetworkObjectId;
+            if (!playersHitThisExplosion.Contains(playerId))
+            {
+                playersHitThisExplosion.Add(playerId);
+                player.TakeDamageServerRpc();
+            }
         }
 
         // 2. Obstáculos indestructibles (detienen la propagación)
-        if (hit.CompareTag("Indestructible"))
+        if (!hitIndestructible && hit.CompareTag("Indestructible"))
         {
             hitIndestructible = true;
         }
 
-        // 3. Obstáculos destructibles (destruyen y detienen la propagación)
-        if (hit.CompareTag("Destructible"))
+        // 3. Obstáculos destructibles (destruyen y detienen la propagación, una sola vez por casilla)
+        if (!hitDestructible && hit.CompareTag("Destructible"))
         {
             hitDestructible = true;
             DestroyObjectAtPositionClientRpc(hit.transform.position);
