@@ -57,7 +57,7 @@ private int EffectiveExplosionRange => explosionRange + (playerStats != null ? p
     [ServerRpc]
     private void RequestPlantBombServerRpc(Vector3 spawnPosition)
     {
-        if (activeBombs >= maxBombs) return;
+        if (activeBombs >= EffectiveMaxBombs) return;
 
         activeBombs++;
         UpdateBombCountClientRpc(activeBombs);
