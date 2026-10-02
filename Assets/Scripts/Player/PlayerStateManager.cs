@@ -59,8 +59,19 @@ public class PlayerStateManager : NetworkBehaviour
     [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Everyone)]
     public void TakeDamageServerRpc()
     {
+        // Si ya está muerto o aturdido, ignora daño
         if (currentState.Value == PlayerState.Muerto || currentState.Value == PlayerState.Aturdido) return;
 
+        // --- PROTECCIÓN POR ESCUDO ---
+        PlayerStats stats = GetComponent<PlayerStats>();
+        if (stats != null && stats.IsShielded)
+        {
+            Debug.Log("[PlayerStateManager] ¡Explosión bloqueada por el Escudo!");
+            stats.ConsumeShield(); // Consume el escudo en el servidor y apaga el visual
+            return; // Anula la pérdida de vida y el aturdimiento
+        }
+
+        // Si no tiene escudo, recibe el daño normal
         currentLives.Value--;
 
         if (currentLives.Value <= 0)

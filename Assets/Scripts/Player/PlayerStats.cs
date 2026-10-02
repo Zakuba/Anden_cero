@@ -110,6 +110,33 @@ public class PlayerStats : NetworkBehaviour
         }
     }
 
+/// Consume el escudo de inmediato tras bloquear una explosión.
+/// Solo debe llamarse en el Servidor/Host.
+public void ConsumeShield()
+{
+    if (!IsServer) return;
+
+    if (activePowerUp.Value == PowerUpType.Escudo)
+    {
+        if (activeTimerRoutine != null)
+        {
+            StopCoroutine(activeTimerRoutine);
+        }
+
+        // Si había otro power-up esperando en cola, se activa; si no, queda en Ninguno
+        if (queuedPowerUp.Value != PowerUpType.Ninguno)
+        {
+            PowerUpType next = queuedPowerUp.Value;
+            queuedPowerUp.Value = PowerUpType.Ninguno;
+            ActivatePowerUp(next);
+        }
+        else
+        {
+            activePowerUp.Value = PowerUpType.Ninguno;
+        }
+    }
+}
+
 // --- SOLO PARA PROBAR, hasta que exista HU-03.2 (drops reales) ---
 #if UNITY_EDITOR
     private void Update()
