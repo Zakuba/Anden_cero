@@ -39,22 +39,22 @@ public class PlayerStateManager : NetworkBehaviour
             characterController = GetComponent<CharacterController>();
     }
 
-    public override void OnNetworkSpawn()
+   public override void OnNetworkSpawn()
+{
+    if (IsServer)
     {
-        if (IsServer)
-        {
-            currentLives.Value = maxLives;
-            currentState.Value = PlayerState.Vivo;
-        }
-
-        currentState.OnValueChanged += OnStateChanged;
-        ApplyStateProperties(currentState.Value);
+        currentLives.Value = maxLives;
+        currentState.Value = PlayerState.Vivo;
     }
 
-    public override void OnNetworkDespawn()
+    currentState.OnValueChanged += OnStateChanged;
+    ApplyStateProperties(currentState.Value);
+
+    if (MatchManager.Instance != null)
     {
-        currentState.OnValueChanged -= OnStateChanged;
+        MatchManager.Instance.RegisterPlayer(this);
     }
+}
 
     [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Everyone)]
     public void TakeDamageServerRpc()
