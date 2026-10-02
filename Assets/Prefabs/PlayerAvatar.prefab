@@ -18,6 +18,7 @@ GameObject:
   - component: {fileID: 262425994612966626}
   - component: {fileID: 5769002067245888163}
   - component: {fileID: 4121954788461909425}
+  - component: {fileID: 4830271221576520950}
   m_Layer: 0
   m_Name: PlayerAvatar
   m_TagString: Player
@@ -233,7 +234,7 @@ MonoBehaviour:
   ShowTopMostFoldoutHeaderGroup: 1
   bombPrefab: {fileID: 6099856826827984316, guid: a368f4f3cc921e943942c1791fea6f11, type: 3}
   gridSize: 2.5
-  bombTimer: 3
+  bombTimer: 10
   explosionRange: 1
   explosionLayerMask:
     serializedVersion: 2
@@ -288,3 +289,24 @@ MonoBehaviour:
   botasSpeedMultiplier: 1.5
   guanteBateoMultiplier: 1.5
   escudoVisual: {fileID: 0}
+--- !u!114 &4830271221576520950
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6023118608644461741}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b6e17e674df549f4483e53c70d8b39f3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerBatMechanic
+  ShowTopMostFoldoutHeaderGroup: 1
+  batKey: 101
+  gridSize: 2.5
+  bombLayerMask:
+    serializedVersion: 2
+    m_Bits: 8
+  indestructibleTag: Indestructible
+  destructibleTag: Destructible
+  playerTag: Player

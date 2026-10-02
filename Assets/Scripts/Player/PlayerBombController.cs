@@ -57,7 +57,7 @@ private int EffectiveExplosionRange => explosionRange + (playerStats != null ? p
     [ServerRpc]
     private void RequestPlantBombServerRpc(Vector3 spawnPosition)
     {
-       if (activeBombs >= EffectiveMaxBombs) return;
+        if (activeBombs >= maxBombs) return;
 
         activeBombs++;
         UpdateBombCountClientRpc(activeBombs);
@@ -66,22 +66,35 @@ private int EffectiveExplosionRange => explosionRange + (playerStats != null ? p
         NetworkObject bombNetObj = bombInstance.GetComponent<NetworkObject>();
         bombNetObj.Spawn();
 
-        StartCoroutine(BombExplosionRoutine(bombNetObj, spawnPosition));
+        // Llamada con un solo parámetro
+        StartCoroutine(BombExplosionRoutine(bombNetObj));
     }
 
-    private IEnumerator BombExplosionRoutine(NetworkObject bombNetObj, Vector3 centerPos)
+    private IEnumerator BombExplosionRoutine(NetworkObject bombNetObj)
     {
-        yield return new WaitForSeconds(bombTimer);
+        BombInteractable bombLogic = bombNetObj.GetComponent<BombInteractable>();
+        float currentTimer = 0f;
+
+        // Pausa la cuenta regresiva mientras la bomba se desliza
+        while (currentTimer < bombTimer)
+        {
+            if (bombNetObj == null || !bombNetObj.IsSpawned) yield break;
+
+            if (bombLogic == null || !bombLogic.isMoving.Value)
+            {
+                currentTimer += Time.deltaTime;
+            }
+            yield return null;
+        }
 
         if (bombNetObj != null && bombNetObj.IsSpawned)
         {
-            // 1. El servidor calcula la expansión y recopila las posiciones válidas
-            List<Vector3> affectedCells = CalculateExplosionCells(centerPos);
-
-            // 2. Notifica a todos los clientes (Host y Cliente) dónde spawnear el fuego
+            // Toma la posición REAL tras ser bateada
+            Vector3 finalPos = bombNetObj.transform.position;
+            
+            List<Vector3> affectedCells = CalculateExplosionCells(finalPos);
             SpawnVfxClientRpc(affectedCells.ToArray());
 
-            // 3. Breve espera para garantizar que el paquete ClientRpc salga antes del despawn
             yield return new WaitForSeconds(0.05f);
 
             if (bombNetObj != null && bombNetObj.IsSpawned)
