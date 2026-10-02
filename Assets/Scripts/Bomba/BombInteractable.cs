@@ -5,7 +5,7 @@ public class BombInteractable : NetworkBehaviour
 {
     [Header("Configuración de Desplazamiento")]
     [Tooltip("Velocidad a la que se desliza la bomba hacia la siguiente casilla.")]
-    [SerializeField] private float slideSpeed = 8f;
+    [SerializeField] private float slideSpeed = 12f;
 
     // Sincroniza el estado para que todos sepan que está en movimiento
     public NetworkVariable<bool> isMoving = new NetworkVariable<bool>(false);

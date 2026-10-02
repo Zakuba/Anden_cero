@@ -8,7 +8,6 @@ public class PlayerBatMechanic : NetworkBehaviour
     [SerializeField] private float gridSize = 2.5f;
 
     [Header("Detección de Bombas")]
-    [Tooltip("LayerMask exclusivo para detectar la bomba frente al jugador.")]
     [SerializeField] private LayerMask bombLayerMask;
 
     [Header("Tags de Obstáculos")]
@@ -17,20 +16,42 @@ public class PlayerBatMechanic : NetworkBehaviour
     [SerializeField] private string playerTag = "Player";
 
     private PlayerStats playerStats;
+    private PlayerStateManager stateManager;
 
     private void Awake()
     {
         playerStats = GetComponent<PlayerStats>();
+        stateManager = GetComponent<PlayerStateManager>();
     }
 
     private void Update()
     {
         if (!IsOwner) return;
 
+        // Bloqueo si el jugador está aturdido o muerto
+        if (stateManager != null && stateManager.currentState.Value != PlayerState.Vivo) return;
+
         if (Input.GetKeyDown(batKey))
         {
-            Vector3 cardinalDir = GetCardinalDirection(transform.forward);
-            RequestBatBombServerRpc(cardinalDir);
+            TryBatLocal();
+        }
+    }
+
+    private void TryBatLocal()
+    {
+        Vector3 cardinalDir = GetCardinalDirection(transform.forward);
+        Vector3 origin = transform.position + (Vector3.up * 0.5f);
+
+        // El cliente local detecta la bomba directamente frente a sus ojos
+        if (Physics.SphereCast(origin, 0.45f, cardinalDir, out RaycastHit hit, gridSize * 1.1f, bombLayerMask, QueryTriggerInteraction.Collide))
+        {
+            BombInteractable bomb = hit.collider.GetComponent<BombInteractable>();
+
+            if (bomb != null && !bomb.isMoving.Value)
+            {
+                // Enviar la referencia directa al servidor
+                RequestBatBombServerRpc(new NetworkObjectReference(bomb.NetworkObject), cardinalDir);
+            }
         }
     }
 
@@ -45,48 +66,45 @@ public class PlayerBatMechanic : NetworkBehaviour
     }
 
     [ServerRpc]
-    private void RequestBatBombServerRpc(Vector3 direction)
+    private void RequestBatBombServerRpc(NetworkObjectReference bombRef, Vector3 direction)
     {
-        Vector3 origin = transform.position + (Vector3.up * 0.5f);
-        if (Physics.SphereCast(origin, 0.4f, direction, out RaycastHit hit, gridSize, bombLayerMask, QueryTriggerInteraction.Collide))
+        // 1. Resolver el objeto en el servidor
+        if (!bombRef.TryGet(out NetworkObject bombNetObj)) return;
+
+        BombInteractable bomb = bombNetObj.GetComponent<BombInteractable>();
+        if (bomb == null || bomb.isMoving.Value) return;
+
+        // 2. Validación de proximidad de seguridad (evita exploits si el jugador estuviera lejos)
+        if (Vector3.Distance(transform.position, bomb.transform.position) > gridSize * 2.2f) return;
+
+        // 3. Determinar alcance según Power-Up
+        int maxCellsToSlide = 1;
+        if (playerStats != null && playerStats.BateoMultiplier > 1f)
         {
-            BombInteractable bomb = hit.collider.GetComponent<BombInteractable>();
+            maxCellsToSlide = Mathf.RoundToInt(playerStats.BateoMultiplier);
+            if (maxCellsToSlide < 2) maxCellsToSlide = 2;
+        }
 
-            if (bomb != null && !bomb.isMoving.Value)
+        // 4. Calcular el trayecto casilla por casilla
+        Vector3 finalDestination = bomb.transform.position;
+
+        for (int i = 1; i <= maxCellsToSlide; i++)
+        {
+            Vector3 nextCell = bomb.transform.position + (direction * gridSize * i);
+
+            if (!IsCellBlocked(nextCell))
             {
-                // Determina la cantidad de casillas según el power-up activo
-                // Sin guante = 1 casilla. Con guante (multiplicador >= 1.5) = 2 casillas (o según el valor redondeado)
-                int maxCellsToSlide = 1;
-                if (playerStats != null && playerStats.BateoMultiplier > 1f)
-                {
-                    maxCellsToSlide = Mathf.RoundToInt(playerStats.BateoMultiplier); 
-                    if (maxCellsToSlide < 2) maxCellsToSlide = 2; // Garantiza mínimo 2 casillas con el guante
-                }
-
-                // Proyecta casilla por casilla en línea recta hasta encontrar un obstáculo
-                Vector3 currentTarget = bomb.transform.position;
-                Vector3 finalDestination = bomb.transform.position;
-
-                for (int i = 1; i <= maxCellsToSlide; i++)
-                {
-                    Vector3 nextCell = bomb.transform.position + (direction * gridSize * i);
-
-                    if (!IsCellBlocked(nextCell))
-                    {
-                        finalDestination = nextCell; // Casilla válida para deslizarse
-                    }
-                    else
-                    {
-                        break; // Se frena en seco al topar con el primer obstáculo
-                    }
-                }
-
-                // Si al menos pudo avanzar una casilla, inicia el deslizamiento
-                if (finalDestination != bomb.transform.position)
-                {
-                    bomb.SlideTo(finalDestination);
-                }
+                finalDestination = nextCell;
             }
+            else
+            {
+                break; // Se frena en seco ante el primer obstáculo
+            }
+        }
+
+        if (finalDestination != bomb.transform.position)
+        {
+            bomb.SlideTo(finalDestination);
         }
     }
 

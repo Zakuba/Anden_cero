@@ -19,6 +19,7 @@ GameObject:
   - component: {fileID: 5769002067245888163}
   - component: {fileID: 4121954788461909425}
   - component: {fileID: 4830271221576520950}
+  - component: {fileID: 8594183129778106702}
   m_Layer: 0
   m_Name: PlayerAvatar
   m_TagString: Player
@@ -113,9 +114,9 @@ CapsuleCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_ProvidesContacts: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 2
   m_Radius: 0.5
   m_Height: 2
@@ -133,7 +134,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.NetworkObject
-  GlobalObjectIdHash: 751227136
+  GlobalObjectIdHash: 1902537740
   InScenePlacedSourceGlobalObjectIdHash: 0
   m_InScenePlacedDisabledByDefault: 0
   DeferredDespawnTick: 0
@@ -310,3 +311,33 @@ MonoBehaviour:
   indestructibleTag: Indestructible
   destructibleTag: Destructible
   playerTag: Player
+--- !u!114 &8594183129778106702
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6023118608644461741}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 76d0c90a809e5214dbb7e25f93b5bf9b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerStateManager
+  ShowTopMostFoldoutHeaderGroup: 1
+  maxLives: 3
+  characterController: {fileID: 6785377418466255797}
+  ghostTriggerCollider: {fileID: 72523261959232536}
+  playerRenderer: {fileID: 5322985985516838060}
+  colorVivo: {r: 0.05724919, g: 1, b: 0, a: 1}
+  colorAturdido: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
+  colorMuerto: {r: 0.5, g: 0.5, b: 0.5, a: 1}
+  currentState:
+    UpdateTraits:
+      MinSecondsBetweenUpdates: 0
+      MaxSecondsBetweenUpdates: 0
+    m_InternalValue: 0
+  currentLives:
+    UpdateTraits:
+      MinSecondsBetweenUpdates: 0
+      MaxSecondsBetweenUpdates: 0
+    m_InternalValue: 3

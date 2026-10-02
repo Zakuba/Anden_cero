@@ -40,6 +40,10 @@ private int EffectiveExplosionRange => explosionRange + (playerStats != null ? p
     {
         if (!IsOwner) return;
 
+        // BLOQUEO DE ESTADO
+        PlayerStateManager stateManager = GetComponent<PlayerStateManager>();
+        if (stateManager != null && stateManager.currentState.Value != PlayerState.Vivo) return;
+
         if (Input.GetKeyDown(plantKey) && activeBombs < EffectiveMaxBombs)
         {
             Vector3 spawnPosition = GetGridCenter(transform.position);
@@ -140,36 +144,51 @@ private List<Vector3> CalculateExplosionCells(Vector3 center)
     return cells;
 }
 
+private void CheckAndDestroyCell(Vector3 cell)
+{
+    CheckCell(cell, out _, out _);
+}
+
 private void CheckCell(Vector3 cell, out bool hitIndestructible, out bool hitDestructible)
 {
     hitIndestructible = false;
     hitDestructible = false;
 
+    // Escaneo de la casilla con margen de seguridad del 90% del tamaño
     Vector3 halfExtents = new Vector3(gridSize * 0.45f, 2.0f, gridSize * 0.45f);
     Collider[] hits = Physics.OverlapBox(cell, halfExtents, Quaternion.identity, explosionLayerMask, QueryTriggerInteraction.Collide);
 
     foreach (Collider hit in hits)
     {
+        // 1. Detección y aplicación de daño al Jugador
+        PlayerStateManager player = hit.GetComponent<PlayerStateManager>();
+        if (player == null)
+        {
+            player = hit.GetComponentInParent<PlayerStateManager>();
+        }
+
+        if (player != null)
+        {
+            player.TakeDamageServerRpc();
+        }
+
+        // 2. Obstáculos indestructibles (detienen la propagación)
         if (hit.CompareTag("Indestructible"))
         {
             hitIndestructible = true;
-            break;
         }
 
-      if (hit.CompareTag("Destructible"))
-{
-    hitDestructible = true;
-    DestroyObjectAtPositionClientRpc(hit.transform.position);
-    TrySpawnPowerUpDrop(hit.transform.position);
-    break;
-}
+        // 3. Obstáculos destructibles (destruyen y detienen la propagación)
+        if (hit.CompareTag("Destructible"))
+        {
+            hitDestructible = true;
+            DestroyObjectAtPositionClientRpc(hit.transform.position);
+            TrySpawnPowerUpDrop(hit.transform.position);
+        }
     }
 }
 
-private void CheckAndDestroyCell(Vector3 cell)
-{
-    CheckCell(cell, out _, out _);
-}
+
 
 private void TrySpawnPowerUpDrop(Vector3 boxPosition)
 {

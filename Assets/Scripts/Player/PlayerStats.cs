@@ -53,9 +53,9 @@ public class PlayerStats : NetworkBehaviour
     }
 
     // Esto lo va a llamar el pickup de HU-03.2 más adelante.
-    [ServerRpc(RequireOwnership = false)]
-public void RequestPickupPowerUpServerRpc(PowerUpType type)
-{
+    [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Everyone)]
+    public void RequestPickupPowerUpServerRpc(PowerUpType type)
+    {
     Debug.Log($"[PlayerStats] Power-up solicitado: {type}");
 
     if (activePowerUp.Value == PowerUpType.Ninguno)
