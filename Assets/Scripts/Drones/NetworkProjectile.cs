@@ -7,11 +7,11 @@ public class NetworkProjectile : NetworkBehaviour
 {
     [Header("Configuración")]
     [SerializeField] private float speed = 8f;
-    [SerializeField] private float lifeTime = 4f; // Autodestrucción si no choca con nada
+    [SerializeField] private float lifeTime = 4f;
 
-    private void Start()
+    // Reemplazamos Start() por OnNetworkSpawn() que es seguro en multijugador
+    public override void OnNetworkSpawn()
     {
-        // Solo el servidor gestiona el tiempo de vida y el movimiento físico
         if (IsServer)
         {
             Invoke(nameof(DestroyProjectile), lifeTime);
@@ -21,7 +21,6 @@ public class NetworkProjectile : NetworkBehaviour
     private void Update()
     {
         if (!IsServer) return;
-        // Movimiento constante hacia adelante
         transform.Translate(Vector3.forward * speed * Time.deltaTime);
     }
 
@@ -29,21 +28,23 @@ public class NetworkProjectile : NetworkBehaviour
     {
         if (!IsServer) return;
 
-        // Ignorar colisiones con el propio dron que lo disparó u otros drones
+        // 1. Ignorar colisiones con drones
         if (other.CompareTag("Drone")) return;
+        
+        // 2. Ignorar si choca contra otro trigger (por ejemplo, zonas de luz u otros radares)
+        if (other.isTrigger) return; 
 
-        // Si impacta a un jugador
+        // 3. Impacto a jugador
         if (other.CompareTag("Player"))
         {
             NetworkObject playerNetObj = other.GetComponent<NetworkObject>();
             if (playerNetObj != null && playerNetObj.IsSpawned)
             {
-                // Por ahora, esto destruye al jugador (lo saca de la partida)
-                playerNetObj.Despawn(); 
+                //playerNetObj.Despawn(); 
             }
         }
 
-        // Al chocar contra cualquier otra cosa (Pared, Caja, Jugador), se destruye la bala
+        // 4. Se destruye al chocar contra geometría sólida
         DestroyProjectile();
     }
 

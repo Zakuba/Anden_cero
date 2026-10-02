@@ -26,6 +26,7 @@ public class DroneShooterAI : NetworkBehaviour
     [SerializeField] private GameObject projectilePrefab;
     [SerializeField] private Transform firePoint;
     [SerializeField] private float fireRate = 1f;
+    [SerializeField] private float eyeHeight = 1f; // <-- NUEVO: Altura de los "ojos"
 
     private NavMeshAgent agent;
     private ShooterState currentState = ShooterState.Patrol;
@@ -73,20 +74,28 @@ public class DroneShooterAI : NetworkBehaviour
 
     private void CheckLineOfSight()
     {
-        // Busca jugadores cercanos
-        Collider[] hits = Physics.OverlapSphere(transform.position, sightRange);
+        // Elevamos el punto desde donde mira el dron
+        Vector3 eyePosition = transform.position + Vector3.up * eyeHeight; 
+        
+        Collider[] hits = Physics.OverlapSphere(eyePosition, sightRange);
         Transform potentialTarget = null;
         float closestDistance = Mathf.Infinity;
-
-        foreach (var hit in hits)
+        
+    foreach (var hit in hits)
         {
             if (hit.CompareTag("Player"))
             {
-                float dist = Vector3.Distance(transform.position, hit.transform.position);
-                Vector3 dirToPlayer = (hit.transform.position - transform.position).normalized;
+                // Elevamos también el punto hacia donde mira (para no apuntarle a los pies)
+                Vector3 targetCenter = hit.transform.position + Vector3.up * eyeHeight;
+                
+                float dist = Vector3.Distance(eyePosition, targetCenter);
+                Vector3 dirToPlayer = (targetCenter - eyePosition).normalized;
 
-                // Raycast para asegurar que no hay cajas ni paredes en medio
-                if (!Physics.Raycast(transform.position, dirToPlayer, dist, obstacleMask))
+                // Dibuja una línea amarilla en la vista "Scene" para que veas el rayo en tiempo real
+                Debug.DrawRay(eyePosition, dirToPlayer * dist, Color.yellow); 
+
+                // Lanza el rayo. Si no choca con nada de la obstacleMask, lo vio
+                if (!Physics.Raycast(eyePosition, dirToPlayer, dist, obstacleMask))
                 {
                     if (dist < closestDistance)
                     {
@@ -97,13 +106,13 @@ public class DroneShooterAI : NetworkBehaviour
             }
         }
 
-        // Transiciones de estado
+        // Transiciones
         if (potentialTarget != null)
         {
             if (currentState == ShooterState.Patrol)
             {
                 currentState = ShooterState.Attack;
-                agent.speed = attackSpeed; // Reduce velocidad
+                agent.speed = attackSpeed;
             }
             targetPlayer = potentialTarget;
         }
@@ -111,12 +120,19 @@ public class DroneShooterAI : NetworkBehaviour
         {
             if (currentState == ShooterState.Attack)
             {
-                // El jugador se escondió, vuelve a patrullar inmediatamente
                 currentState = ShooterState.Patrol;
                 agent.speed = patrolSpeed;
                 targetPlayer = null;
             }
         }
+    }
+
+    // --- NUEVO: Esto dibuja la esfera de visión en la pestaña Scene del Editor ---
+    private void OnDrawGizmosSelected()
+    {
+        Gizmos.color = Color.red;
+        Vector3 eyePosition = transform.position + Vector3.up * (eyeHeight > 0 ? eyeHeight : 1f);
+        Gizmos.DrawWireSphere(eyePosition, sightRange);
     }
 
     private void HandleMovement()
@@ -191,6 +207,20 @@ public class DroneShooterAI : NetworkBehaviour
     {
         if (targetPlayer == null) return;
 
+        // Calculamos la dirección exacta hacia el jugador en el plano horizontal
+        Vector3 dirToPlayer = (targetPlayer.position - transform.position).normalized;
+        dirToPlayer.y = 0;
+
+        // Calculamos cuántos grados de diferencia hay entre la mira del dron y el jugador
+        float angle = Vector3.Angle(transform.forward, dirToPlayer);
+
+        // Si la diferencia es mayor a 5 grados, el dron cancela el disparo y sigue girando
+        if (angle > 10f)
+        {
+            return; 
+        }
+
+        // Solo si lo tiene en la mira, avanza el temporizador y dispara
         fireTimer -= Time.deltaTime;
         if (fireTimer <= 0f)
         {
@@ -217,7 +247,7 @@ public class DroneShooterAI : NetworkBehaviour
         if (dir != Vector3.zero)
         {
             Quaternion targetRotation = Quaternion.LookRotation(dir);
-            transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * 5f);
+            transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * 10f);
         }
     }
 

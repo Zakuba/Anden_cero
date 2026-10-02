@@ -135,14 +135,24 @@ private void CheckCell(Vector3 cell, out bool hitIndestructible, out bool hitDes
             DestroyObjectAtPositionClientRpc(hit.transform.position);
             break;
         }
+        // --- LÓGICA PARA DAÑAR A CUALQUIER DRON ---
         if (hit.CompareTag("Drone"))
         {
-            DroneBomberAI drone = hit.GetComponent<DroneBomberAI>();
-            if (drone != null)
+            // 1. Intentamos ver si es el Bombardero
+            DroneBomberAI bombardero = hit.GetComponent<DroneBomberAI>();
+            if (bombardero != null)
             {
-                drone.TakeDamage(); 
+                bombardero.TakeDamage(); 
             }
             
+            // 2. Intentamos ver si es el Fusilero
+            DroneShooterAI fusilero = hit.GetComponent<DroneShooterAI>();
+            if (fusilero != null)
+            {
+                fusilero.TakeDamage();
+            }
+            
+            // Frenamos la expansión del fuego de la bomba
             hitDestructible = true; 
             break;
         }

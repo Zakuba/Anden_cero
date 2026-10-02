@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: 8262158825635871694}
   - component: {fileID: 8217382920124504894}
   - component: {fileID: 5466363630610301564}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Dron Fusilero
   m_TagString: Drone
   m_Icon: {fileID: 0}
@@ -72,7 +72,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
+  - {fileID: 2100000, guid: 332530dca5cf5f74fa29ed33ff1e4f72, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -238,6 +238,7 @@ MonoBehaviour:
   projectilePrefab: {fileID: 236433448797351813, guid: 63da4468429d41e49a4231f188bef2bf, type: 3}
   firePoint: {fileID: 7229684986349033828}
   fireRate: 1
+  eyeHeight: 1
 --- !u!1 &3250924244427067158
 GameObject:
   m_ObjectHideFlags: 0
@@ -247,7 +248,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7229684986349033828}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: FirePoint
   m_TagString: Untagged
   m_Icon: {fileID: 0}
