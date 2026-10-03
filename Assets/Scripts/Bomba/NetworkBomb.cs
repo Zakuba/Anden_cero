@@ -90,7 +90,7 @@ public class NetworkBomb : NetworkBehaviour
             if (hit.CompareTag("Destructible"))
             {
                 hitDestructible = true;
-                DestroyObjectAtPositionClientRpc(hit.transform.position);
+                //DestroyObjectAtPositionClientRpc(hit.transform.position);
                 break;
             }
         }
