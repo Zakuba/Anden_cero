@@ -21,14 +21,10 @@ public class PlayerMovimientoOnline : NetworkBehaviour
     private Vector3 movementInput;
     private float verticalVelocity = 0f;
     private const float Gravity = -9.81f;
-    private PlayerStats playerStats;
-    private PlayerStateManager stateManager;
 
     private void Awake()
     {
         controller = GetComponent<CharacterController>();
-        playerStats = GetComponent<PlayerStats>();
-        stateManager = GetComponent<PlayerStateManager>();
     }
 
     public override void OnNetworkSpawn()
@@ -73,15 +69,6 @@ public class PlayerMovimientoOnline : NetworkBehaviour
     {
         if (!IsOwner) return;
 
-        // BLOQUEO DE ESTADO
-        //PlayerStateManager stateManager = GetComponent<PlayerStateManager>();
-        
-        // Si está aturdido o muerto, ignora el input y detiene el movimiento
-        if (stateManager != null && stateManager.currentState.Value != PlayerState.Vivo)
-        {
-            return;
-        }
-
         GatherCustomInput();
         MoveAndRotate();
     }
@@ -118,8 +105,7 @@ public class PlayerMovimientoOnline : NetworkBehaviour
             transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
         }
 
-        float effectiveSpeed = moveSpeed * (playerStats != null ? playerStats.MoveSpeedMultiplier : 1f);
-        Vector3 finalVelocity = (moveDirection * effectiveSpeed) + (Vector3.up * verticalVelocity);
+        Vector3 finalVelocity = (moveDirection * moveSpeed) + (Vector3.up * verticalVelocity);
         controller.Move(finalVelocity * Time.deltaTime);
     }
 }

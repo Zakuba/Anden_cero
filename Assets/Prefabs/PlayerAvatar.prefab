@@ -240,7 +240,7 @@ MonoBehaviour:
   explosionRange: 1
   explosionLayerMask:
     serializedVersion: 2
-    m_Bits: 1
+    m_Bits: 65
   plantKey: 32
   alturaspawnbomba: -1
   powerUpPrefabs:

@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Destructible
   - Indestructible
+  - Drone
   layers:
   - Default
   - TransparentFX
@@ -13,7 +14,7 @@ TagManager:
   - Bombas
   - Water
   - UI
-  - 
+  - Enemigos
   - 
   - 
   - 

@@ -191,6 +191,28 @@ private void CheckCell(Vector3 cell, HashSet<ulong> playersHitThisExplosion, out
             DestroyObjectAtPositionClientRpc(hit.transform.position);
             TrySpawnPowerUpDrop(hit.transform.position);
         }
+
+        // --- LÓGICA PARA DAÑAR A CUALQUIER DRON ---
+        if (hit.CompareTag("Drone"))
+        {
+            // 1. Intentamos ver si es el Bombardero
+            DroneBomberAI bombardero = hit.GetComponent<DroneBomberAI>();
+            if (bombardero != null)
+            {
+                bombardero.TakeDamage(); 
+            }
+            
+            // 2. Intentamos ver si es el Fusilero
+            DroneShooterAI fusilero = hit.GetComponent<DroneShooterAI>();
+            if (fusilero != null)
+            {
+                fusilero.TakeDamage();
+            }
+            
+            // Frenamos la expansión del fuego de la bomba
+            hitDestructible = true; 
+            break;
+        }
     }
 }
 
