@@ -45,6 +45,9 @@ public class PowerUpPickup : NetworkBehaviour
                 PlayerStats stats = hit.GetComponentInParent<PlayerStats>();
                 if (stats == null) continue;
 
+                // Si ya tiene un power-up activo, lo dejamos tirado para otro jugador
+                if (stats.HasActivePowerUp) continue;
+
                 isCollected = true;
                 stats.RequestPickupPowerUpServerRpc(powerUpType);
 

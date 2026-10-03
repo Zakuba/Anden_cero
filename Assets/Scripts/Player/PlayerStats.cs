@@ -30,9 +30,6 @@ public class PlayerStats : NetworkBehaviour
     private readonly NetworkVariable<PowerUpType> activePowerUp = new NetworkVariable<PowerUpType>(
         PowerUpType.Ninguno, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
 
-    private readonly NetworkVariable<PowerUpType> queuedPowerUp = new NetworkVariable<PowerUpType>(
-        PowerUpType.Ninguno, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
-
     private Coroutine activeTimerRoutine;
 
     public int ExplosionRangeBonus => activePowerUp.Value == PowerUpType.Expansor ? bonusExplosionRange : 0;
@@ -40,6 +37,9 @@ public class PlayerStats : NetworkBehaviour
     public float MoveSpeedMultiplier => activePowerUp.Value == PowerUpType.Botas ? botasSpeedMultiplier : 1f;
     public float BateoMultiplier => activePowerUp.Value == PowerUpType.Guante ? guanteBateoMultiplier : 1f;
     public bool IsShielded => activePowerUp.Value == PowerUpType.Escudo;
+
+    // Para que PowerUpPickup sepa si este jugador puede agarrar uno nuevo
+    public bool HasActivePowerUp => activePowerUp.Value != PowerUpType.Ninguno;
 
     public override void OnNetworkSpawn()
     {
@@ -52,21 +52,15 @@ public class PlayerStats : NetworkBehaviour
         activePowerUp.OnValueChanged -= OnActivePowerUpChanged;
     }
 
-    // Esto lo va a llamar el pickup de HU-03.2 más adelante.
     [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Everyone)]
     public void RequestPickupPowerUpServerRpc(PowerUpType type)
     {
-    Debug.Log($"[PlayerStats] Power-up solicitado: {type}");
+        // Si ya tiene uno activo, se ignora (PowerUpPickup ya deberia haber
+        // filtrado esto antes de llamar, pero lo dejamos como resguardo).
+        if (activePowerUp.Value != PowerUpType.Ninguno) return;
 
-    if (activePowerUp.Value == PowerUpType.Ninguno)
-        {
-            ActivatePowerUp(type);
-        }
-        else if (queuedPowerUp.Value == PowerUpType.Ninguno)
-        {
-            queuedPowerUp.Value = type;
-        }
-        // Si ya hay uno activo y uno en cola, se ignora: ya está en el límite.
+        Debug.Log($"[PlayerStats] Power-up solicitado: {type}");
+        ActivatePowerUp(type);
     }
 
     private void ActivatePowerUp(PowerUpType type)
@@ -83,24 +77,14 @@ public class PlayerStats : NetworkBehaviour
     private IEnumerator PowerUpTimer()
     {
         yield return new WaitForSeconds(powerUpDuration);
-
-        if (queuedPowerUp.Value != PowerUpType.Ninguno)
-        {
-            PowerUpType next = queuedPowerUp.Value;
-            queuedPowerUp.Value = PowerUpType.Ninguno;
-            ActivatePowerUp(next);
-        }
-        else
-        {
-            activePowerUp.Value = PowerUpType.Ninguno;
-        }
+        activePowerUp.Value = PowerUpType.Ninguno;
     }
 
     private void OnActivePowerUpChanged(PowerUpType previous, PowerUpType current)
-{
-    Debug.Log($"[PlayerStats] Power-up activo cambió de {previous} a {current}");
-    UpdateEscudoVisual(current);
-}
+    {
+        Debug.Log($"[PlayerStats] Power-up activo cambió de {previous} a {current}");
+        UpdateEscudoVisual(current);
+    }
 
     private void UpdateEscudoVisual(PowerUpType current)
     {
@@ -110,34 +94,23 @@ public class PlayerStats : NetworkBehaviour
         }
     }
 
-/// Consume el escudo de inmediato tras bloquear una explosión.
-/// Solo debe llamarse en el Servidor/Host.
-public void ConsumeShield()
-{
-    if (!IsServer) return;
-
-    if (activePowerUp.Value == PowerUpType.Escudo)
+    /// Consume el escudo de inmediato tras bloquear una explosión.
+    /// Solo debe llamarse en el Servidor/Host.
+    public void ConsumeShield()
     {
-        if (activeTimerRoutine != null)
-        {
-            StopCoroutine(activeTimerRoutine);
-        }
+        if (!IsServer) return;
 
-        // Si había otro power-up esperando en cola, se activa; si no, queda en Ninguno
-        if (queuedPowerUp.Value != PowerUpType.Ninguno)
+        if (activePowerUp.Value == PowerUpType.Escudo)
         {
-            PowerUpType next = queuedPowerUp.Value;
-            queuedPowerUp.Value = PowerUpType.Ninguno;
-            ActivatePowerUp(next);
-        }
-        else
-        {
+            if (activeTimerRoutine != null)
+            {
+                StopCoroutine(activeTimerRoutine);
+            }
             activePowerUp.Value = PowerUpType.Ninguno;
         }
     }
-}
 
-// --- SOLO PARA PROBAR, hasta que exista HU-03.2 (drops reales) ---
+    // --- SOLO PARA PROBAR, hasta que exista un pickup real por teclado ---
 #if UNITY_EDITOR
     private void Update()
     {
