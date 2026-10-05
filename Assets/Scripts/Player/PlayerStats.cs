@@ -27,6 +27,9 @@ public class PlayerStats : NetworkBehaviour
     [Header("Indicador visual de Escudo")]
     [SerializeField] private GameObject escudoVisual;
 
+    private PowerUpUI localPowerUpUI;
+    public float PowerUpDuration => powerUpDuration;
+
     private readonly NetworkVariable<PowerUpType> activePowerUp = new NetworkVariable<PowerUpType>(
         PowerUpType.Ninguno, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
 
@@ -45,6 +48,11 @@ public class PlayerStats : NetworkBehaviour
     {
         activePowerUp.OnValueChanged += OnActivePowerUpChanged;
         UpdateEscudoVisual(activePowerUp.Value);
+
+        if (IsOwner)
+        {
+            localPowerUpUI = FindObjectOfType<PowerUpUI>(true);
+        }
     }
 
     public override void OnNetworkDespawn()
@@ -84,6 +92,20 @@ public class PlayerStats : NetworkBehaviour
     {
         Debug.Log($"[PlayerStats] Power-up activo cambió de {previous} a {current}");
         UpdateEscudoVisual(current);
+
+        if (IsOwner && localPowerUpUI != null)
+        {
+            if (current != PowerUpType.Ninguno)
+            {
+                // Enciende el HUD con el tipo de efecto y los segundos de duración
+                localPowerUpUI.ActivateEffect(current, powerUpDuration);
+            }
+            else
+            {
+                // Apaga el HUD cuando el tiempo termina o se rompe el escudo
+                localPowerUpUI.DeactivateEffect();
+            }
+        }
     }
 
     private void UpdateEscudoVisual(PowerUpType current)
@@ -121,6 +143,12 @@ public class PlayerStats : NetworkBehaviour
         if (Input.GetKeyDown(KeyCode.Alpha3)) RequestPickupPowerUpServerRpc(PowerUpType.Botas);
         if (Input.GetKeyDown(KeyCode.Alpha4)) RequestPickupPowerUpServerRpc(PowerUpType.Guante);
         if (Input.GetKeyDown(KeyCode.Alpha5)) RequestPickupPowerUpServerRpc(PowerUpType.Escudo);
+
+        // RED DE SEGURIDAD: Si no encontró la UI al nacer, la sigue buscando
+        if (localPowerUpUI == null)
+        {
+            localPowerUpUI = FindObjectOfType<PowerUpUI>(true);
+        }
     }
 #endif
 }
