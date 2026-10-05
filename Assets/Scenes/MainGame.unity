@@ -8068,6 +8068,112 @@ Transform:
   - {fileID: 1298764178}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1001 &417654717
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 1917036122}
+    m_Modifications:
+    - target: {fileID: 253898069864107226, guid: 71ab548ad3b120d4c92dd4961afc87dc, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 08e1d5dd275adc44aa674fee6beb17fe, type: 2}
+    - target: {fileID: 564525828303104135, guid: 71ab548ad3b120d4c92dd4961afc87dc, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 08e1d5dd275adc44aa674fee6beb17fe, type: 2}
+    - target: {fileID: 1856215094248081227, guid: 71ab548ad3b120d4c92dd4961afc87dc, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 08e1d5dd275adc44aa674fee6beb17fe, type: 2}
+    - target: {fileID: 2384026757299239286, guid: 71ab548ad3b120d4c92dd4961afc87dc, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 08e1d5dd275adc44aa674fee6beb17fe, type: 2}
+    - target: {fileID: 2698538663051108421, guid: 71ab548ad3b120d4c92dd4961afc87dc, type: 3}
+      propertyPath: m_Name
+      value: Dron Fusilero (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 4700788477788071081, guid: 71ab548ad3b120d4c92dd4961afc87dc, type: 3}
+      propertyPath: m_InScenePlaced
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4700788477788071081, guid: 71ab548ad3b120d4c92dd4961afc87dc, type: 3}
+      propertyPath: GlobalObjectIdHash
+      value: 3518384190
+      objectReference: {fileID: 0}
+    - target: {fileID: 4700788477788071081, guid: 71ab548ad3b120d4c92dd4961afc87dc, type: 3}
+      propertyPath: InScenePlacedSourceGlobalObjectIdHash
+      value: 3128450766
+      objectReference: {fileID: 0}
+    - target: {fileID: 4724408162487758292, guid: 71ab548ad3b120d4c92dd4961afc87dc, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -9.23
+      objectReference: {fileID: 0}
+    - target: {fileID: 4724408162487758292, guid: 71ab548ad3b120d4c92dd4961afc87dc, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.7974502
+      objectReference: {fileID: 0}
+    - target: {fileID: 4724408162487758292, guid: 71ab548ad3b120d4c92dd4961afc87dc, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 1.27
+      objectReference: {fileID: 0}
+    - target: {fileID: 4724408162487758292, guid: 71ab548ad3b120d4c92dd4961afc87dc, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4724408162487758292, guid: 71ab548ad3b120d4c92dd4961afc87dc, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4724408162487758292, guid: 71ab548ad3b120d4c92dd4961afc87dc, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4724408162487758292, guid: 71ab548ad3b120d4c92dd4961afc87dc, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4724408162487758292, guid: 71ab548ad3b120d4c92dd4961afc87dc, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4724408162487758292, guid: 71ab548ad3b120d4c92dd4961afc87dc, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4724408162487758292, guid: 71ab548ad3b120d4c92dd4961afc87dc, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6997821992788008272, guid: 71ab548ad3b120d4c92dd4961afc87dc, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 08e1d5dd275adc44aa674fee6beb17fe, type: 2}
+    - target: {fileID: 7229684986349033828, guid: 71ab548ad3b120d4c92dd4961afc87dc, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.809
+      objectReference: {fileID: 0}
+    - target: {fileID: 7229684986349033828, guid: 71ab548ad3b120d4c92dd4961afc87dc, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0.848
+      objectReference: {fileID: 0}
+    - target: {fileID: 8217382920124504894, guid: 71ab548ad3b120d4c92dd4961afc87dc, type: 3}
+      propertyPath: m_ObstacleAvoidanceType
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 71ab548ad3b120d4c92dd4961afc87dc, type: 3}
+--- !u!4 &417654718 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 4724408162487758292, guid: 71ab548ad3b120d4c92dd4961afc87dc, type: 3}
+  m_PrefabInstance: {fileID: 417654717}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &418184055
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -8142,6 +8248,10 @@ PrefabInstance:
       propertyPath: m_NavMeshData
       value: 
       objectReference: {fileID: 23800000, guid: 8e20c557dadf38142864d33e364d839d, type: 2}
+    - target: {fileID: 1051768343494530962, guid: e82d74db0b42c5b4194d5c6f66447d1f, type: 3}
+      propertyPath: m_LayerMask.m_Bits
+      value: 63
+      objectReference: {fileID: 0}
     - target: {fileID: 5684598319416645241, guid: e82d74db0b42c5b4194d5c6f66447d1f, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.18
@@ -13402,7 +13512,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4724408162487758292, guid: 71ab548ad3b120d4c92dd4961afc87dc, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -6.66
+      value: 5.892
       objectReference: {fileID: 0}
     - target: {fileID: 4724408162487758292, guid: 71ab548ad3b120d4c92dd4961afc87dc, type: 3}
       propertyPath: m_LocalPosition.y
@@ -13444,6 +13554,18 @@ PrefabInstance:
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
       objectReference: {fileID: 2100000, guid: 08e1d5dd275adc44aa674fee6beb17fe, type: 2}
+    - target: {fileID: 7229684986349033828, guid: 71ab548ad3b120d4c92dd4961afc87dc, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.809
+      objectReference: {fileID: 0}
+    - target: {fileID: 7229684986349033828, guid: 71ab548ad3b120d4c92dd4961afc87dc, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0.848
+      objectReference: {fileID: 0}
+    - target: {fileID: 8217382920124504894, guid: 71ab548ad3b120d4c92dd4961afc87dc, type: 3}
+      propertyPath: m_ObstacleAvoidanceType
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -33874,6 +33996,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Dron Bombardero
       objectReference: {fileID: 0}
+    - target: {fileID: 6951983563759267854, guid: 320a9487f53799f4e8ea3c14d44fdf11, type: 3}
+      propertyPath: m_ObstacleAvoidanceType
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -38108,6 +38234,7 @@ Transform:
   m_Children:
   - {fileID: 1715194661}
   - {fileID: 660501051}
+  - {fileID: 417654718}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1917440613
