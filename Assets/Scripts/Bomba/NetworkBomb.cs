@@ -53,7 +53,12 @@ public class NetworkBomb : NetworkBehaviour
     private List<Vector3> CalculateExplosionCells(Vector3 center)
     {
         List<Vector3> cells = new List<Vector3> { center };
-        CheckAndDestroyCell(center);
+        
+        // 1. Creamos la lista temporal para esta explosión
+        HashSet<ulong> playersHitThisExplosion = new HashSet<ulong>();
+
+        // 2. La pasamos como parámetro a la casilla central
+        CheckAndDestroyCell(center, playersHitThisExplosion);
 
         Vector3[] directions = { Vector3.forward, Vector3.back, Vector3.right, Vector3.left };
 
@@ -62,7 +67,9 @@ public class NetworkBomb : NetworkBehaviour
             for (int i = 1; i <= explosionRange; i++)
             {
                 Vector3 targetCell = center + (dir * gridSize * i);
-                CheckCell(targetCell, out bool hitIndestructible, out bool hitDestructible);
+                
+                // 3. La pasamos como parámetro a cada casilla escaneada
+                CheckCell(targetCell, playersHitThisExplosion, out bool hitIndestructible, out bool hitDestructible);
 
                 if (hitIndestructible) break;
                 cells.Add(targetCell);
@@ -71,8 +78,8 @@ public class NetworkBomb : NetworkBehaviour
         }
         return cells;
     }
-
-    private void CheckCell(Vector3 cell, out bool hitIndestructible, out bool hitDestructible)
+// 4. Modificamos la firma del método para recibir el HashSet
+    private void CheckCell(Vector3 cell, HashSet<ulong> playersHitThisExplosion, out bool hitIndestructible, out bool hitDestructible)
     {
         hitIndestructible = false;
         hitDestructible = false;
@@ -84,21 +91,39 @@ public class NetworkBomb : NetworkBehaviour
             if (hit.CompareTag("Indestructible"))
             {
                 hitIndestructible = true;
-                break;
+                break; // frena la expansión del fuego
             }
 
             if (hit.CompareTag("Destructible"))
             {
                 hitDestructible = true;
-                //DestroyObjectAtPositionClientRpc(hit.transform.position);
-                break;
+                // Opcional: DestroyObjectAtPositionClientRpc(hit.transform.position);
+                break; // frena la expansión del fuego
+            }
+            
+            PlayerStateManager player = hit.GetComponent<PlayerStateManager>();
+            if (player == null)
+            {
+                player = hit.GetComponentInParent<PlayerStateManager>();
+            }
+
+            // Aplicamos el daño verificando que el jugador no esté en la lista
+            if (player != null)
+            {
+                ulong playerId = player.NetworkObjectId;
+                if (!playersHitThisExplosion.Contains(playerId))
+                {
+                    playersHitThisExplosion.Add(playerId);
+                    player.TakeDamageServerRpc();
+                }
             }
         }
     }
 
-    private void CheckAndDestroyCell(Vector3 cell)
+    // 5. Modificamos este método para que también acepte y pase el HashSet
+    private void CheckAndDestroyCell(Vector3 cell, HashSet<ulong> playersHitThisExplosion)
     {
-        CheckCell(cell, out _, out _);
+        CheckCell(cell, playersHitThisExplosion, out _, out _);
     }
 
     [ClientRpc]
