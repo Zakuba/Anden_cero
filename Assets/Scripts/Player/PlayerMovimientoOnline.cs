@@ -21,10 +21,12 @@ public class PlayerMovimientoOnline : NetworkBehaviour
     private Vector3 movementInput;
     private float verticalVelocity = 0f;
     private const float Gravity = -9.81f;
+    private PlayerStats playerStats;
 
     private void Awake()
     {
         controller = GetComponent<CharacterController>();
+        playerStats = GetComponent<PlayerStats>();
     }
 
     public override void OnNetworkSpawn()
@@ -105,7 +107,8 @@ public class PlayerMovimientoOnline : NetworkBehaviour
             transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
         }
 
-        Vector3 finalVelocity = (moveDirection * moveSpeed) + (Vector3.up * verticalVelocity);
+       float effectiveSpeed = moveSpeed * (playerStats != null ? playerStats.MoveSpeedMultiplier : 1f);
+        Vector3 finalVelocity = (moveDirection * effectiveSpeed) + (Vector3.up * verticalVelocity);
         controller.Move(finalVelocity * Time.deltaTime);
     }
 }

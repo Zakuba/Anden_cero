@@ -21,6 +21,7 @@ public class DroneShooterAI : NetworkBehaviour
     [SerializeField] private float attackSpeed = 1.5f; // Más lento al disparar
     
     [Header("Combate y Visión")]
+    [SerializeField] private bool Damage = true;
     [SerializeField] private float sightRange = 12f;
     [SerializeField] private LayerMask obstacleMask; // Capas que bloquean la visión (Paredes, Cajas)
     [SerializeField] private GameObject projectilePrefab;

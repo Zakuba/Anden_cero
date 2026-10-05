@@ -37,11 +37,18 @@ public class NetworkProjectile : NetworkBehaviour
         // 3. Impacto a jugador
         if (other.CompareTag("Player"))
         {
-            NetworkObject playerNetObj = other.GetComponent<NetworkObject>();
-            if (playerNetObj != null && playerNetObj.IsSpawned)
+            PlayerStateManager player = other.GetComponent<PlayerStateManager>();
+            if (player == null)
             {
-                //playerNetObj.Despawn(); 
+                player = other.GetComponentInParent<PlayerStateManager>();
             }
+
+            // Aplicamos el daño verificando que el jugador no esté en la lista
+            if (player != null)
+            {
+                player.TakeDamageServerRpc();
+            }
+
         }
 
         // 4. Se destruye al chocar contra geometría sólida
