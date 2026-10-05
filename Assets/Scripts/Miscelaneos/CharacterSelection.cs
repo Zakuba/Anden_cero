@@ -7,6 +7,9 @@ public class CharacterData
 {
     public GameObject characterPrefab;
     public TMP_Text characterText;
+
+    [Header("Posición")]
+    public Vector3 offsetSpawn = Vector3.zero;
 }
 
 public class CharacterSelection : MonoBehaviour
@@ -14,7 +17,7 @@ public class CharacterSelection : MonoBehaviour
     [Header("Personajes disponibles")]
     [SerializeField] private CharacterData[] characters;
 
-    [Header("Preview")]
+    [Header("Punto de Spawn")]
     [SerializeField] private Transform previewPoint;
 
     [Header("Puerta de transición")]
@@ -27,7 +30,6 @@ public class CharacterSelection : MonoBehaviour
     [SerializeField] private float duracionApertura = 0.25f;
 
     private int currentIndex = 0;
-    private GameObject currentCharacter;
 
     private Vector3 posicionInicialPuerta;
     private Quaternion rotacionInicialPuerta;
@@ -42,15 +44,30 @@ public class CharacterSelection : MonoBehaviour
             return;
         }
 
-        // Guardamos la posición inicial de la puerta
+        if (previewPoint == null)
+        {
+            Debug.LogError("No se asignó el Preview Point.");
+            return;
+        }
+
         posicionInicialPuerta = puertaReal.position;
         rotacionInicialPuerta = puertaReal.rotation;
 
-        // Ocultamos todos los textos
+        DesactivarTodosLosPersonajes();
         OcultarTodosLosTextos();
 
-        // Mostramos el primer personaje
         ShowCharacter();
+    }
+
+    private void DesactivarTodosLosPersonajes()
+    {
+        foreach (CharacterData character in characters)
+        {
+            if (character.characterPrefab != null)
+            {
+                character.characterPrefab.SetActive(false);
+            }
+        }
     }
 
     public void NextCharacter()
@@ -83,10 +100,6 @@ public class CharacterSelection : MonoBehaviour
     {
         transicionando = true;
 
-        // =========================
-        // CERRAR PUERTA
-        // =========================
-
         yield return StartCoroutine(
             MoverPuerta(
                 puertaReal.position,
@@ -97,18 +110,9 @@ public class CharacterSelection : MonoBehaviour
             )
         );
 
-        // =========================
-        // CAMBIAR PERSONAJE
-        // =========================
-
         ShowCharacter();
 
-        // Pequeña pausa con la puerta cerrada
         yield return new WaitForSeconds(tiempoCerrada);
-
-        // =========================
-        // ABRIR PUERTA
-        // =========================
 
         yield return StartCoroutine(
             MoverPuerta(
@@ -125,27 +129,33 @@ public class CharacterSelection : MonoBehaviour
 
     private void ShowCharacter()
     {
-        // Elimina el personaje anterior
-        if (currentCharacter != null)
+        foreach (CharacterData character in characters)
         {
-            Destroy(currentCharacter);
+            if (character.characterPrefab != null)
+            {
+                character.characterPrefab.SetActive(false);
+            }
         }
 
-        // Oculta todos los textos
         OcultarTodosLosTextos();
 
-        // Crea el nuevo personaje
-        currentCharacter = Instantiate(
-            characters[currentIndex].characterPrefab,
-            previewPoint.position,
-            previewPoint.rotation,
-            previewPoint
-        );
+        CharacterData characterSeleccionado = characters[currentIndex];
 
-        // Muestra solamente el texto del personaje seleccionado
-        if (characters[currentIndex].characterText != null)
+        if (characterSeleccionado.characterPrefab != null)
         {
-            characters[currentIndex].characterText.gameObject.SetActive(true);
+            GameObject personaje = characterSeleccionado.characterPrefab;
+
+            personaje.transform.SetPositionAndRotation(
+                previewPoint.position + characterSeleccionado.offsetSpawn,
+                previewPoint.rotation
+            );
+
+            personaje.SetActive(true);
+        }
+
+        if (characterSeleccionado.characterText != null)
+        {
+            characterSeleccionado.characterText.gameObject.SetActive(true);
         }
     }
 
@@ -175,8 +185,6 @@ public class CharacterSelection : MonoBehaviour
             tiempo += Time.deltaTime;
 
             float t = Mathf.Clamp01(tiempo / duracion);
-
-            // Movimiento suave
             t = Mathf.SmoothStep(0f, 1f, t);
 
             puertaReal.position = Vector3.Lerp(
@@ -194,7 +202,6 @@ public class CharacterSelection : MonoBehaviour
             yield return null;
         }
 
-        // Aseguramos que termine exactamente en el destino
         puertaReal.position = posicionDestino;
         puertaReal.rotation = rotacionDestino;
     }
