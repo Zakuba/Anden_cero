@@ -27,6 +27,8 @@ public class PlayerStateManager : NetworkBehaviour
     [SerializeField] private Color colorAturdido = Color.yellow;
     [SerializeField] private Color colorMuerto = Color.gray;
 
+    private PlayerLivesUI localLivesUI;
+
     public NetworkVariable<PlayerState> currentState = new NetworkVariable<PlayerState>(
         PlayerState.Vivo, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
 
@@ -39,22 +41,73 @@ public class PlayerStateManager : NetworkBehaviour
             characterController = GetComponent<CharacterController>();
     }
 
-   public override void OnNetworkSpawn()
-{
-    if (IsServer)
+    private void Update()
+        {
+            // Solo el jugador local debe buscar y actualizar su propia pantalla
+            if (!IsOwner) return;
+
+            // RED DE SEGURIDAD: Si no encontró la UI al nacer, la sigue buscando
+            if (localLivesUI == null)
+            {
+                localLivesUI = FindObjectOfType<PlayerLivesUI>(true);
+                
+                // Si por fin la encontró en este fotograma...
+                if (localLivesUI != null)
+                {
+                    // ...la actualizamos inmediatamente con las vidas actuales
+                    localLivesUI.UpdateHearts(currentLives.Value);
+                }
+            }
+        }
+
+    public override void OnNetworkSpawn()
     {
-        currentLives.Value = maxLives;
-        currentState.Value = PlayerState.Vivo;
+        if (IsServer)
+        {
+            currentLives.Value = maxLives;
+            currentState.Value = PlayerState.Vivo;
+        }
+
+        currentState.OnValueChanged += OnStateChanged;
+        currentLives.OnValueChanged += OnLivesChanged; // Escuchamos los cambios de vida
+
+        // 2. Búsqueda y configuración de UI solo para el jugador local
+        if (IsOwner)
+        {
+            localLivesUI = FindObjectOfType<PlayerLivesUI>(true);
+
+            if (localLivesUI != null)
+            {
+                localLivesUI.UpdateHearts(currentLives.Value); // Dibuja los 3 corazones al iniciar
+            } else{
+                Debug.Log("No se encontro el objeto");
+            }
+        }
+
+        ApplyStateProperties(currentState.Value);
+
+        if (MatchManager.Instance != null)
+        {
+            MatchManager.Instance.RegisterPlayer(this);
+        }
     }
 
-    currentState.OnValueChanged += OnStateChanged;
-    ApplyStateProperties(currentState.Value);
-
-    if (MatchManager.Instance != null)
+    // Buena práctica desuscribirse cuando el objeto se destruye
+    public override void OnNetworkDespawn()
     {
-        MatchManager.Instance.RegisterPlayer(this);
+        currentState.OnValueChanged -= OnStateChanged;
+        currentLives.OnValueChanged -= OnLivesChanged;
     }
-}
+
+    // Este método se dispara solo cuando el servidor altera currentLives.Value
+    private void OnLivesChanged(int previousValue, int newValue)
+    {
+        // Solo actualizamos la pantalla de quien recibió el daño
+        if (IsOwner && localLivesUI != null)
+        {
+            localLivesUI.UpdateHearts(newValue);
+        }
+    }
 
     [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Everyone)]
     public void TakeDamageServerRpc()

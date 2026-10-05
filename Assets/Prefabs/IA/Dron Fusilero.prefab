@@ -309,7 +309,7 @@ NavMeshAgent:
   m_Height: 2
   m_BaseOffset: 1
   m_WalkableMask: 4294967295
-  m_ObstacleAvoidanceType: 4
+  m_ObstacleAvoidanceType: 3
 --- !u!114 &5466363630610301564
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -327,6 +327,7 @@ MonoBehaviour:
   heightOffset: -1
   patrolSpeed: 2
   attackSpeed: 1.5
+  Damage: 1
   sightRange: 12
   obstacleMask:
     serializedVersion: 2

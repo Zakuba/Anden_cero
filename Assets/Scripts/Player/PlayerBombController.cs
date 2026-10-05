@@ -27,11 +27,21 @@ public class PlayerBombController : NetworkBehaviour
     private int activeBombs = 0;
     private int maxBombs = 1;
     private PlayerStats playerStats;
+    private BombCooldownUI localBombUI;
 
     private void Awake()
-{
-    playerStats = GetComponent<PlayerStats>();
-}
+    {
+        playerStats = GetComponent<PlayerStats>();
+    }
+
+    public override void OnNetworkSpawn()
+    {
+        if (IsOwner)
+        {
+            // Busca la UI en la escena localmente para este jugador
+            localBombUI = FindObjectOfType<BombCooldownUI>(true);
+        }
+    }
 
 private int EffectiveMaxBombs => maxBombs + (playerStats != null ? playerStats.MaxBombsBonus : 0);
 private int EffectiveExplosionRange => explosionRange + (playerStats != null ? playerStats.ExplosionRangeBonus : 0);
@@ -40,12 +50,39 @@ private int EffectiveExplosionRange => explosionRange + (playerStats != null ? p
     {
         if (!IsOwner) return;
 
+        if (localBombUI == null)
+        {
+            localBombUI = FindObjectOfType<BombCooldownUI>(true);
+            
+            // Si sigue sin existir, cancelamos el Update para no tirar errores, 
+            // pero el jugador podrá moverse igual.
+            if (localBombUI == null) return; 
+        }
+
         // BLOQUEO DE ESTADO
         PlayerStateManager stateManager = GetComponent<PlayerStateManager>();
         if (stateManager != null && stateManager.currentState.Value != PlayerState.Vivo) return;
 
-        if (Input.GetKeyDown(plantKey) && activeBombs < EffectiveMaxBombs)
+        if (localBombUI == null)
         {
+            Debug.Log("No se encontro el objeto");
+        }
+        else
+        {
+            // Si gastamos todas las bombas y la UI no está en cooldown, lo activamos
+            if (activeBombs >= EffectiveMaxBombs && !localBombUI.IsCooldownActive)
+            {
+                localBombUI.StartCooldown(bombTimer);
+            }
+            // Si recuperamos bombas (explotó una o agarramos power-up) y la UI sigue bloqueada, la liberamos
+            else if (activeBombs < EffectiveMaxBombs && localBombUI.IsCooldownActive)
+            {
+                localBombUI.ResetUI();
+            }
+        }
+
+        if (Input.GetKeyDown(plantKey) && activeBombs < EffectiveMaxBombs)
+        {   
             Vector3 spawnPosition = GetGridCenter(transform.position);
             RequestPlantBombServerRpc(spawnPosition);
         }
