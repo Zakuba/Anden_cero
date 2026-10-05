@@ -7,6 +7,7 @@ TagManager:
   - Destructible
   - Indestructible
   - Drone
+  - Bridge
   layers:
   - Default
   - TransparentFX
