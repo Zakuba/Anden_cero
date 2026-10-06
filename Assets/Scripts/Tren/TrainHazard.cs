@@ -20,5 +20,27 @@ public class TrainHazard : MonoBehaviour
             Debug.Log($"[TrainHazard] ¡El tren arrolló a {player.gameObject.name}!");
             player.InstantKillServerRpc();
         }
+
+        DroneBomberAI dronBom = other.GetComponent<DroneBomberAI>();
+        if(dronBom == null)
+        {
+            dronBom = other.GetComponentInParent<DroneBomberAI>();
+        }
+
+        if(dronBom != null)
+        {
+            dronBom.TakeDamage();
+        }
+
+        DroneShooterAI dronShoot = other.GetComponent<DroneShooterAI>();
+        if(dronShoot == null)
+        {
+            dronShoot = other.GetComponentInParent<DroneShooterAI>();
+        }
+
+        if(dronShoot != null)
+        {
+            dronShoot.TakeDamage();
+        }
     }
 }
