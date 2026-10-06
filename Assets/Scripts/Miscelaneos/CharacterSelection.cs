@@ -158,6 +158,9 @@ public class CharacterSelection : MonoBehaviour
         CharacterData characterSeleccionado =
             characters[currentIndex];
 
+        // GUARDAR SELECCIÓN
+        PlayerSelectionData.selectedCharacterIndex = currentIndex;
+
         if (characterSeleccionado.characterPrefab != null)
         {
             GameObject personaje =
@@ -241,5 +244,10 @@ public class CharacterSelection : MonoBehaviour
     public GameObject GetSelectedCharacter()
     {
         return characters[currentIndex].characterPrefab;
+    }
+
+    public int GetSelectedCharacterIndex()
+    {
+        return currentIndex;
     }
 }
