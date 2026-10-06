@@ -236,7 +236,7 @@ MonoBehaviour:
   ShowTopMostFoldoutHeaderGroup: 1
   bombPrefab: {fileID: 6099856826827984316, guid: a368f4f3cc921e943942c1791fea6f11, type: 3}
   gridSize: 2.5
-  bombTimer: 10
+  bombTimer: 3
   explosionRange: 1
   explosionLayerMask:
     serializedVersion: 2

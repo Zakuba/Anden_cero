@@ -5,6 +5,11 @@ using System.Collections.Generic;
 
 public class PowerUpUI : MonoBehaviour
 {
+
+    // --- EL SINGLETON ---
+    public static PowerUpUI Instance { get; private set; }
+
+    
     [Header("Referencias Visuales")]
     [SerializeField] private GameObject panelRoot;
     [SerializeField] private Image effectIcon;
@@ -20,6 +25,25 @@ public class PowerUpUI : MonoBehaviour
 
     private float currentTimer;
     private bool isTimerActive;
+
+    private void Awake()
+    {
+        // Cuando la escena carga, la UI se guarda a sí misma en esta variable global
+        if (Instance == null)
+        {
+            Instance = this;
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+    }
+
+    private void Start()
+    {
+        // Obligamos a que inicie apagado visualmente
+        DeactivateEffect(); 
+    }
 
     private void Update()
     {

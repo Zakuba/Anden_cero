@@ -8,6 +8,7 @@ public class PlayerBatMechanic : NetworkBehaviour
     [SerializeField] private float gridSize = 2.5f;
 
     [Header("Detección de Bombas")]
+    [Tooltip("LayerMask exclusivo para detectar la bomba.")]
     [SerializeField] private LayerMask bombLayerMask;
 
     [Header("Tags de Obstáculos")]
@@ -39,45 +40,86 @@ public class PlayerBatMechanic : NetworkBehaviour
 
     private void TryBatLocal()
     {
-        Vector3 cardinalDir = GetCardinalDirection(transform.forward);
-        Vector3 origin = transform.position + (Vector3.up * 0.5f);
+        // 1. Determinar dirección: Si mantiene una tecla de movimiento, batear en esa dirección;
+        // de lo contrario, batear hacia el frente del personaje.
+        Vector3 inputDir = GetInputOrFacingDirection();
 
-        // El cliente local detecta la bomba directamente frente a sus ojos
-        if (Physics.SphereCast(origin, 0.45f, cardinalDir, out RaycastHit hit, gridSize * 1.1f, bombLayerMask, QueryTriggerInteraction.Collide))
+        // 2. Buscar bombas en un radio de hasta 1 casilla a la redonda
+        Vector3 playerCenter = transform.position + (Vector3.up * 0.5f);
+        Collider[] hits = Physics.OverlapSphere(playerCenter, gridSize * 1.05f, bombLayerMask, QueryTriggerInteraction.Collide);
+
+        BombInteractable targetBomb = null;
+        float bestDistance = float.MaxValue;
+
+        foreach (Collider hit in hits)
         {
-            BombInteractable bomb = hit.collider.GetComponent<BombInteractable>();
+            BombInteractable bomb = hit.GetComponent<BombInteractable>();
+            if (bomb == null || bomb.isMoving.Value) continue;
 
-            if (bomb != null && !bomb.isMoving.Value)
+            // Distancia horizontal plana
+            Vector3 diff = bomb.transform.position - transform.position;
+            diff.y = 0;
+            float dist = diff.magnitude;
+
+            // Condición mínima: Si el jugador está parado justo encima o dentro del centro geométrico, no permite batear
+            if (dist < 0.35f) continue;
+
+            // Selecciona la bomba más cercana dentro del rango de 1 celda
+            if (dist < bestDistance)
             {
-                // Enviar la referencia directa al servidor
-                RequestBatBombServerRpc(new NetworkObjectReference(bomb.NetworkObject), cardinalDir);
+                bestDistance = dist;
+                targetBomb = bomb;
             }
+        }
+
+        // 3. Si encontró una bomba válida, enviar la solicitud con la dirección al servidor
+        if (targetBomb != null)
+        {
+            RequestBatBombServerRpc(new NetworkObjectReference(targetBomb.NetworkObject), inputDir);
         }
     }
 
-    private Vector3 GetCardinalDirection(Vector3 forward)
+    private Vector3 GetInputOrFacingDirection()
     {
-        forward.y = 0;
-        forward.Normalize();
-        if (Mathf.Abs(forward.x) > Mathf.Abs(forward.z))
-            return forward.x > 0 ? Vector3.right : Vector3.left;
+        float h = Input.GetAxisRaw("Horizontal");
+        float v = Input.GetAxisRaw("Vertical");
+
+        Vector3 moveInput = new Vector3(h, 0f, v);
+
+        // Si hay input direccional activo, batear hacia donde apunta el input
+        if (moveInput.sqrMagnitude > 0.01f)
+        {
+            return GetCardinalDirection(moveInput);
+        }
+
+        // Si no hay input de dirección, batear hacia el frente del avatar
+        return GetCardinalDirection(transform.forward);
+    }
+
+    private Vector3 GetCardinalDirection(Vector3 dir)
+    {
+        dir.y = 0;
+        dir.Normalize();
+        if (Mathf.Abs(dir.x) > Mathf.Abs(dir.z))
+            return dir.x > 0 ? Vector3.right : Vector3.left;
         else
-            return forward.z > 0 ? Vector3.forward : Vector3.back;
+            return dir.z > 0 ? Vector3.forward : Vector3.back;
     }
 
     [ServerRpc]
     private void RequestBatBombServerRpc(NetworkObjectReference bombRef, Vector3 direction)
     {
-        // 1. Resolver el objeto en el servidor
         if (!bombRef.TryGet(out NetworkObject bombNetObj)) return;
 
         BombInteractable bomb = bombNetObj.GetComponent<BombInteractable>();
         if (bomb == null || bomb.isMoving.Value) return;
 
-        // 2. Validación de proximidad de seguridad (evita exploits si el jugador estuviera lejos)
-        if (Vector3.Distance(transform.position, bomb.transform.position) > gridSize * 2.2f) return;
+        // Validación de seguridad en el servidor: como máximo una casilla y media de tolerancia de red
+        Vector3 diff = bomb.transform.position - transform.position;
+        diff.y = 0;
+        if (diff.magnitude > gridSize * 1.6f || diff.magnitude < 0.25f) return;
 
-        // 3. Determinar alcance según Power-Up
+        // Determinar alcance según Power-Up
         int maxCellsToSlide = 1;
         if (playerStats != null && playerStats.BateoMultiplier > 1f)
         {
@@ -85,7 +127,7 @@ public class PlayerBatMechanic : NetworkBehaviour
             if (maxCellsToSlide < 2) maxCellsToSlide = 2;
         }
 
-        // 4. Calcular el trayecto casilla por casilla
+        // Calcular trayecto casilla por casilla
         Vector3 finalDestination = bomb.transform.position;
 
         for (int i = 1; i <= maxCellsToSlide; i++)
@@ -119,12 +161,20 @@ public class PlayerBatMechanic : NetworkBehaviour
         {
             if (col.GetComponent<BombInteractable>() != null) continue;
 
-            if (col.CompareTag(indestructibleTag) || col.CompareTag(destructibleTag))
+            // Bloqueo explícito por Tags existentes
+            if (col.CompareTag(indestructibleTag) || col.CompareTag(destructibleTag) || col.CompareTag(playerTag))
             {
                 return true;
             }
 
-            if (col.CompareTag(playerTag) || col.GetComponent<CharacterController>() != null)
+            // Bloqueo de jugadores vivos
+            if (col.GetComponent<CharacterController>() != null)
+            {
+                return true;
+            }
+
+            // Bloqueo de muros Untagged sólidos
+            if (col.CompareTag("Untagged") && !col.isTrigger)
             {
                 return true;
             }

@@ -27,11 +27,13 @@ public class PlayerBombController : NetworkBehaviour
     private int activeBombs = 0;
     private int maxBombs = 1;
     private PlayerStats playerStats;
+    private PlayerStateManager stateManager;
     private BombCooldownUI localBombUI;
 
     private void Awake()
     {
         playerStats = GetComponent<PlayerStats>();
+        stateManager = GetComponent<PlayerStateManager>();
     }
 
     public override void OnNetworkSpawn()
@@ -50,6 +52,9 @@ private int EffectiveExplosionRange => explosionRange + (playerStats != null ? p
     {
         if (!IsOwner) return;
 
+        // Bloqueo si el jugador está aturdido o muerto
+        if (stateManager != null && stateManager.currentState.Value != PlayerState.Vivo) return;
+
         if (localBombUI == null)
         {
             localBombUI = FindObjectOfType<BombCooldownUI>(true);
@@ -58,10 +63,6 @@ private int EffectiveExplosionRange => explosionRange + (playerStats != null ? p
             // pero el jugador podrá moverse igual.
             if (localBombUI == null) return; 
         }
-
-        // BLOQUEO DE ESTADO
-        PlayerStateManager stateManager = GetComponent<PlayerStateManager>();
-        if (stateManager != null && stateManager.currentState.Value != PlayerState.Vivo) return;
 
         if (localBombUI == null)
         {

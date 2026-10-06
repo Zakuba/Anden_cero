@@ -27,7 +27,6 @@ public class PlayerStats : NetworkBehaviour
     [Header("Indicador visual de Escudo")]
     [SerializeField] private GameObject escudoVisual;
 
-    private PowerUpUI localPowerUpUI;
     public float PowerUpDuration => powerUpDuration;
 
     private readonly NetworkVariable<PowerUpType> activePowerUp = new NetworkVariable<PowerUpType>(
@@ -49,9 +48,10 @@ public class PlayerStats : NetworkBehaviour
         activePowerUp.OnValueChanged += OnActivePowerUpChanged;
         UpdateEscudoVisual(activePowerUp.Value);
 
-        if (IsOwner)
+        // Si el jugador entra con un powerup ya activo, usa el Singleton directamente
+        if (IsOwner && activePowerUp.Value != PowerUpType.Ninguno && PowerUpUI.Instance != null)
         {
-            localPowerUpUI = FindObjectOfType<PowerUpUI>(true);
+            PowerUpUI.Instance.ActivateEffect(activePowerUp.Value, powerUpDuration);
         }
     }
 
@@ -93,17 +93,16 @@ public class PlayerStats : NetworkBehaviour
         Debug.Log($"[PlayerStats] Power-up activo cambió de {previous} a {current}");
         UpdateEscudoVisual(current);
 
-        if (IsOwner && localPowerUpUI != null)
+        // USAMOS EL SINGLETON AQUÍ
+        if (IsOwner && PowerUpUI.Instance != null)
         {
             if (current != PowerUpType.Ninguno)
             {
-                // Enciende el HUD con el tipo de efecto y los segundos de duración
-                localPowerUpUI.ActivateEffect(current, powerUpDuration);
+                PowerUpUI.Instance.ActivateEffect(current, powerUpDuration);
             }
             else
             {
-                // Apaga el HUD cuando el tiempo termina o se rompe el escudo
-                localPowerUpUI.DeactivateEffect();
+                PowerUpUI.Instance.DeactivateEffect();
             }
         }
     }
@@ -133,7 +132,7 @@ public class PlayerStats : NetworkBehaviour
     }
 
     // --- SOLO PARA PROBAR, hasta que exista un pickup real por teclado ---
-#if UNITY_EDITOR
+    #if UNITY_EDITOR
     private void Update()
     {
         if (!IsOwner) return;
@@ -143,12 +142,6 @@ public class PlayerStats : NetworkBehaviour
         if (Input.GetKeyDown(KeyCode.Alpha3)) RequestPickupPowerUpServerRpc(PowerUpType.Botas);
         if (Input.GetKeyDown(KeyCode.Alpha4)) RequestPickupPowerUpServerRpc(PowerUpType.Guante);
         if (Input.GetKeyDown(KeyCode.Alpha5)) RequestPickupPowerUpServerRpc(PowerUpType.Escudo);
-
-        // RED DE SEGURIDAD: Si no encontró la UI al nacer, la sigue buscando
-        if (localPowerUpUI == null)
-        {
-            localPowerUpUI = FindObjectOfType<PowerUpUI>(true);
-        }
     }
-#endif
+    #endif
 }

@@ -137,6 +137,18 @@ public class PlayerStateManager : NetworkBehaviour
         }
     }
 
+    /// Muerte instantánea (ignora escudo y vidas restantes).
+    /// Utilizado por el tren u otros peligros mortales.
+    [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Everyone)]
+    public void InstantKillServerRpc()
+    {
+        if (currentState.Value == PlayerState.Muerto) return;
+
+        currentLives.Value = 0;
+        currentState.Value = PlayerState.Muerto;
+        Debug.Log($"[PlayerStateManager] {gameObject.name} murió instantáneamente por impacto.");
+    }
+
     private IEnumerator StunRoutine()
     {
         currentState.Value = PlayerState.Aturdido;

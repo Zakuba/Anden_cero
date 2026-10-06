@@ -22,11 +22,15 @@ public class PlayerMovimientoOnline : NetworkBehaviour
     private float verticalVelocity = 0f;
     private const float Gravity = -9.81f;
     private PlayerStats playerStats;
+    private PlayerStateManager stateManager;
+
+    
 
     private void Awake()
     {
         controller = GetComponent<CharacterController>();
         playerStats = GetComponent<PlayerStats>();
+        stateManager = GetComponent<PlayerStateManager>();
     }
 
     public override void OnNetworkSpawn()
@@ -71,6 +75,9 @@ public class PlayerMovimientoOnline : NetworkBehaviour
     {
         if (!IsOwner) return;
 
+        // Bloqueo si el jugador está aturdido o muerto
+        if (stateManager != null && stateManager.currentState.Value != PlayerState.Vivo) return;
+        
         GatherCustomInput();
         MoveAndRotate();
     }
