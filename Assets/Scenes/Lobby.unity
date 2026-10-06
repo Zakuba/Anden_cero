@@ -22584,6 +22584,17 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 7715606284638305982, guid: 290dccd82b28bec45834703a51c62093, type: 3}
   m_PrefabInstance: {fileID: 111955378}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1774380827 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3688932867268268460, guid: 8097ac01cc8cb04478ab63c742930d74, type: 3}
+  m_PrefabInstance: {fileID: 6689118201096875608}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1bb236fd5cd288d4d99d5a13a5a807a8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SelectorEscenario
 --- !u!1001 &1784093506
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -25107,7 +25118,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::NetworkBootstrap
   hostButton: {fileID: 1944157303}
-  gameSceneName: MainGame
+  selectorEscenario: {fileID: 1774380827}
+  mapaPorDefecto: MainGame
 --- !u!4 &2060902974
 Transform:
   m_ObjectHideFlags: 0

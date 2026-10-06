@@ -5,8 +5,14 @@ using UnityEngine.UI;
 
 public class NetworkBootstrap : MonoBehaviour
 {
+    [Header("Botón iniciar juego")]
     [SerializeField] private Button hostButton;
-    [SerializeField] private string gameSceneName = "MainGame";
+
+    [Header("Selector de escenario")]
+    [SerializeField] private SelectorEscenario selectorEscenario;
+
+    [Header("Mapa por defecto")]
+    [SerializeField] private string mapaPorDefecto = "MainGame";
 
     private void Awake()
     {
@@ -20,26 +26,58 @@ public class NetworkBootstrap : MonoBehaviour
     {
         if (NetworkManager.Singleton == null)
         {
-            Debug.LogError("No se encontró el NetworkManager en la escena.");
+            Debug.LogError(
+                "No se encontró el NetworkManager en la escena."
+            );
+
             return;
         }
 
-        // Verificamos que Scene Management esté habilitado
         if (!NetworkManager.Singleton.NetworkConfig.EnableSceneManagement)
         {
-            Debug.LogWarning("Enable Scene Management debe estar tildado en el NetworkManager para cargar escenas en red.");
+            Debug.LogWarning(
+                "Enable Scene Management debe estar tildado " +
+                "en el NetworkManager para cargar escenas en red."
+            );
         }
+
+        // Obtenemos el mapa seleccionado
+        string mapaSeleccionado = mapaPorDefecto;
+
+        if (selectorEscenario != null)
+        {
+            mapaSeleccionado =
+                selectorEscenario.ObtenerNombreEscenario();
+        }
+
+        // Si por algún motivo el selector devuelve vacío,
+        // usamos el mapa por defecto.
+        if (string.IsNullOrEmpty(mapaSeleccionado))
+        {
+            mapaSeleccionado = mapaPorDefecto;
+        }
+
+        Debug.Log(
+            "Mapa seleccionado: " +
+            mapaSeleccionado
+        );
 
         if (NetworkManager.Singleton.StartHost())
         {
-            Debug.Log("Host inicializado correctamente.");
-            
-            // Carga autoritativa en red: traslada a todos los clientes a la escena de juego
-            NetworkManager.Singleton.SceneManager.LoadScene(gameSceneName, LoadSceneMode.Single);
+            Debug.Log(
+                "Host inicializado correctamente."
+            );
+
+            NetworkManager.Singleton.SceneManager.LoadScene(
+                mapaSeleccionado,
+                LoadSceneMode.Single
+            );
         }
         else
         {
-            Debug.LogError("No se pudo inicializar el Host.");
+            Debug.LogError(
+                "No se pudo inicializar el Host."
+            );
         }
     }
 }
