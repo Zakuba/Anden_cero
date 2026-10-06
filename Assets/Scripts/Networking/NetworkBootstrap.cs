@@ -42,12 +42,19 @@ public class NetworkBootstrap : MonoBehaviour
         }
 
         // Obtenemos el mapa seleccionado
-        string mapaSeleccionado = mapaPorDefecto;
+       string mapaSeleccionado = mapaPorDefecto;
 
         if (selectorEscenario != null)
         {
-            mapaSeleccionado =
-                selectorEscenario.ObtenerNombreEscenario();
+            string nombre = selectorEscenario.ObtenerNombreEscenario();
+
+            mapaSeleccionado = nombre switch
+            {
+                "Andén Central"   => "MainGame",
+                "Túneles y Vías"  => "ViasYAndenes",
+                "Sala de control" => "SalaDeControl",
+                _                 => nombre // Si no coincide con ninguno, conserva el nombre original
+            };
         }
 
         // Si por algún motivo el selector devuelve vacío,
