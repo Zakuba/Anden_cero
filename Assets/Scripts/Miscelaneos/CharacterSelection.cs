@@ -8,6 +8,9 @@ public class CharacterData
     public GameObject characterPrefab;
     public TMP_Text characterText;
 
+    [Header("Objeto asociado")]
+    public GameObject objetoAsociado;
+
     [Header("Posición")]
     public Vector3 offsetSpawn = Vector3.zero;
 }
@@ -55,6 +58,7 @@ public class CharacterSelection : MonoBehaviour
 
         DesactivarTodosLosPersonajes();
         OcultarTodosLosTextos();
+        DesactivarTodosLosObjetos();
 
         ShowCharacter();
     }
@@ -66,6 +70,17 @@ public class CharacterSelection : MonoBehaviour
             if (character.characterPrefab != null)
             {
                 character.characterPrefab.SetActive(false);
+            }
+        }
+    }
+
+    private void DesactivarTodosLosObjetos()
+    {
+        foreach (CharacterData character in characters)
+        {
+            if (character.objetoAsociado != null)
+            {
+                character.objetoAsociado.SetActive(false);
             }
         }
     }
@@ -138,15 +153,19 @@ public class CharacterSelection : MonoBehaviour
         }
 
         OcultarTodosLosTextos();
+        DesactivarTodosLosObjetos();
 
-        CharacterData characterSeleccionado = characters[currentIndex];
+        CharacterData characterSeleccionado =
+            characters[currentIndex];
 
         if (characterSeleccionado.characterPrefab != null)
         {
-            GameObject personaje = characterSeleccionado.characterPrefab;
+            GameObject personaje =
+                characterSeleccionado.characterPrefab;
 
             personaje.transform.SetPositionAndRotation(
-                previewPoint.position + characterSeleccionado.offsetSpawn,
+                previewPoint.position +
+                characterSeleccionado.offsetSpawn,
                 previewPoint.rotation
             );
 
@@ -156,6 +175,11 @@ public class CharacterSelection : MonoBehaviour
         if (characterSeleccionado.characterText != null)
         {
             characterSeleccionado.characterText.gameObject.SetActive(true);
+        }
+
+        if (characterSeleccionado.objetoAsociado != null)
+        {
+            characterSeleccionado.objetoAsociado.SetActive(true);
         }
     }
 
@@ -184,26 +208,34 @@ public class CharacterSelection : MonoBehaviour
         {
             tiempo += Time.deltaTime;
 
-            float t = Mathf.Clamp01(tiempo / duracion);
-            t = Mathf.SmoothStep(0f, 1f, t);
+            float t =
+                Mathf.Clamp01(tiempo / duracion);
 
-            puertaReal.position = Vector3.Lerp(
-                posicionComienzo,
-                posicionDestino,
-                t
-            );
+            t =
+                Mathf.SmoothStep(0f, 1f, t);
 
-            puertaReal.rotation = Quaternion.Slerp(
-                rotacionComienzo,
-                rotacionDestino,
-                t
-            );
+            puertaReal.position =
+                Vector3.Lerp(
+                    posicionComienzo,
+                    posicionDestino,
+                    t
+                );
+
+            puertaReal.rotation =
+                Quaternion.Slerp(
+                    rotacionComienzo,
+                    rotacionDestino,
+                    t
+                );
 
             yield return null;
         }
 
-        puertaReal.position = posicionDestino;
-        puertaReal.rotation = rotacionDestino;
+        puertaReal.position =
+            posicionDestino;
+
+        puertaReal.rotation =
+            rotacionDestino;
     }
 
     public GameObject GetSelectedCharacter()
