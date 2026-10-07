@@ -568,7 +568,7 @@ PrefabInstance:
       objectReference: {fileID: 2100000, guid: 34aa008ac39d96241b3b010513d906e3, type: 2}
     - target: {fileID: 919132149155446097, guid: 03177a87aa0c52d43a20f53c9af55a63, type: 3}
       propertyPath: m_Name
-      value: Diablo
+      value: DiabloPRE
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 03177a87aa0c52d43a20f53c9af55a63, type: 3}
       propertyPath: m_IsActive
@@ -576,7 +576,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5866666021909216657, guid: 03177a87aa0c52d43a20f53c9af55a63, type: 3}
       propertyPath: m_Enabled
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5866666021909216657, guid: 03177a87aa0c52d43a20f53c9af55a63, type: 3}
       propertyPath: m_Controller

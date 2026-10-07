@@ -56,6 +56,7 @@ GameObject:
   - component: {fileID: 4830271221576520950}
   - component: {fileID: 8594183129778106702}
   - component: {fileID: 2880702124819192731}
+  - component: {fileID: 4317313515988791827}
   m_Layer: 0
   m_Name: PlayerAvatar
   m_TagString: Player
@@ -172,7 +173,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.NetworkObject
-  GlobalObjectIdHash: 751227136
+  GlobalObjectIdHash: 1902537740
   InScenePlacedSourceGlobalObjectIdHash: 0
   m_InScenePlacedDisabledByDefault: 0
   DeferredDespawnTick: 0
@@ -397,6 +398,19 @@ MonoBehaviour:
   - {fileID: 121104343835521069}
   - {fileID: 7833730416452343112}
   - {fileID: 3648306204663288363}
+--- !u!114 &4317313515988791827
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6023118608644461741}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5a98810d227069a4da59280fb3cac1d8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerAnimationController
+  suavizado: 10
 --- !u!1 &7732735729615609519
 GameObject:
   m_ObjectHideFlags: 0
@@ -555,6 +569,10 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8342061217783314657, guid: 67dab7ea20f3cab48b7d3b011c4b30f5, type: 3}
+      propertyPath: m_Controller
+      value: 
+      objectReference: {fileID: 9100000, guid: 7f979d7dac226ba4c9fa26341fdde469, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -578,6 +596,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 5261492997828471248}
     m_Modifications:
+    - target: {fileID: 3974605843471362156, guid: f91974ac814333547b9539925a77a697, type: 3}
+      propertyPath: m_Controller
+      value: 
+      objectReference: {fileID: 9100000, guid: 7f979d7dac226ba4c9fa26341fdde469, type: 2}
     - target: {fileID: 7046037886372721174, guid: f91974ac814333547b9539925a77a697, type: 3}
       propertyPath: m_LocalScale.x
       value: 0.87601024
@@ -721,6 +743,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6511284827039815300, guid: 250386725c0a9bb4d956bfa43bfcebd3, type: 3}
+      propertyPath: m_Controller
+      value: 
+      objectReference: {fileID: 9100000, guid: 7f979d7dac226ba4c9fa26341fdde469, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -744,6 +770,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 5261492997828471248}
     m_Modifications:
+    - target: {fileID: 1626355635924578408, guid: 36c152553dff99b41a0286357d4d7b6a, type: 3}
+      propertyPath: m_Controller
+      value: 
+      objectReference: {fileID: 9100000, guid: 7f979d7dac226ba4c9fa26341fdde469, type: 2}
     - target: {fileID: 4643726891080018450, guid: 36c152553dff99b41a0286357d4d7b6a, type: 3}
       propertyPath: m_LocalScale.x
       value: 0.87601024

@@ -13,6 +13,22 @@ public class PlayerCharacterVisual : NetworkBehaviour
             NetworkVariableWritePermission.Server
         );
 
+    private PlayerAnimationController animationController;
+
+    private void Awake()
+    {
+        animationController =
+            GetComponent<PlayerAnimationController>();
+
+        if (animationController == null)
+        {
+            Debug.LogError(
+                "[PlayerCharacterVisual] " +
+                "No se encontró PlayerAnimationController en el Player."
+            );
+        }
+    }
+
     public override void OnNetworkSpawn()
     {
         base.OnNetworkSpawn();
@@ -29,7 +45,7 @@ public class PlayerCharacterVisual : NetworkBehaviour
             SeleccionarPersonajeServerRpc(selectedIndex);
         }
 
-        // Mostrar inicialmente el valor actual
+        // Mostrar inicialmente el personaje actual.
         ActualizarPersonaje(selectedCharacter.Value);
     }
 
@@ -38,7 +54,9 @@ public class PlayerCharacterVisual : NetworkBehaviour
         selectedCharacter.OnValueChanged -= OnCharacterChanged;
     }
 
-    private void OnCharacterChanged(int previousValue, int newValue)
+    private void OnCharacterChanged(
+        int previousValue,
+        int newValue)
     {
         ActualizarPersonaje(newValue);
     }
@@ -69,7 +87,8 @@ public class PlayerCharacterVisual : NetworkBehaviour
             characterModels.Length == 0)
         {
             Debug.LogError(
-                "[PlayerCharacterVisual] No hay modelos configurados."
+                "[PlayerCharacterVisual] " +
+                "No hay modelos configurados."
             );
 
             return;
@@ -80,12 +99,49 @@ public class PlayerCharacterVisual : NetworkBehaviour
             index = 0;
         }
 
+        // Desactivar todos los personajes
+        // y activar solamente el seleccionado.
         for (int i = 0; i < characterModels.Length; i++)
         {
             if (characterModels[i] != null)
             {
                 characterModels[i].SetActive(i == index);
             }
+        }
+
+        // Obtener el personaje que acabamos de activar.
+        GameObject personajeActivo =
+            characterModels[index];
+
+        if (personajeActivo == null)
+        {
+            Debug.LogError(
+                $"[PlayerCharacterVisual] " +
+                $"El personaje {index} es NULL."
+            );
+
+            return;
+        }
+
+        // Buscar el Animator dentro del personaje.
+        Animator animator =
+            personajeActivo.GetComponentInChildren<Animator>();
+
+        if (animator == null)
+        {
+            Debug.LogError(
+                $"[PlayerCharacterVisual] " +
+                $"El personaje {index} no tiene Animator."
+            );
+
+            return;
+        }
+
+        // Pasarle el Animator al controlador
+        // que está en el Player.
+        if (animationController != null)
+        {
+            animationController.SetAnimator(animator);
         }
     }
 
