@@ -147,6 +147,20 @@ public class PlayerBatMechanic : NetworkBehaviour
         if (finalDestination != bomb.transform.position)
         {
             bomb.SlideTo(finalDestination);
+
+            // Avisa únicamente al dueño del avatar que el bateo fue exitoso
+            NotifySuccessfulBatClientRpc();
+        }
+
+    }
+
+    [ClientRpc]
+    private void NotifySuccessfulBatClientRpc()
+    {
+        // Solo el jugador dueño de este avatar incrementa su persistencia local
+        if (IsOwner && AchievementManager.Instance != null)
+        {
+            AchievementManager.Instance.AddBatStat();
         }
     }
 
