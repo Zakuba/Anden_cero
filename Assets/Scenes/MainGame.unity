@@ -43092,8 +43092,45 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 4703438501063505821, guid: 4f6ea2c54a86e7a48b158c12f51502ea, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 6097332223401335553}
   m_SourcePrefab: {fileID: 100100000, guid: 4f6ea2c54a86e7a48b158c12f51502ea, type: 3}
+--- !u!1 &6097332223401335552 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4703438501063505821, guid: 4f6ea2c54a86e7a48b158c12f51502ea, type: 3}
+  m_PrefabInstance: {fileID: 6097332223401335551}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &6097332223401335553
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6097332223401335552}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c532f6cd8ca1ee349af4a551f7f0095f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PerimeterCollapse
+  ShowTopMostFoldoutHeaderGroup: 1
+  gridSize: 2.5
+  minX: -4
+  maxX: 5
+  minZ: -5
+  maxZ: 7
+  tileHeight: -1.95
+  startDelay: 10
+  ringInterval: 8
+  warningTime: 5
+  maxCollapsedRings: 3
+  damageInterval: 4
+  firstDamageDelay: 0.75
+  warningMaterial: {fileID: 2100000, guid: a566ff27827597a47b7cc8db8d68d45e, type: 2}
+  collapsedMaterial: {fileID: 2100000, guid: 5cc8392071c743d47892206143b41329, type: 2}
+  blinkInterval: 0.3
+  touchRadius: 0.35
 --- !u!1001 &6408743683398589625
 PrefabInstance:
   m_ObjectHideFlags: 0
