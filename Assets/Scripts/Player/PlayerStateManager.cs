@@ -112,6 +112,8 @@ public class PlayerStateManager : NetworkBehaviour
     [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Everyone)]
     public void TakeDamageServerRpc()
     {
+        // Sin daño hasta que el host inicie la partida (y tampoco una vez terminada)
+    if (MatchManager.Instance != null && !MatchManager.Instance.IsMatchRunning) return;
         // Si ya está muerto o aturdido, ignora daño
         if (currentState.Value == PlayerState.Muerto || currentState.Value == PlayerState.Aturdido) return;
 

@@ -54,6 +54,7 @@ private int EffectiveExplosionRange => explosionRange + (playerStats != null ? p
 
         // Bloqueo si el jugador está aturdido o muerto
         if (stateManager != null && stateManager.currentState.Value != PlayerState.Vivo) return;
+        if (MatchManager.Instance != null && !MatchManager.Instance.IsMatchRunning) return;
 
         if (localBombUI == null)
         {
@@ -99,6 +100,7 @@ private int EffectiveExplosionRange => explosionRange + (playerStats != null ? p
     [ServerRpc]
     private void RequestPlantBombServerRpc(Vector3 spawnPosition)
     {
+        if (MatchManager.Instance != null && !MatchManager.Instance.IsMatchRunning) return;
         if (activeBombs >= EffectiveMaxBombs) return;
 
         activeBombs++;
@@ -192,6 +194,7 @@ private void CheckCell(Vector3 cell, HashSet<ulong> playersHitThisExplosion, out
 {
     hitIndestructible = false;
     hitDestructible = false;
+        HashSet<GameObject> dronesHitThisCell = new HashSet<GameObject>();
 
     // Escaneo de la casilla con margen de seguridad del 90% del tamaño
     Vector3 halfExtents = new Vector3(gridSize * 0.45f, 2.0f, gridSize * 0.45f);
@@ -233,23 +236,19 @@ private void CheckCell(Vector3 cell, HashSet<ulong> playersHitThisExplosion, out
         // --- LÓGICA PARA DAÑAR A CUALQUIER DRON ---
         if (hit.CompareTag("Drone"))
         {
-            // 1. Intentamos ver si es el Bombardero
-            DroneBomberAI bombardero = hit.GetComponent<DroneBomberAI>();
-            if (bombardero != null)
+            // Evita golpear dos veces al mismo dron si tiene varios colliders
+            GameObject droneRoot = hit.transform.root.gameObject;
+            if (dronesHitThisCell.Add(droneRoot))
             {
-                bombardero.TakeDamage(); 
+                DroneBomberAI bombardero = hit.GetComponentInParent<DroneBomberAI>();
+                if (bombardero != null) bombardero.TakeDamage();
+
+                DroneShooterAI fusilero = hit.GetComponentInParent<DroneShooterAI>();
+                if (fusilero != null) fusilero.TakeDamage();
             }
-            
-            // 2. Intentamos ver si es el Fusilero
-            DroneShooterAI fusilero = hit.GetComponent<DroneShooterAI>();
-            if (fusilero != null)
-            {
-                fusilero.TakeDamage();
-            }
-            
-            // Frenamos la expansión del fuego de la bomba
-            hitDestructible = true; 
-            break;
+
+            // Frena la expansión del fuego, pero SIN cortar el foreach
+            hitDestructible = true;
         }
     }
 }

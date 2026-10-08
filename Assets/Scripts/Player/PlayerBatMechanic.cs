@@ -29,6 +29,7 @@ public class PlayerBatMechanic : NetworkBehaviour
     {
         if (!IsOwner) return;
 
+if (MatchManager.Instance != null && !MatchManager.Instance.IsMatchRunning) return;
         // Bloqueo si el jugador está aturdido o muerto
         if (stateManager != null && stateManager.currentState.Value != PlayerState.Vivo) return;
 
@@ -109,6 +110,8 @@ public class PlayerBatMechanic : NetworkBehaviour
     [ServerRpc]
     private void RequestBatBombServerRpc(NetworkObjectReference bombRef, Vector3 direction)
     {
+         if (MatchManager.Instance != null && !MatchManager.Instance.IsMatchRunning) return;
+
         if (!bombRef.TryGet(out NetworkObject bombNetObj)) return;
 
         BombInteractable bomb = bombNetObj.GetComponent<BombInteractable>();

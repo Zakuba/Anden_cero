@@ -1,112 +1,166 @@
-using Unity.Netcode;
-using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using Unity.Netcode;
+using UnityEngine;
+using UnityEngine.UI;
 
 public class MatchManager : NetworkBehaviour
 {
     public static MatchManager Instance { get; private set; }
 
-    [Header("UI de Resultados")]
+    // Se pone en true cuando arranca la partida: lo usa el ConnectionApproval para rechazar late joiners
+    public static bool JoinsClosed { get; private set; }
+
+    public const int MaxPlayers = 4;
+    private const int MinPlayersToStart = 2;
+
+    [Header("Resultados")]
     [SerializeField] private GameObject resultsPanel;
     [SerializeField] private TMP_Text resultsText;
 
-    private readonly List<PlayerStateManager> registeredPlayers = new List<PlayerStateManager>();
-    private bool matchStarted = false;
-    private bool matchEnded = false;
-    private bool checkScheduled = false;
+    [Header("Inicio de partida (solo host)")]
+    [SerializeField] private Button startMatchButton;
+    [SerializeField] private GameObject waitingText;   // "Esperando jugadores..."
+    [SerializeField] private GameObject waitingForHostText; // Texto para clientes: "Esperando al host..."
 
-    private void Awake()
+    private readonly NetworkVariable<bool> matchStarted = new NetworkVariable<bool>(
+        false, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
+
+    private readonly List<PlayerStateManager> registeredPlayers = new List<PlayerStateManager>();
+    private bool matchEnded;
+    private bool checkScheduled;
+
+    public bool IsMatchRunning => matchStarted.Value && !matchEnded;
+
+        private void Awake()
     {
         Instance = this;
+
+        // Arrancan ocultos; solo el host los activa cuando el MatchManager aparece en red
+                if (startMatchButton != null) startMatchButton.gameObject.SetActive(false);
+        if (waitingText != null) waitingText.SetActive(false);
+        if (waitingForHostText != null) waitingForHostText.SetActive(false);
     }
 
-   public override void OnNetworkSpawn()
-{
-    if (resultsPanel != null)
+    public override void OnNetworkSpawn()
     {
-        resultsPanel.SetActive(false);
-    }
+        JoinsClosed = false;
+        if (resultsPanel != null) resultsPanel.SetActive(false);
 
-    if (IsServer)
-    {
-        // Los jugadores ya pueden existir desde antes (spawnearon en el Lobby),
-        // asi que los buscamos y registramos apenas el MatchManager aparece en MainGame.
-        PlayerStateManager[] existingPlayers = FindObjectsByType<PlayerStateManager>(FindObjectsSortMode.None);
-        foreach (PlayerStateManager player in existingPlayers)
+        matchStarted.OnValueChanged += OnMatchStartedChanged;
+
+              if (startMatchButton != null)
         {
-            RegisterPlayer(player);
+            startMatchButton.onClick.AddListener(OnStartButtonClicked);
+            startMatchButton.gameObject.SetActive(IsHost && !matchStarted.Value);
+            startMatchButton.interactable = false;
+        }
+        if (waitingText != null) waitingText.SetActive(IsHost && !matchStarted.Value);
+        if (waitingForHostText != null) waitingForHostText.SetActive(!IsHost && !matchStarted.Value);
+        if (IsServer)
+        {
+            foreach (var p in FindObjectsByType<PlayerStateManager>(FindObjectsSortMode.None))
+                RegisterPlayer(p);
         }
     }
-}
 
+    public override void OnNetworkDespawn()
+    {
+        matchStarted.OnValueChanged -= OnMatchStartedChanged;
+        if (startMatchButton != null) startMatchButton.onClick.RemoveListener(OnStartButtonClicked);
+        JoinsClosed = false;
+        if (Instance == this) Instance = null;
+    }
+
+    private void OnMatchStartedChanged(bool oldValue, bool newValue)
+    {
+        if (!newValue) return;
+        if (startMatchButton != null) startMatchButton.gameObject.SetActive(false);
+        if (waitingText != null) waitingText.SetActive(false);
+        if (waitingForHostText != null) waitingForHostText.SetActive(false);
+    }
+
+    // ---------- Registro de jugadores (solo servidor) ----------
     public void RegisterPlayer(PlayerStateManager player)
     {
-        if (!IsServer) return;
-        if (registeredPlayers.Contains(player)) return;
+        if (!IsServer || player == null || registeredPlayers.Contains(player)) return;
 
         registeredPlayers.Add(player);
-        player.currentState.OnValueChanged += OnPlayerStateChanged;
+        player.currentState.OnValueChanged += (_, newState) => OnPlayerStateChanged(newState);
+        RefreshStartButton();
+    }
 
-        if (!matchStarted && registeredPlayers.Count >= 2)
+    private int ConnectedPlayersCount()
+    {
+        registeredPlayers.RemoveAll(p => p == null);
+        return registeredPlayers.Count;
+    }
+
+    private void RefreshStartButton()
+    {
+        if (startMatchButton == null || matchStarted.Value) return;
+        startMatchButton.interactable = ConnectedPlayersCount() >= MinPlayersToStart;
+    }
+
+    // ---------- Inicio de partida ----------
+    private void OnStartButtonClicked()
+    {
+        if (!IsServer) return; // el host es el servidor
+        StartMatch();
+    }
+
+    private void StartMatch()
+    {
+        if (matchStarted.Value || ConnectedPlayersCount() < MinPlayersToStart) return;
+        matchStarted.Value = true;
+        JoinsClosed = true;
+    }
+
+    // ---------- Victoria ----------
+    private void OnPlayerStateChanged(PlayerState newState)
+    {
+        if (!matchStarted.Value || matchEnded || checkScheduled) return;
+        if (newState != PlayerState.Muerto) return;
+        checkScheduled = true;
+        StartCoroutine(CheckVictoryNextFrame());
+    }
+
+    private IEnumerator CheckVictoryNextFrame()
+    {
+        yield return null;
+        checkScheduled = false;
+        if (matchEnded) yield break;
+
+        registeredPlayers.RemoveAll(p => p == null);
+        var alive = registeredPlayers.FindAll(p => p.currentState.Value != PlayerState.Muerto);
+
+        if (alive.Count == 1)
         {
-            matchStarted = true;
+            matchEnded = true;
+            AnnounceResultClientRpc(alive[0].OwnerClientId, alive[0].NetworkObject, false);
+        }
+        else if (alive.Count == 0)
+        {
+            matchEnded = true;
+            AnnounceResultClientRpc(0, default, true);
         }
     }
 
-    private void OnPlayerStateChanged(PlayerState previous, PlayerState current)
+    [Rpc(SendTo.ClientsAndHost)]
+    private void AnnounceResultClientRpc(ulong winnerClientId, NetworkObjectReference winnerRef, bool isDraw)
     {
-        if (!IsServer || !matchStarted || matchEnded) return;
-        if (current != PlayerState.Muerto) return;
+        matchEnded = true; // para que IsMatchRunning sea false también en los clientes
+        if (resultsPanel != null) resultsPanel.SetActive(true);
+        if (resultsText == null) return;
 
-        if (!checkScheduled)
-        {
-            checkScheduled = true;
-            StartCoroutine(CheckVictoryNextFrame());
-        }
-    }
-
- private IEnumerator CheckVictoryNextFrame()
-{
-    yield return null;
-    checkScheduled = false;
-
-    if (matchEnded) yield break;
-
-    List<PlayerStateManager> alivePlayers = registeredPlayers.FindAll(
-        p => p != null && p.currentState.Value != PlayerState.Muerto);
-
-    if (alivePlayers.Count == 1)
-    {
-        matchEnded = true;
-        NetworkObjectReference winnerRef = alivePlayers[0].NetworkObject;
-        AnnounceResultClientRpc(alivePlayers[0].OwnerClientId, winnerRef, false);
-    }
-    else if (alivePlayers.Count == 0)
-    {
-        matchEnded = true;
-        AnnounceResultClientRpc(0, default, true);
-    }
-}
-
-[ClientRpc]
-private void AnnounceResultClientRpc(ulong winnerClientId, NetworkObjectReference winnerRef, bool isDraw)
-{
-    if (resultsPanel != null) resultsPanel.SetActive(true);
-
-    if (resultsText != null)
-    {
         if (isDraw) resultsText.text = "¡Empate!";
-        else if (winnerClientId == NetworkManager.Singleton.LocalClientId) resultsText.text = "¡Ganaste!";
+        else if (NetworkManager.Singleton.LocalClientId == winnerClientId) resultsText.text = "¡Ganaste!";
         else resultsText.text = $"Perdiste. Jugador {winnerClientId} gana la partida.";
-    }
 
-    if (!isDraw && winnerRef.TryGet(out NetworkObject winnerObj))
-    {
-        // Aca Tomas puede disparar la animación de festejo, por ejemplo:
-        // winnerObj.GetComponent<Animator>().SetTrigger("Festejar");
-         
+        if (!isDraw && winnerRef.TryGet(out NetworkObject winnerObj))
+        {
+            // Hook para la animación de celebración de tus compañeros
+        }
     }
-}
 }

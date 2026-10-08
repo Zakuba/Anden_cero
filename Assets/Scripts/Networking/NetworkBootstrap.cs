@@ -68,6 +68,24 @@ public class NetworkBootstrap : MonoBehaviour
             "Mapa seleccionado: " +
             mapaSeleccionado
         );
+        // Rechaza entradas tarde y limita a MatchManager.MaxPlayers
+        NetworkManager.Singleton.ConnectionApprovalCallback = (request, response) =>
+        {
+            int connected = NetworkManager.Singleton.ConnectedClientsIds.Count;
+            bool hasRoom = connected < MatchManager.MaxPlayers;
+            bool joinsOpen = !MatchManager.JoinsClosed;
+
+            response.Approved = hasRoom && joinsOpen;
+            response.CreatePlayerObject = true;
+            response.Pending = false;
+
+            if (!response.Approved)
+            {
+                response.Reason = !joinsOpen
+                    ? "La partida ya comenzó."
+                    : "La sala está llena (máximo 4 jugadores).";
+            }
+        };
 
         if (NetworkManager.Singleton.StartHost())
         {

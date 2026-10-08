@@ -71,16 +71,23 @@ public class PlayerMovimientoOnline : NetworkBehaviour
         }
     }
 
-    private void Update()
-    {
-        if (!IsOwner) return;
+private void Update()
+{
+    // Antes de arrancar la partida, los drones no pueden chocar ni empujar al jugador.
+    // Se aplica en todas las instancias, no solo en el dueño.
+    bool matchRunning = MatchManager.Instance == null || MatchManager.Instance.IsMatchRunning;
+    int enemigosMask = LayerMask.GetMask("Enemigos");
+    controller.excludeLayers = matchRunning ? 0 : enemigosMask;
 
-        // Bloqueo si el jugador está aturdido o muerto
-        if (stateManager != null && stateManager.currentState.Value != PlayerState.Vivo) return;
-        
-        GatherCustomInput();
-        MoveAndRotate();
-    }
+    if (!IsOwner) return;
+
+    if (stateManager != null && stateManager.currentState.Value != PlayerState.Vivo) return;
+
+    if (matchRunning) GatherCustomInput();
+    else movementInput = Vector3.zero;
+
+    MoveAndRotate();
+}
 
     private void GatherCustomInput()
     {
