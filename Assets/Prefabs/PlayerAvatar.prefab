@@ -289,7 +289,7 @@ MonoBehaviour:
   - {fileID: 3445791680956674612, guid: 8591591fcd04e5a4bb0ad4c1150d1ab4, type: 3}
   powerUpDropChance: 0.5
   powerUpSpawnHeight: -1
-  explosionVfx: {fileID: 1737463432510393942, guid: c6e879bb9ad505341aa895aae1ef89f8, type: 3}
+  explosionVfx: {fileID: 1737463432510393942, guid: 93dc88073b38e464d8d8b5af1ad25c72, type: 3}
   fireVfx: {fileID: 1737463432510393942, guid: c6e879bb9ad505341aa895aae1ef89f8, type: 3}
 --- !u!114 &5769002067245888163
 MonoBehaviour:
