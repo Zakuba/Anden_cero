@@ -13,7 +13,7 @@ public class MatchManager : NetworkBehaviour
     public static bool JoinsClosed { get; private set; }
 
     public const int MaxPlayers = 6;
-    private const int MinPlayersToStart = 2;
+    private const int MinPlayersToStart = 1;
 
     [Header("Resultados")]
     [SerializeField] private GameObject resultsPanel;
@@ -23,7 +23,11 @@ public class MatchManager : NetworkBehaviour
     [SerializeField] private Button startMatchButton;
     [SerializeField] private GameObject waitingText;   // "Esperando jugadores..."
     [SerializeField] private GameObject waitingForHostText; // Texto para clientes: "Esperando al host..."
-    
+
+    [Header("Cámaras")]
+    [SerializeField] private Camera lobbyCamera;
+    [SerializeField] private Camera mainCamera;
+
     [Header("Spawns")]
     [SerializeField] private Transform[] spawnPoints;
     private int nextSpawnIndex;
@@ -37,14 +41,20 @@ public class MatchManager : NetworkBehaviour
 
     public bool IsMatchRunning => matchStarted.Value && !matchEnded;
 
-        private void Awake()
+    private void Awake()
     {
         Instance = this;
 
-        // Arrancan ocultos; solo el host los activa cuando el MatchManager aparece en red
-                if (startMatchButton != null) startMatchButton.gameObject.SetActive(false);
-        if (waitingText != null) waitingText.SetActive(false);
-        if (waitingForHostText != null) waitingForHostText.SetActive(false);
+        if (startMatchButton != null)
+            startMatchButton.gameObject.SetActive(false);
+
+        if (waitingText != null)
+            waitingText.SetActive(false);
+
+        if (waitingForHostText != null)
+            waitingForHostText.SetActive(false);
+
+        ActivarLobbyCamera();
     }
 
     public override void OnNetworkSpawn()
@@ -79,10 +89,22 @@ public class MatchManager : NetworkBehaviour
 
     private void OnMatchStartedChanged(bool oldValue, bool newValue)
     {
-        if (!newValue) return;
-        if (startMatchButton != null) startMatchButton.gameObject.SetActive(false);
-        if (waitingText != null) waitingText.SetActive(false);
-        if (waitingForHostText != null) waitingForHostText.SetActive(false);
+        if (!newValue)
+        {
+            ActivarLobbyCamera();
+            return;
+        }
+
+        ActivarMainCamera();
+
+        if (startMatchButton != null)
+            startMatchButton.gameObject.SetActive(false);
+
+        if (waitingText != null)
+            waitingText.SetActive(false);
+
+        if (waitingForHostText != null)
+            waitingForHostText.SetActive(false);
     }
 
     // ---------- Registro de jugadores (solo servidor) ----------
@@ -187,5 +209,23 @@ public class MatchManager : NetworkBehaviour
         yield return null; // espera un frame a que el avatar esté listo en red
         if (handler != null && handler.IsSpawned)
             handler.TeleportToSpawnRpc(pos, rot);
+    }
+
+    private void ActivarLobbyCamera()
+    {
+        if (lobbyCamera != null)
+            lobbyCamera.gameObject.SetActive(true);
+
+        if (mainCamera != null)
+            mainCamera.gameObject.SetActive(false);
+    }
+
+    private void ActivarMainCamera()
+    {
+        if (lobbyCamera != null)
+            lobbyCamera.gameObject.SetActive(false);
+
+        if (mainCamera != null)
+            mainCamera.gameObject.SetActive(true);
     }
 }
