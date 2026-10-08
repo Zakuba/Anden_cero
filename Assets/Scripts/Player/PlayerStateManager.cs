@@ -1,3 +1,4 @@
+
 using UnityEngine;
 using Unity.Netcode;
 using System.Collections;
@@ -15,10 +16,7 @@ public class PlayerStateManager : NetworkBehaviour
     [SerializeField] private int maxLives = 3;
 
     [Header("Físicas y Colisiones")]
-    [Tooltip("El CharacterController del jugador (sólido en vida).")]
     [SerializeField] private CharacterController characterController;
-
-    [Tooltip("Collider secundario que actúa como Trigger cuando el jugador muere.")]
     [SerializeField] private Collider ghostTriggerCollider;
 
     [Header("Feedback Visual")]
@@ -27,21 +25,21 @@ public class PlayerStateManager : NetworkBehaviour
     [SerializeField] private Color colorAturdido = Color.yellow;
     [SerializeField] private Color colorMuerto = Color.gray;
 
-    private Animator characterAnimator;
-
     private PlayerLivesUI localLivesUI;
 
-    public NetworkVariable<PlayerState> currentState = new NetworkVariable<PlayerState>(
-        PlayerState.Vivo,
-        NetworkVariableReadPermission.Everyone,
-        NetworkVariableWritePermission.Server
-    );
+    public NetworkVariable<PlayerState> currentState =
+        new NetworkVariable<PlayerState>(
+            PlayerState.Vivo,
+            NetworkVariableReadPermission.Everyone,
+            NetworkVariableWritePermission.Server
+        );
 
-    public NetworkVariable<int> currentLives = new NetworkVariable<int>(
-        3,
-        NetworkVariableReadPermission.Everyone,
-        NetworkVariableWritePermission.Server
-    );
+    public NetworkVariable<int> currentLives =
+        new NetworkVariable<int>(
+            3,
+            NetworkVariableReadPermission.Everyone,
+            NetworkVariableWritePermission.Server
+        );
 
     private void Awake()
     {
@@ -51,18 +49,15 @@ public class PlayerStateManager : NetworkBehaviour
 
     private void Update()
     {
-        // Solo el jugador local debe buscar y actualizar su propia pantalla
-        if (!IsOwner) return;
+        if (!IsOwner)
+            return;
 
-        // Si no encontró la UI al nacer, la sigue buscando
         if (localLivesUI == null)
         {
             localLivesUI = FindObjectOfType<PlayerLivesUI>(true);
 
             if (localLivesUI != null)
-            {
                 localLivesUI.UpdateHearts(currentLives.Value);
-            }
         }
     }
 
@@ -77,23 +72,19 @@ public class PlayerStateManager : NetworkBehaviour
         currentState.OnValueChanged += OnStateChanged;
         currentLives.OnValueChanged += OnLivesChanged;
 
-        // Búsqueda y configuración de UI solo para el jugador local
         if (IsOwner)
         {
             localLivesUI = FindObjectOfType<PlayerLivesUI>(true);
 
             if (localLivesUI != null)
-            {
                 localLivesUI.UpdateHearts(currentLives.Value);
-            }
         }
 
         ApplyStateProperties(currentState.Value);
 
+        // Registrar al jugador en el MatchManager.
         if (MatchManager.Instance != null)
-        {
             MatchManager.Instance.RegisterPlayer(this);
-        }
     }
 
     public override void OnNetworkDespawn()
@@ -105,25 +96,20 @@ public class PlayerStateManager : NetworkBehaviour
     private void OnLivesChanged(int previousValue, int newValue)
     {
         if (IsOwner && localLivesUI != null)
-        {
             localLivesUI.UpdateHearts(newValue);
-        }
     }
 
     [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Everyone)]
     public void TakeDamageServerRpc()
     {
-        // No recibe daño hasta que empiece la partida
         if (MatchManager.Instance != null &&
             !MatchManager.Instance.IsMatchRunning)
             return;
 
-        // Si ya está muerto o aturdido, ignora daño
         if (currentState.Value == PlayerState.Muerto ||
             currentState.Value == PlayerState.Aturdido)
             return;
 
-        // Protección por escudo
         PlayerStats stats = GetComponent<PlayerStats>();
 
         if (stats != null && stats.IsShielded)
@@ -132,7 +118,6 @@ public class PlayerStateManager : NetworkBehaviour
             return;
         }
 
-        // Pierde una vida
         currentLives.Value--;
 
         if (currentLives.Value <= 0)
@@ -145,10 +130,6 @@ public class PlayerStateManager : NetworkBehaviour
         }
     }
 
-    /// <summary>
-    /// Muerte instantánea. Ignora escudo y vidas restantes.
-    /// Utilizado por el tren u otros peligros mortales.
-    /// </summary>
     [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Everyone)]
     public void InstantKillServerRpc()
     {
@@ -166,9 +147,7 @@ public class PlayerStateManager : NetworkBehaviour
         yield return new WaitForSeconds(2f);
 
         if (currentState.Value != PlayerState.Muerto)
-        {
             currentState.Value = PlayerState.Vivo;
-        }
     }
 
     private void OnStateChanged(PlayerState previous, PlayerState current)
@@ -178,10 +157,7 @@ public class PlayerStateManager : NetworkBehaviour
 
     private void ApplyStateProperties(PlayerState state)
     {
-        // =========================================
-        // 1. CAMBIO DE COLOR
-        // =========================================
-
+        // 1. Cambio de color.
         if (playerRenderer != null)
         {
             switch (state)
@@ -200,46 +176,42 @@ public class PlayerStateManager : NetworkBehaviour
             }
         }
 
-        // =========================================
-        // 2. BUSCAR ANIMATOR DEL PERSONAJE ACTIVO
-        // =========================================
-
-        Animator animatorActivo = ObtenerAnimatorActivo();
-
-        if (animatorActivo != null)
-        {
-            animatorActivo.SetInteger("PlayerState", (int)state);
-        }
-
-        // =========================================
-        // 3. COLISIONES
-        // =========================================
-
-        bool isDead = state == PlayerState.Muerto;
-
-        if (characterController != null)
-        {
-            characterController.enabled = !isDead;
-        }
-
-        if (ghostTriggerCollider != null)
-        {
-            ghostTriggerCollider.enabled = isDead;
-        }
-    }
-
-    private Animator ObtenerAnimatorActivo()
-    {
+        // 2. Animación del personaje activo.
         Animator[] animators = GetComponentsInChildren<Animator>(true);
 
         foreach (Animator animator in animators)
         {
             if (animator.gameObject.activeInHierarchy)
             {
-                return animator;
+                animator.SetInteger("PlayerState", (int)state);
+                break;
             }
         }
 
-        return null;
+        // 3. Determinar si la partida ya comenzó.
+        bool partidaIniciada =
+            MatchManager.Instance != null &&
+            MatchManager.Instance.IsMatchRunning;
+
+        bool isDead = state == PlayerState.Muerto;
+
+        // 4. El CharacterController solo funciona durante la partida
+        // y mientras el jugador no esté muerto.
+        if (characterController != null)
+        {
+            characterController.enabled = partidaIniciada && !isDead;
+        }
+
+        // 5. El collider fantasma solo funciona al morir.
+        if (ghostTriggerCollider != null)
+        {
+            ghostTriggerCollider.enabled = isDead;
+        }
+    }
+
+    // Llamar desde MatchManager al comenzar la partida.
+    public void ActualizarColisionesPartida()
+    {
+        ApplyStateProperties(currentState.Value);
     }
 }

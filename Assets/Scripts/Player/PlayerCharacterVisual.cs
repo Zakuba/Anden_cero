@@ -149,4 +149,30 @@ public class PlayerCharacterVisual : NetworkBehaviour
     {
         return selectedCharacter.Value;
     }
+
+    public void SetLobbyAnimation(int animationIndex)
+    {
+        Animator animatorActivo = null;
+
+        Animator[] animators = GetComponentsInChildren<Animator>(true);
+
+        foreach (Animator animator in animators)
+        {
+            if (animator.gameObject.activeInHierarchy)
+            {
+                animatorActivo = animator;
+                break;
+            }
+        }
+
+        if (animatorActivo == null)
+            return;
+
+        animatorActivo.SetInteger("LobbyAnimation", animationIndex);
+    }
+
+    public void ResetLobbyAnimation()
+    {
+        SetLobbyAnimation(0);
+    }
 }

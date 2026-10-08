@@ -32,6 +32,10 @@ public class MatchManager : NetworkBehaviour
     [SerializeField] private Transform[] spawnPoints;
     private int nextSpawnIndex;
 
+    [Header("Posiciones del lobby")]
+    [SerializeField] private Transform[] lobbySpawnPoints;
+    private int nextLobbySpawnIndex;
+
     private readonly NetworkVariable<bool> matchStarted = new NetworkVariable<bool>(
         false, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
 
@@ -113,7 +117,7 @@ public class MatchManager : NetworkBehaviour
         if (!IsServer || player == null || registeredPlayers.Contains(player)) return;
 
         registeredPlayers.Add(player);
-        AssignSpawn(player);
+        AssignLobbySpawn(player);
         player.currentState.OnValueChanged += (_, newState) => OnPlayerStateChanged(newState);
         RefreshStartButton();
     }
@@ -139,9 +143,33 @@ public class MatchManager : NetworkBehaviour
 
     private void StartMatch()
     {
-        if (matchStarted.Value || ConnectedPlayersCount() < MinPlayersToStart) return;
-        matchStarted.Value = true;
+        if (matchStarted.Value ||
+            ConnectedPlayersCount() < MinPlayersToStart)
+            return;
+
         JoinsClosed = true;
+
+        // Primero marcamos la partida como iniciada.
+        matchStarted.Value = true;
+
+        foreach (PlayerStateManager player in registeredPlayers)
+        {
+            if (player == null)
+                continue;
+
+            // Restaurar el idle normal.
+            PlayerCharacterVisual visual =
+                player.GetComponent<PlayerCharacterVisual>();
+
+            if (visual != null)
+                visual.ResetLobbyAnimation();
+
+            // Asignar la posición de partida.
+            AssignSpawn(player);
+
+            // Reactivar las colisiones.
+            player.ActualizarColisionesPartida();
+        }
     }
 
     // ---------- Victoria ----------
@@ -227,5 +255,41 @@ public class MatchManager : NetworkBehaviour
 
         if (mainCamera != null)
             mainCamera.gameObject.SetActive(true);
+    }
+
+    private void AssignLobbySpawn(PlayerStateManager player)
+    {
+        if (lobbySpawnPoints == null || lobbySpawnPoints.Length == 0)
+            return;
+
+        PlayerSpawnHandler handler = player.GetComponent<PlayerSpawnHandler>();
+
+        if (handler == null)
+            return;
+
+        Transform point = lobbySpawnPoints[
+            nextLobbySpawnIndex % lobbySpawnPoints.Length
+        ];
+
+        nextLobbySpawnIndex++;
+
+        // Obtener la animación configurada para este punto.
+        LobbySpawnPoint lobbyPoint = point.GetComponent<LobbySpawnPoint>();
+
+        if (lobbyPoint != null)
+        {
+            PlayerCharacterVisual visual =
+                player.GetComponent<PlayerCharacterVisual>();
+
+            if (visual != null)
+            {
+                visual.SetLobbyAnimation(lobbyPoint.LobbyAnimation);
+            }
+        }
+
+        // Teletransportar al jugador a su posición de espera.
+        StartCoroutine(
+            SendSpawnNextFrame(handler, point.position, point.rotation)
+        );
     }
 }
