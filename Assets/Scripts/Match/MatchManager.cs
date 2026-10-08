@@ -12,7 +12,7 @@ public class MatchManager : NetworkBehaviour
     // Se pone en true cuando arranca la partida: lo usa el ConnectionApproval para rechazar late joiners
     public static bool JoinsClosed { get; private set; }
 
-    public const int MaxPlayers = 4;
+    public const int MaxPlayers = 6;
     private const int MinPlayersToStart = 2;
 
     [Header("Resultados")]
@@ -23,6 +23,10 @@ public class MatchManager : NetworkBehaviour
     [SerializeField] private Button startMatchButton;
     [SerializeField] private GameObject waitingText;   // "Esperando jugadores..."
     [SerializeField] private GameObject waitingForHostText; // Texto para clientes: "Esperando al host..."
+    
+    [Header("Spawns")]
+    [SerializeField] private Transform[] spawnPoints;
+    private int nextSpawnIndex;
 
     private readonly NetworkVariable<bool> matchStarted = new NetworkVariable<bool>(
         false, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
@@ -87,6 +91,7 @@ public class MatchManager : NetworkBehaviour
         if (!IsServer || player == null || registeredPlayers.Contains(player)) return;
 
         registeredPlayers.Add(player);
+        AssignSpawn(player);
         player.currentState.OnValueChanged += (_, newState) => OnPlayerStateChanged(newState);
         RefreshStartButton();
     }
@@ -162,5 +167,25 @@ public class MatchManager : NetworkBehaviour
         {
             // Hook para la animación de celebración de tus compañeros
         }
+    }
+
+        private void AssignSpawn(PlayerStateManager player)
+    {
+        if (spawnPoints == null || spawnPoints.Length == 0) return;
+
+        var handler = player.GetComponent<PlayerSpawnHandler>();
+        if (handler == null) return;
+
+        Transform point = spawnPoints[nextSpawnIndex % spawnPoints.Length];
+        nextSpawnIndex++;
+
+        StartCoroutine(SendSpawnNextFrame(handler, point.position, point.rotation));
+    }
+
+    private IEnumerator SendSpawnNextFrame(PlayerSpawnHandler handler, Vector3 pos, Quaternion rot)
+    {
+        yield return null; // espera un frame a que el avatar esté listo en red
+        if (handler != null && handler.IsSpawned)
+            handler.TeleportToSpawnRpc(pos, rot);
     }
 }

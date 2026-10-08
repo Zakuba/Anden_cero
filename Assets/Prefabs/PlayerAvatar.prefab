@@ -57,6 +57,7 @@ GameObject:
   - component: {fileID: 8594183129778106702}
   - component: {fileID: 2880702124819192731}
   - component: {fileID: 4317313515988791827}
+  - component: {fileID: -4440210105935950766}
   m_Layer: 0
   m_Name: PlayerAvatar
   m_TagString: Player
@@ -410,6 +411,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5a98810d227069a4da59280fb3cac1d8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerAnimationController
+--- !u!114 &-4440210105935950766
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6023118608644461741}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8fac7c24a8024074eb56f6580dedf0dc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerSpawnHandler
+  ShowTopMostFoldoutHeaderGroup: 1
 --- !u!1 &7732735729615609519
 GameObject:
   m_ObjectHideFlags: 0
