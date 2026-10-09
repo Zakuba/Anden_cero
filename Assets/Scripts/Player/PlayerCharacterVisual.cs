@@ -13,18 +13,24 @@ public class PlayerCharacterVisual : NetworkBehaviour
             NetworkVariableWritePermission.Server
         );
 
+    // Animación del lobby sincronizada por red.
+    private NetworkVariable<int> lobbyAnimationIndex =
+        new NetworkVariable<int>(
+            0,
+            NetworkVariableReadPermission.Everyone,
+            NetworkVariableWritePermission.Server
+        );
+
     private PlayerAnimationController animationController;
 
     private void Awake()
     {
-        animationController =
-            GetComponent<PlayerAnimationController>();
+        animationController = GetComponent<PlayerAnimationController>();
 
         if (animationController == null)
         {
             Debug.LogError(
-                "[PlayerCharacterVisual] " +
-                "No se encontró PlayerAnimationController en el Player."
+                "[PlayerCharacterVisual] No se encontró PlayerAnimationController."
             );
         }
     }
@@ -34,31 +40,35 @@ public class PlayerCharacterVisual : NetworkBehaviour
         base.OnNetworkSpawn();
 
         selectedCharacter.OnValueChanged += OnCharacterChanged;
+        lobbyAnimationIndex.OnValueChanged += OnLobbyAnimationChanged;
 
-        // Si este es MI Player, envío al servidor
-        // el personaje que elegí en el Lobby.
         if (IsOwner)
         {
-            int selectedIndex =
-                PlayerSelectionData.selectedCharacterIndex;
-
+            int selectedIndex = PlayerSelectionData.selectedCharacterIndex;
             SeleccionarPersonajeServerRpc(selectedIndex);
         }
 
-        // Mostrar inicialmente el personaje actual.
         ActualizarPersonaje(selectedCharacter.Value);
+        AplicarAnimacionLobby();
     }
 
     public override void OnNetworkDespawn()
     {
         selectedCharacter.OnValueChanged -= OnCharacterChanged;
+        lobbyAnimationIndex.OnValueChanged -= OnLobbyAnimationChanged;
+
+        base.OnNetworkDespawn();
     }
 
-    private void OnCharacterChanged(
-        int previousValue,
-        int newValue)
+    private void OnCharacterChanged(int previousValue, int newValue)
     {
         ActualizarPersonaje(newValue);
+        AplicarAnimacionLobby();
+    }
+
+    private void OnLobbyAnimationChanged(int previousValue, int newValue)
+    {
+        AplicarAnimacionLobby();
     }
 
     [Rpc(
@@ -74,7 +84,6 @@ public class PlayerCharacterVisual : NetworkBehaviour
             Debug.LogWarning(
                 $"[PlayerCharacterVisual] Índice inválido: {index}"
             );
-
             return;
         }
 
@@ -87,62 +96,43 @@ public class PlayerCharacterVisual : NetworkBehaviour
             characterModels.Length == 0)
         {
             Debug.LogError(
-                "[PlayerCharacterVisual] " +
-                "No hay modelos configurados."
+                "[PlayerCharacterVisual] No hay modelos configurados."
             );
-
             return;
         }
 
         if (index < 0 || index >= characterModels.Length)
-        {
             index = 0;
-        }
 
-        // Desactivar todos los personajes
-        // y activar solamente el seleccionado.
         for (int i = 0; i < characterModels.Length; i++)
         {
             if (characterModels[i] != null)
-            {
                 characterModels[i].SetActive(i == index);
-            }
         }
 
-        // Obtener el personaje que acabamos de activar.
-        GameObject personajeActivo =
-            characterModels[index];
+        GameObject personajeActivo = characterModels[index];
 
         if (personajeActivo == null)
         {
             Debug.LogError(
-                $"[PlayerCharacterVisual] " +
-                $"El personaje {index} es NULL."
+                $"[PlayerCharacterVisual] El personaje {index} es NULL."
             );
-
             return;
         }
 
-        // Buscar el Animator dentro del personaje.
         Animator animator =
-            personajeActivo.GetComponentInChildren<Animator>();
+            personajeActivo.GetComponentInChildren<Animator>(true);
 
         if (animator == null)
         {
             Debug.LogError(
-                $"[PlayerCharacterVisual] " +
-                $"El personaje {index} no tiene Animator."
+                $"[PlayerCharacterVisual] El personaje {index} no tiene Animator."
             );
-
             return;
         }
 
-        // Pasarle el Animator al controlador
-        // que está en el Player.
         if (animationController != null)
-        {
             animationController.SetAnimator(animator);
-        }
     }
 
     public int GetSelectedCharacter()
@@ -150,29 +140,69 @@ public class PlayerCharacterVisual : NetworkBehaviour
         return selectedCharacter.Value;
     }
 
+    // Este método lo llama MatchManager en el servidor.
     public void SetLobbyAnimation(int animationIndex)
     {
-        Animator animatorActivo = null;
-
-        Animator[] animators = GetComponentsInChildren<Animator>(true);
-
-        foreach (Animator animator in animators)
+        if (!IsServer)
         {
-            if (animator.gameObject.activeInHierarchy)
-            {
-                animatorActivo = animator;
-                break;
-            }
+            Debug.LogWarning(
+                "[PlayerCharacterVisual] Solo el servidor puede asignar la animación."
+            );
+            return;
         }
 
-        if (animatorActivo == null)
-            return;
+        lobbyAnimationIndex.Value = animationIndex;
 
-        animatorActivo.SetInteger("LobbyAnimation", animationIndex);
+        // Aplicación inmediata en el servidor.
+        AplicarAnimacionLobby();
     }
 
     public void ResetLobbyAnimation()
     {
         SetLobbyAnimation(0);
+    }
+
+    private void AplicarAnimacionLobby()
+    {
+        if (characterModels == null)
+            return;
+
+        int index = selectedCharacter.Value;
+
+        if (index < 0 || index >= characterModels.Length)
+            return;
+
+        GameObject personajeActivo = characterModels[index];
+
+        if (personajeActivo == null || !personajeActivo.activeInHierarchy)
+            return;
+
+        Animator animator =
+            personajeActivo.GetComponentInChildren<Animator>(true);
+
+        if (animator == null)
+            return;
+
+        if (!animator.gameObject.activeInHierarchy)
+            return;
+
+        if (animator.runtimeAnimatorController == null)
+            return;
+
+        if (animator.isInitialized)
+        {
+            animator.SetInteger(
+                "LobbyAnimation",
+                lobbyAnimationIndex.Value
+            );
+        }
+        else
+        {
+            animator.Rebind();
+            animator.SetInteger(
+                "LobbyAnimation",
+                lobbyAnimationIndex.Value
+            );
+        }
     }
 }
