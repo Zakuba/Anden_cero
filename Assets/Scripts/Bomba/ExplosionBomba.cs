@@ -67,7 +67,10 @@ public class ExplosionBomba : MonoBehaviour
             objetoTitileo.SetActive(false);
         }
 
+        /*
         // Destruir la bomba
         Destroy(gameObject);
+        */
+        
     }
 }

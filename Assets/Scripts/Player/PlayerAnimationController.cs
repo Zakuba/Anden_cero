@@ -9,18 +9,21 @@ public class PlayerAnimationController : MonoBehaviour
     private void Start()
     {
         ultimaPosicion = transform.position;
-
+        /*
         Debug.Log(
             "[ANIM] PlayerAnimationController iniciado en " +
             gameObject.name
         );
+        */
     }
 
     private void Update()
     {
         if (animator == null)
         {
+            /*
             Debug.LogWarning("[ANIM] No hay Animator asignado.");
+            */
             return;
         }
 
@@ -36,22 +39,24 @@ public class PlayerAnimationController : MonoBehaviour
         ultimaPosicion = transform.position;
 
         animator.SetFloat("Speed", velocidad);
-
+        /*
         Debug.Log(
             "[ANIM] Posición: " +
             transform.position +
             " | Velocidad: " +
             velocidad
         );
+        */
     }
 
     public void SetAnimator(Animator nuevoAnimator)
     {
         animator = nuevoAnimator;
-
+        /*
         Debug.Log(
             "[ANIM] Animator asignado: " +
             nuevoAnimator.gameObject.name
         );
+        */
     }
 }

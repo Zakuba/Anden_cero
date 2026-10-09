@@ -114,6 +114,7 @@ private int EffectiveExplosionRange => explosionRange + (playerStats != null ? p
         StartCoroutine(BombExplosionRoutine(bombNetObj));
     }
 
+    /*
     private IEnumerator BombExplosionRoutine(NetworkObject bombNetObj)
     {
         BombInteractable bombLogic = bombNetObj.GetComponent<BombInteractable>();
@@ -149,6 +150,55 @@ private int EffectiveExplosionRange => explosionRange + (playerStats != null ? p
 
         activeBombs--;
         UpdateBombCountClientRpc(activeBombs);
+    }
+    */
+
+    private IEnumerator BombExplosionRoutine(NetworkObject bombNetObj)
+    {
+        BombInteractable bombLogic = bombNetObj.GetComponent<BombInteractable>();
+        float currentTimer = 0f;
+
+        try
+        {
+            while (currentTimer < bombTimer)
+            {
+                // Si la bomba se destruyó externamente, salimos del bucle para no causar errores de referencia nula
+                if (bombNetObj == null || !bombNetObj.IsSpawned)
+                {
+                    Debug.LogWarning("[Bomba] La bomba fue destruida o despawneada antes de completar el temporizador.");
+                    yield break;
+                }
+
+                if (bombLogic == null || !bombLogic.isMoving.Value)
+                {
+                    currentTimer += Time.deltaTime;
+                }
+
+                yield return null;
+            }
+
+            // Si completó el tiempo con la bomba viva, ejecuta la explosión normalmente
+            if (bombNetObj != null && bombNetObj.IsSpawned)
+            {
+                Vector3 finalPos = bombNetObj.transform.position;
+                List<Vector3> affectedCells = CalculateExplosionCells(finalPos);
+                SpawnVfxClientRpc(affectedCells.ToArray());
+
+                yield return new WaitForSeconds(0.05f);
+
+                if (bombNetObj != null && bombNetObj.IsSpawned)
+                {
+                    bombNetObj.Despawn();
+                }
+            }
+        }
+        finally
+        {
+            // Esto se ejecuta SIEMPRE, incluso si la corrutina hace 'yield break' o si se interrumpe
+            activeBombs--;
+            if (activeBombs < 0) activeBombs = 0;
+            UpdateBombCountClientRpc(activeBombs);
+        }
     }
 
 /// Cálculo autoritativo en el Servidor: determina daños y obstáculos

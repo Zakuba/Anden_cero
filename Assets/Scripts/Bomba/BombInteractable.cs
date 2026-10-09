@@ -27,11 +27,11 @@ public class BombInteractable : NetworkBehaviour
         if (!IsServer || !isMoving.Value) return;
 
         transform.position = Vector3.MoveTowards(transform.position, targetPosition, slideSpeed * Time.deltaTime);
-
         // Al llegar exactamente al centro de la casilla destino
-        if (Vector3.Distance(transform.position, targetPosition) < 0.01f)
+        // Aumentar la tolerancia de 0.01f a 0.05f para evitar problemas de precisión flotante
+        if (Vector3.Distance(transform.position, targetPosition) <= 0.05f)
         {
-            transform.position = targetPosition; // Anclaje matemático perfecto
+            transform.position = targetPosition;// Anclaje matemático perfecto
             isMoving.Value = false;
         }
     }
