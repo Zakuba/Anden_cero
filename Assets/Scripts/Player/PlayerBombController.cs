@@ -5,6 +5,7 @@ using System.Collections.Generic;
 
 public class PlayerBombController : NetworkBehaviour
 {
+    /*
     [Header("Configuración de Bomba")]
     [SerializeField] private GameObject bombPrefab;
     [SerializeField] private float gridSize = 1f;
@@ -12,7 +13,18 @@ public class PlayerBombController : NetworkBehaviour
     [SerializeField] private int explosionRange = 2;
     [SerializeField] private LayerMask explosionLayerMask;
     [SerializeField] private KeyCode plantKey = KeyCode.Space;
-    [SerializeField] private float alturaspawnbomba = -1f; 
+    [SerializeField] private float alturaspawnbomba = -1f;
+    */
+
+    [Header("Configuración de Bomba")]
+    [SerializeField] private GameObject bombPrefab;
+    [SerializeField] private float gridSize = 1f;
+    [SerializeField] private float bombTimer = 3f;
+    [SerializeField] private int explosionRange = 2;
+    [SerializeField] private LayerMask explosionLayerMask;
+    [SerializeField] private KeyCode plantKey = KeyCode.Space;
+    [Tooltip("Radio o elevación para que la bomba descanse sobre el piso sin enterrarse.")]
+    [SerializeField] private float bombRadiusOffset = 0.5f;
 
     [Header("Power-ups (Drops)")]
     [SerializeField] private GameObject[] powerUpPrefabs; // orden: Expansor, Bomba Extra, Botas, Guante, Escudo
@@ -90,12 +102,27 @@ private int EffectiveExplosionRange => explosionRange + (playerStats != null ? p
         }
     }
 
+    /*
     private Vector3 GetGridCenter(Vector3 playerPos)
     {
         float x = Mathf.Round(playerPos.x / gridSize) * gridSize;
         float z = Mathf.Round(playerPos.z / gridSize) * gridSize;
         return new Vector3(x, alturaspawnbomba, z);
     }
+    */
+
+    //Prueba
+private Vector3 GetGridCenter(Vector3 playerPos)
+{
+    float x = Mathf.Round(playerPos.x / gridSize) * gridSize;
+    float z = Mathf.Round(playerPos.z / gridSize) * gridSize;
+    
+    // (playerPos.y - 1.0f) es el nivel del piso donde apoya el jugador.
+    // Sumamos bombRadiusOffset (0.5f) para que la base de la esfera toque el suelo.
+    float bombCenterY = (playerPos.y - 1.0f) + bombRadiusOffset;
+
+    return new Vector3(x, bombCenterY, z);
+}
 
     [ServerRpc]
     private void RequestPlantBombServerRpc(Vector3 spawnPosition)
@@ -114,47 +141,8 @@ private int EffectiveExplosionRange => explosionRange + (playerStats != null ? p
         StartCoroutine(BombExplosionRoutine(bombNetObj));
     }
 
-    /*
-    private IEnumerator BombExplosionRoutine(NetworkObject bombNetObj)
-    {
-        BombInteractable bombLogic = bombNetObj.GetComponent<BombInteractable>();
-        float currentTimer = 0f;
-
-        // Pausa la cuenta regresiva mientras la bomba se desliza
-        while (currentTimer < bombTimer)
-        {
-            if (bombNetObj == null || !bombNetObj.IsSpawned) yield break;
-
-            if (bombLogic == null || !bombLogic.isMoving.Value)
-            {
-                currentTimer += Time.deltaTime;
-            }
-            yield return null;
-        }
-
-        if (bombNetObj != null && bombNetObj.IsSpawned)
-        {
-            // Toma la posición REAL tras ser bateada
-            Vector3 finalPos = bombNetObj.transform.position;
-            
-            List<Vector3> affectedCells = CalculateExplosionCells(finalPos);
-            SpawnVfxClientRpc(affectedCells.ToArray());
-
-            yield return new WaitForSeconds(0.05f);
-
-            if (bombNetObj != null && bombNetObj.IsSpawned)
-            {
-                bombNetObj.Despawn();
-            }
-        }
-
-        activeBombs--;
-        UpdateBombCountClientRpc(activeBombs);
-    }
-    */
-
-    private IEnumerator BombExplosionRoutine(NetworkObject bombNetObj)
-    {
+private IEnumerator BombExplosionRoutine(NetworkObject bombNetObj)
+{
         BombInteractable bombLogic = bombNetObj.GetComponent<BombInteractable>();
         float currentTimer = 0f;
 
@@ -198,8 +186,8 @@ private int EffectiveExplosionRange => explosionRange + (playerStats != null ? p
             activeBombs--;
             if (activeBombs < 0) activeBombs = 0;
             UpdateBombCountClientRpc(activeBombs);
-        }
     }
+}
 
 /// Cálculo autoritativo en el Servidor: determina daños y obstáculos
 private List<Vector3> CalculateExplosionCells(Vector3 center)
