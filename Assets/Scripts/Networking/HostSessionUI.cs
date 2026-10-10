@@ -8,11 +8,13 @@ public class HostSessionUI : MonoBehaviour
 {
     [SerializeField] private GameObject waitingIndicator;
     [SerializeField] private Button stopServerButton;
+    [SerializeField] private Button stopServerButtonMenu;
     [SerializeField] private string lobbySceneName = "Lobby";
 
     private void Awake()
     {
         stopServerButton.onClick.AddListener(OnExitClicked);
+        stopServerButtonMenu.onClick.AddListener(OnExitClicked);
     }
 
     private void Start()

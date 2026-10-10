@@ -73,6 +73,9 @@ public class PlayerMovimientoOnline : NetworkBehaviour
 
 private void Update()
 {
+    // 1. Si el juego está pausado, ignoramos completamente cualquier input o movimiento del jugador
+    if (PauseManager.IsGamePaused) return;
+
     // Antes de arrancar la partida, los drones no pueden chocar ni empujar al jugador.
     // Se aplica en todas las instancias, no solo en el dueño.
     bool matchRunning = MatchManager.Instance == null || MatchManager.Instance.IsMatchRunning;
