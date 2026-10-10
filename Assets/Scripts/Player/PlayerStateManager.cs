@@ -25,6 +25,8 @@ public class PlayerStateManager : NetworkBehaviour
     [SerializeField] private Color colorAturdido = Color.yellow;
     [SerializeField] private Color colorMuerto = Color.gray;
 
+    private MatchManager subscribedMatchManager;
+
     private PlayerLivesUI localLivesUI;
 
     public NetworkVariable<PlayerState> currentState =
@@ -82,15 +84,25 @@ public class PlayerStateManager : NetworkBehaviour
 
         ApplyStateProperties(currentState.Value);
 
-        // Registrar al jugador en el MatchManager.
         if (MatchManager.Instance != null)
+        {
+            ConectarMatchManager(MatchManager.Instance);
             MatchManager.Instance.RegisterPlayer(this);
+        }
     }
 
     public override void OnNetworkDespawn()
     {
         currentState.OnValueChanged -= OnStateChanged;
         currentLives.OnValueChanged -= OnLivesChanged;
+
+        if (subscribedMatchManager != null)
+        {
+            subscribedMatchManager.MatchStartedChanged -=
+                OnMatchStartedChanged;
+
+            subscribedMatchManager = null;
+        }
     }
 
     private void OnLivesChanged(int previousValue, int newValue)
@@ -211,6 +223,36 @@ public class PlayerStateManager : NetworkBehaviour
 
     // Llamar desde MatchManager al comenzar la partida.
     public void ActualizarColisionesPartida()
+    {
+        ApplyStateProperties(currentState.Value);
+    }
+
+    public void ConectarMatchManager(MatchManager manager)
+    {
+        if (manager == null)
+            return;
+
+        // Evitar suscripciones duplicadas.
+        if (subscribedMatchManager == manager)
+            return;
+
+        // Desuscribirse del manager anterior, si existe.
+        if (subscribedMatchManager != null)
+        {
+            subscribedMatchManager.MatchStartedChanged -=
+                OnMatchStartedChanged;
+        }
+
+        subscribedMatchManager = manager;
+
+        subscribedMatchManager.MatchStartedChanged +=
+            OnMatchStartedChanged;
+
+        // Aplicar inmediatamente el estado actual.
+        ApplyStateProperties(currentState.Value);
+    }
+
+    private void OnMatchStartedChanged(bool oldValue, bool newValue)
     {
         ApplyStateProperties(currentState.Value);
     }

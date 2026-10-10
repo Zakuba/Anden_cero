@@ -38,6 +38,7 @@ public class MatchManager : NetworkBehaviour
 
     private readonly NetworkVariable<bool> matchStarted = new NetworkVariable<bool>(
         false, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
+    public event System.Action<bool, bool> MatchStartedChanged;
 
     private readonly List<PlayerStateManager> registeredPlayers = new List<PlayerStateManager>();
     private bool matchEnded;
@@ -81,6 +82,15 @@ public class MatchManager : NetworkBehaviour
             foreach (var p in FindObjectsByType<PlayerStateManager>(FindObjectsSortMode.None))
                 RegisterPlayer(p);
         }
+
+        // Pruebita para conectar los jugadores existentes en cada cliente a ver si funca
+        foreach (PlayerStateManager player in
+                 FindObjectsByType<PlayerStateManager>(
+                     FindObjectsSortMode.None))
+        {
+            if (player != null)
+                player.ConectarMatchManager(this);
+        }
     }
 
     public override void OnNetworkDespawn()
@@ -93,6 +103,9 @@ public class MatchManager : NetworkBehaviour
 
     private void OnMatchStartedChanged(bool oldValue, bool newValue)
     {
+        // Avisar a los PlayerStateManager de este clienteeee
+        MatchStartedChanged?.Invoke(oldValue, newValue);
+
         if (!newValue)
         {
             ActivarLobbyCamera();
