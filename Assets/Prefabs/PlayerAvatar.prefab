@@ -281,7 +281,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 65
   plantKey: 32
-  alturaspawnbomba: -1
+  bombRadiusOffset: 0.5
   powerUpPrefabs:
   - {fileID: 3711330356922311909, guid: 156134cc5537516489b549703c0435da, type: 3}
   - {fileID: 4191467962569306139, guid: 439fb3c742b89544bb1deee5c6322449, type: 3}

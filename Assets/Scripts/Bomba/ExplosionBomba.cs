@@ -18,6 +18,12 @@ public class ExplosionBomba : MonoBehaviour
     [SerializeField] private Color colorRojo = Color.red;
 
     private Renderer objetoRenderer;
+    private BombInteractable bombLogic;
+
+    private void Awake()
+    {
+        bombLogic = GetComponent<BombInteractable>();
+    }
 
     private void Start()
     {
@@ -40,6 +46,13 @@ public class ExplosionBomba : MonoBehaviour
 
         while (tiempoTranscurrido < duracion)
         {
+            // Pausa el parpadeo si la bomba está siendo bateada
+            if (bombLogic != null && bombLogic.isMoving.Value)
+            {
+                yield return null;
+                continue;
+            }
+
             float progreso = tiempoTranscurrido / duracion;
 
             float intervalo = Mathf.Lerp(

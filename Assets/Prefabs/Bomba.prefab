@@ -129,7 +129,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.NetworkObject
-  GlobalObjectIdHash: 1155689460
+  GlobalObjectIdHash: 1906951499
   InScenePlacedSourceGlobalObjectIdHash: 0
   m_InScenePlacedDisabledByDefault: 0
   DeferredDespawnTick: 0
@@ -290,6 +290,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: be930d629bc89e346b3d2b496ab94aa0, type: 3}
       propertyPath: m_Name
       value: Bomb3
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: be930d629bc89e346b3d2b496ab94aa0, type: 3}
+      propertyPath: m_Layer
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 3451118302482216456, guid: be930d629bc89e346b3d2b496ab94aa0, type: 3}
       propertyPath: m_Enabled

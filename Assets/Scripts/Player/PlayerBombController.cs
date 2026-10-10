@@ -102,16 +102,7 @@ private int EffectiveExplosionRange => explosionRange + (playerStats != null ? p
         }
     }
 
-    /*
-    private Vector3 GetGridCenter(Vector3 playerPos)
-    {
-        float x = Mathf.Round(playerPos.x / gridSize) * gridSize;
-        float z = Mathf.Round(playerPos.z / gridSize) * gridSize;
-        return new Vector3(x, alturaspawnbomba, z);
-    }
-    */
-
-    //Prueba
+/*
 private Vector3 GetGridCenter(Vector3 playerPos)
 {
     float x = Mathf.Round(playerPos.x / gridSize) * gridSize;
@@ -122,6 +113,39 @@ private Vector3 GetGridCenter(Vector3 playerPos)
     float bombCenterY = (playerPos.y - 1.0f) + bombRadiusOffset;
 
     return new Vector3(x, bombCenterY, z);
+}
+*/
+//Prueba
+private Vector3 GetGridCenter(Vector3 playerPos)
+{
+    // Lanza un rayo vertical desde el torso del jugador hacia el piso
+    Vector3 rayOrigin = new Vector3(playerPos.x, playerPos.y + 0.5f, playerPos.z);
+    
+    if (Physics.Raycast(rayOrigin, Vector3.down, out RaycastHit hit, 4f, ~0, QueryTriggerInteraction.Ignore))
+    {
+        string objName = hit.collider.gameObject.name.ToLower();
+        string rootName = hit.collider.transform.root.gameObject.name.ToLower();
+
+        // Contempla "casila" (con una sola L), "casilla", "piso", "anden" y "tile"
+        if (objName.Contains("casil") || objName.Contains("piso") || objName.Contains("anden") || objName.Contains("floor")
+            || rootName.Contains("casil") || rootName.Contains("piso") || rootName.Contains("anden"))
+        {
+            // hit.collider.bounds.center devuelve el centro geométrico exacto en el mundo del collider
+            Vector3 tileCenter = hit.collider.bounds.center;
+            
+            // Apoya la bomba con su radio (+0.5f) sobre la cara superior detectada
+            float bombY = hit.point.y + bombRadiusOffset;
+
+            return new Vector3(tileCenter.x, bombY, tileCenter.z);
+        }
+    }
+
+    // Fallback si por alguna razón no detecta una baldosa específica
+    float x = Mathf.Round(playerPos.x / gridSize) * gridSize;
+    float z = Mathf.Round(playerPos.z / gridSize) * gridSize;
+    float floorY = (playerPos.y - 1.0f) + bombRadiusOffset;
+
+    return new Vector3(x, floorY, z);
 }
 
     [ServerRpc]
@@ -189,109 +213,172 @@ private IEnumerator BombExplosionRoutine(NetworkObject bombNetObj)
     }
 }
 
-/// Cálculo autoritativo en el Servidor: determina daños y obstáculos
-private List<Vector3> CalculateExplosionCells(Vector3 center)
-{
-    List<Vector3> cells = new List<Vector3> { center };
-    HashSet<ulong> playersHitThisExplosion = new HashSet<ulong>();
-
-    // --- CHEQUEO DE LA CASILLA CENTRAL ---
-    CheckAndDestroyCell(center, playersHitThisExplosion);
-
-    // --- CHEQUEO DE LAS DIRECCIONES ---
-    Vector3[] directions = { Vector3.forward, Vector3.back, Vector3.right, Vector3.left };
-
-    foreach (Vector3 dir in directions)
+/// Cálculo autoritativo en el Servidor: determina daños y obstáculos proyectando a cada desnivel
+    private List<Vector3> CalculateExplosionCells(Vector3 center)
     {
-        for (int i = 1; i <= EffectiveExplosionRange; i++)
+        List<Vector3> cells = new List<Vector3>();
+        HashSet<ulong> playersHitThisExplosion = new HashSet<ulong>();
+
+        // Casilla central proyectada al suelo
+        Vector3 groundCenter = GetGroundPosition(center);
+        cells.Add(groundCenter);
+        CheckAndDestroyCell(groundCenter, playersHitThisExplosion);
+
+        // Direcciones cardinales
+        Vector3[] directions = { Vector3.forward, Vector3.back, Vector3.right, Vector3.left };
+
+        foreach (Vector3 dir in directions)
         {
-            Vector3 targetCell = center + (dir * gridSize * i);
+            for (int i = 1; i <= EffectiveExplosionRange; i++)
+            {
+                // Posición horizontal de la siguiente celda
+                Vector3 horizontalCell = center + (dir * gridSize * i);
+                
+                // Proyecta la celda al piso real (vía, andén o escalón)
+                Vector3 targetCell = GetGroundPosition(horizontalCell);
 
-            bool hitIndestructible;
-            bool hitDestructible;
+                bool hitIndestructible;
+                bool hitDestructible;
 
-            CheckCell(targetCell, playersHitThisExplosion, out hitIndestructible, out hitDestructible);
+                CheckCell(targetCell, playersHitThisExplosion, out hitIndestructible, out hitDestructible);
 
-            if (hitIndestructible) break;
+                if (hitIndestructible) break;
 
-            cells.Add(targetCell);
+                cells.Add(targetCell);
 
-            if (hitDestructible) break;
+                if (hitDestructible) break;
+            }
         }
+
+        return cells;
     }
 
-    return cells;
+/// Encuentra la cota real del suelo debajo de una coordenada, ignorando cajas y objetos rompibles
+private Vector3 GetGroundPosition(Vector3 pos)
+{
+    Vector3 rayOrigin = new Vector3(pos.x, pos.y + 2.5f, pos.z);
+    
+    // Proyecta hacia abajo atravesando todos los colliders en el camino
+    RaycastHit[] hits = Physics.RaycastAll(rayOrigin, Vector3.down, 10f, ~0, QueryTriggerInteraction.Ignore);
+    
+    // Ordena los impactos de mayor a menor altura (de arriba hacia abajo)
+    System.Array.Sort(hits, (a, b) => b.point.y.CompareTo(a.point.y));
+
+    foreach (var hit in hits)
+    {
+        // 1. Si impacta con una caja destructible, la ignora porque va a desaparecer en la explosión
+        if (hit.collider.CompareTag("Destructible"))
+        {
+            continue;
+        }
+
+        // 2. Si impacta con la propia bomba o su modelo hijo, también la ignora
+        if (hit.collider.GetComponentInParent<BombInteractable>() != null)
+        {
+            continue;
+        }
+
+        // 3. El primer collider sólido que no sea destructible ni la bomba es el suelo real (piso o andén)
+        return new Vector3(pos.x, hit.point.y, pos.z);
+    }
+
+    // En caso de no encontrar ningún piso por debajo, conserva la posición original
+    return pos;
 }
 
-private void CheckAndDestroyCell(Vector3 cell, HashSet<ulong> playersHitThisExplosion)
-{
-    CheckCell(cell, playersHitThisExplosion, out _, out _);
-}
+    private void CheckAndDestroyCell(Vector3 cell, HashSet<ulong> playersHitThisExplosion)
+    {
+        CheckCell(cell, playersHitThisExplosion, out _, out _);
+    }
 
-private void CheckCell(Vector3 cell, HashSet<ulong> playersHitThisExplosion, out bool hitIndestructible, out bool hitDestructible)
-{
-    hitIndestructible = false;
-    hitDestructible = false;
+    private void CheckCell(Vector3 cell, HashSet<ulong> playersHitThisExplosion, out bool hitIndestructible, out bool hitDestructible)
+    {
+        hitIndestructible = false;
+        hitDestructible = false;
         HashSet<GameObject> dronesHitThisCell = new HashSet<GameObject>();
 
-    // Escaneo de la casilla con margen de seguridad del 90% del tamaño
-    Vector3 halfExtents = new Vector3(gridSize * 0.45f, 2.0f, gridSize * 0.45f);
-    Collider[] hits = Physics.OverlapBox(cell, halfExtents, Quaternion.identity, explosionLayerMask, QueryTriggerInteraction.Collide);
+        // La caja se apoya desde el suelo (cell.y) elevándose +1.0m para cubrir la altura del personaje y cajas
+        Vector3 boxCenter = new Vector3(cell.x, cell.y + 1.0f, cell.z);
+        Vector3 halfExtents = new Vector3(gridSize * 0.45f, 1.0f, gridSize * 0.45f);
+        Collider[] hits = Physics.OverlapBox(boxCenter, halfExtents, Quaternion.identity, explosionLayerMask, QueryTriggerInteraction.Collide);
 
-    foreach (Collider hit in hits)
-    {
-        // 1. Detección y aplicación de daño al Jugador (una sola vez por jugador, por explosión)
-        PlayerStateManager player = hit.GetComponent<PlayerStateManager>();
-        if (player == null)
+        foreach (Collider hit in hits)
         {
-            player = hit.GetComponentInParent<PlayerStateManager>();
-        }
+            // Ignorar la propia bomba
+            if (hit.GetComponentInParent<BombInteractable>() != null) continue;
 
-        if (player != null)
-        {
-            ulong playerId = player.NetworkObjectId;
-            if (!playersHitThisExplosion.Contains(playerId))
+            // 1. Detección y aplicación de daño al Jugador
+            PlayerStateManager player = hit.GetComponent<PlayerStateManager>();
+            if (player == null) player = hit.GetComponentInParent<PlayerStateManager>();
+
+            if (player != null)
             {
-                playersHitThisExplosion.Add(playerId);
-                player.TakeDamageServerRpc();
-            }
-        }
-
-        // 2. Obstáculos indestructibles (detienen la propagación)
-        if (!hitIndestructible && hit.CompareTag("Indestructible"))
-        {
-            hitIndestructible = true;
-        }
-
-        // 3. Obstáculos destructibles (destruyen y detienen la propagación, una sola vez por casilla)
-        if (!hitDestructible && hit.CompareTag("Destructible"))
-        {
-            hitDestructible = true;
-            DestroyObjectAtPositionClientRpc(hit.transform.position);
-            TrySpawnPowerUpDrop(hit.transform.position);
-        }
-
-        // --- LÓGICA PARA DAÑAR A CUALQUIER DRON ---
-        if (hit.CompareTag("Drone"))
-        {
-            // Evita golpear dos veces al mismo dron si tiene varios colliders
-            GameObject droneRoot = hit.transform.root.gameObject;
-            if (dronesHitThisCell.Add(droneRoot))
-            {
-                DroneBomberAI bombardero = hit.GetComponentInParent<DroneBomberAI>();
-                if (bombardero != null) bombardero.TakeDamage();
-
-                DroneShooterAI fusilero = hit.GetComponentInParent<DroneShooterAI>();
-                if (fusilero != null) fusilero.TakeDamage();
+                ulong playerId = player.NetworkObjectId;
+                if (!playersHitThisExplosion.Contains(playerId))
+                {
+                    playersHitThisExplosion.Add(playerId);
+                    player.TakeDamageServerRpc();
+                }
             }
 
-            // Frena la expansión del fuego, pero SIN cortar el foreach
-            hitDestructible = true;
+            // 2. Obstáculos indestructibles (detienen la propagación)
+            if (!hitIndestructible && hit.CompareTag("Indestructible"))
+            {
+                hitIndestructible = true;
+            }
+
+            // 3. Obstáculos destructibles
+            if (!hitDestructible && hit.CompareTag("Destructible"))
+            {
+                hitDestructible = true;
+                DestroyObjectAtPositionClientRpc(hit.transform.position);
+                TrySpawnPowerUpDrop(hit.transform.position);
+            }
+
+            // 4. Drones
+            if (hit.CompareTag("Drone"))
+            {
+                GameObject droneRoot = hit.transform.root.gameObject;
+                if (dronesHitThisCell.Add(droneRoot))
+                {
+                    DroneBomberAI bombardero = hit.GetComponentInParent<DroneBomberAI>();
+                    if (bombardero != null) bombardero.TakeDamage();
+
+                    DroneShooterAI fusilero = hit.GetComponentInParent<DroneShooterAI>();
+                    if (fusilero != null) fusilero.TakeDamage();
+                }
+
+                hitDestructible = true;
+            }
         }
     }
-}
 
+    /// Spawnea las partículas en las cotas reales de cada casilla (con offset anti-parpadeo)
+    [ClientRpc]
+    private void SpawnVfxClientRpc(Vector3[] firePositions)
+    {
+        if (firePositions == null || firePositions.Length == 0) return;
 
+        // Elevación mínima milimétrica sobre la cara del suelo para evitar Z-fighting
+        float groundOffset = 0.02f;
+
+        // Casilla central
+        if (explosionVfx != null)
+        {
+            Vector3 centerPos = new Vector3(firePositions[0].x, firePositions[0].y + groundOffset, firePositions[0].z);
+            Instantiate(explosionVfx, centerPos, Quaternion.identity);
+        }
+
+        // Casillas de los brazos de la cruz
+        for (int i = 1; i < firePositions.Length; i++)
+        {
+            if (fireVfx != null)
+            {
+                Vector3 firePos = new Vector3(firePositions[i].x, firePositions[i].y + groundOffset, firePositions[i].z);
+                Instantiate(fireVfx, firePos, Quaternion.identity);
+            }
+        }
+    }
 
 private void TrySpawnPowerUpDrop(Vector3 boxPosition)
 {
@@ -321,30 +408,6 @@ private void DestroyObjectAtPositionClientRpc(Vector3 pos)
         }
     }
 }
-
-    /// Se ejecuta en TODOS los clientes para mostrar las partículas
-    [ClientRpc]
-    private void SpawnVfxClientRpc(Vector3[] firePositions)
-    {
-        if (firePositions == null || firePositions.Length == 0) return;
-
-        // Casilla central forzada a ras del piso
-        if (explosionVfx != null)
-        {
-            Vector3 centerPos = new Vector3(firePositions[0].x, -1.99f, firePositions[0].z);
-            Instantiate(explosionVfx, centerPos, Quaternion.identity);
-        }
-
-        // Casillas de los brazos de la cruz forzadas a ras del piso
-        for (int i = 1; i < firePositions.Length; i++)
-        {
-            if (fireVfx != null)
-            {
-                Vector3 firePos = new Vector3(firePositions[i].x, -1.99f, firePositions[i].z);
-                Instantiate(fireVfx, firePos, Quaternion.identity);
-            }
-        }
-    }
 
     [ClientRpc]
     private void UpdateBombCountClientRpc(int currentBombs)
