@@ -256,4 +256,44 @@ public class PlayerStateManager : NetworkBehaviour
     {
         ApplyStateProperties(currentState.Value);
     }
+
+    [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Everyone)]
+    public void HealServerRpc()
+    {
+        // Validación de que la partida esté corriendo (siguiendo el patrón de TakeDamageServerRpc)
+        if (MatchManager.Instance != null && !MatchManager.Instance.IsMatchRunning)
+            return;
+
+        // No se puede curar a un jugador muerto
+        if (currentState.Value == PlayerState.Muerto)
+            return;
+
+        // Incrementa la vida solo si es menor al máximo permitido
+        if (currentLives.Value < maxLives)
+        {
+            currentLives.Value++;
+            
+            // Nota: Como currentLives tiene un evento 'OnValueChanged', la interfaz de corazones 
+            // del cliente se actualizará automáticamente de manera sincrónica.
+        }
+    }
+
+    public bool TryHeal()
+    {
+        if (MatchManager.Instance != null && !MatchManager.Instance.IsMatchRunning)
+            return false;
+
+        // No se puede curar a un jugador muerto
+        if (currentState.Value == PlayerState.Muerto)
+            return false;
+
+        // Si la vida actual es menor al máximo, curamos y retornamos true
+        if (currentLives.Value < maxLives)
+        {
+            currentLives.Value++;
+            return true; // Curación exitosa
+        }
+
+        return false; // Ya tiene la vida al máximo, no se aplicó la curación
+    }
 }
