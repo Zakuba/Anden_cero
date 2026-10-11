@@ -20,5 +20,31 @@ public class FireHazard : MonoBehaviour
         {
             player.TakeDamageServerRpc();
         }
+
+        // 2. Intentar detectar si lo que entró es el Dron Bombardero
+        DroneBomberAI bomber = other.GetComponent<DroneBomberAI>();
+        if (bomber == null)
+        {
+            bomber = other.GetComponentInParent<DroneBomberAI>();
+        }
+
+        if (bomber != null)
+        {
+            bomber.TakeDamage();
+            return;
+        }
+
+        // 3. Intentar detectar si lo que entró es el Dron Fusilero
+        DroneShooterAI shooter = other.GetComponent<DroneShooterAI>();
+        if (shooter == null)
+        {
+            shooter = other.GetComponentInParent<DroneShooterAI>();
+        }
+
+        if (shooter != null)
+        {
+            shooter.TakeDamage();
+            return;
+        }
     }
 }
