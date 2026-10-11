@@ -235,4 +235,12 @@ public class PerimeterCollapse : NetworkBehaviour
             }
         }
     }
+
+    public bool IsPositionInDangerOrWarning(Vector3 worldPos)
+    {
+        int x = Mathf.RoundToInt(worldPos.x / gridSize);
+        int z = Mathf.RoundToInt(worldPos.z / gridSize);
+        int ring = RingOf(x, z);
+        return ring < collapsedRings.Value || ring == warningRing.Value;
+    }
 }

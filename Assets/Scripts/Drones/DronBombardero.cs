@@ -15,6 +15,7 @@ public class DroneBomberAI : NetworkBehaviour
     [SerializeField] private float bombSpawnHeight = -1f;
     
     private float bombTimer;
+    private PerimeterCollapse perimeterCollapse;
     private Vector3 currentDirection = Vector3.forward;
 
     private void Awake()
@@ -32,7 +33,9 @@ public class DroneBomberAI : NetworkBehaviour
             agent.enabled = false;
             return;
         }
-        
+        // Buscamos la referencia al sistema de perímetro de la escena
+        perimeterCollapse = Object.FindFirstObjectByType<PerimeterCollapse>();
+
         // Alineamos al dron a la cuadrícula al nacer
         transform.position = GetGridCenter(transform.position);
         SetNextGridDestination();
@@ -61,41 +64,83 @@ public class DroneBomberAI : NetworkBehaviour
         Vector3 currentGridPos = GetGridCenter(transform.position);
         List<Vector3> possibleDirections = new List<Vector3> { Vector3.forward, Vector3.back, Vector3.right, Vector3.left };
         List<Vector3> validDestinations = new List<Vector3>();
+        List<Vector3> fallbackDestinations = new List<Vector3>(); // Por si todas las opciones son peligroso
 
-        // 1. Prioridad a seguir en línea recta
+        // 1. Evaluar dirección recta (con preferencia si es segura)
         Vector3 straightCell = currentGridPos + (currentDirection * gridSize);
         if (IsCellWalkable(straightCell))
         {
-            // Agregamos múltiples veces la opción recta para aumentar su probabilidad (80% prob)
-            validDestinations.Add(straightCell);
-            validDestinations.Add(straightCell);
-            validDestinations.Add(straightCell);
-            validDestinations.Add(straightCell);
+            if (!IsCellInDanger(straightCell))
+            {
+                validDestinations.Add(straightCell);
+                validDestinations.Add(straightCell);
+                validDestinations.Add(straightCell);
+                validDestinations.Add(straightCell);
+            }
+            else
+            {
+                fallbackDestinations.Add(straightCell);
+            }
         }
 
         // 2. Evaluar giros (lados)
         foreach (Vector3 dir in possibleDirections)
         {
-            if (dir == currentDirection) continue; // Ya evaluado
-            if (dir == -currentDirection && validDestinations.Count > 0) continue; // No volver por donde vino salvo que sea un callejón sin salida
+            if (dir == currentDirection) continue;
+            if (dir == -currentDirection && validDestinations.Count > 0 && fallbackDestinations.Count == 0) continue;
 
             Vector3 nextCell = currentGridPos + (dir * gridSize);
             if (IsCellWalkable(nextCell))
             {
-                validDestinations.Add(nextCell);
+                if (!IsCellInDanger(nextCell))
+                {
+                    validDestinations.Add(nextCell);
+                }
+                else
+                {
+                    fallbackDestinations.Add(nextCell);
+                }
             }
         }
 
-        // 3. Elegir destino
+        Vector3 chosenCell;
+
+        // 3. Elegir destino seguro, o usar el fallback si no hay más remedio
         if (validDestinations.Count > 0)
         {
-            Vector3 chosenCell = validDestinations[Random.Range(0, validDestinations.Count)];
-            currentDirection = (chosenCell - currentGridPos).normalized;
-            agent.SetDestination(chosenCell);
-            
-            // Opcional: Forzar la rotación para que mire ortogonalmente
-            transform.rotation = Quaternion.LookRotation(currentDirection);
+            chosenCell = validDestinations[Random.Range(0, validDestinations.Count)];
         }
+        else if (fallbackDestinations.Count > 0)
+        {
+            // Si todo alrededor es peligro, elegimos la celda del fallback que esté más cerca del centro (Vector3.zero)
+            chosenCell = fallbackDestinations[0];
+            float minDistanceToCenter = Vector3.Distance(chosenCell, new Vector3(0, chosenCell.y, 0));
+
+            foreach (var cell in fallbackDestinations)
+            {
+                float dist = Vector3.Distance(cell, new Vector3(0, cell.y, 0));
+                if (dist < minDistanceToCenter)
+                {
+                    minDistanceToCenter = dist;
+                    chosenCell = cell;
+                }
+            }
+        }
+        else
+        {
+            return; // Si no hay absolutamente ninguna celda a donde moverse, se queda quieto
+        }
+
+        currentDirection = (chosenCell - currentGridPos).normalized;
+        agent.SetDestination(chosenCell);
+        transform.rotation = Quaternion.LookRotation(currentDirection);
+    }
+
+    // Método auxiliar para consultar al PerimeterCollapse
+    private bool IsCellInDanger(Vector3 targetPosition)
+    {
+        if (perimeterCollapse == null) return false;
+        return perimeterCollapse.IsPositionInDangerOrWarning(targetPosition);
     }
 
     // Utiliza el NavMesh para confirmar que no hay paredes entre la celda actual y la adyacente
