@@ -46,5 +46,17 @@ public class FireHazard : MonoBehaviour
             shooter.TakeDamage();
             return;
         }
+
+        DroneHealerAI healer = other.GetComponent<DroneHealerAI>();
+        if (healer == null)
+        {
+            healer = other.GetComponentInParent<DroneHealerAI>();
+        }
+
+        if (healer != null)
+        {
+            healer.TakeDamage();
+            return;
+        }
     }
 }

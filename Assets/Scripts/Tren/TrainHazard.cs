@@ -42,5 +42,17 @@ public class TrainHazard : MonoBehaviour
         {
             dronShoot.TakeDamage();
         }
+        
+        DroneHealerAI healer = other.GetComponent<DroneHealerAI>();
+        if (healer == null)
+        {
+            healer = other.GetComponentInParent<DroneHealerAI>();
+        }
+
+        if (healer != null)
+        {
+            healer.TakeDamage();
+            return;
+        }
     }
 }

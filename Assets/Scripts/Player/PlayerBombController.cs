@@ -346,6 +346,9 @@ private Vector3 GetGroundPosition(Vector3 pos)
 
                     DroneShooterAI fusilero = hit.GetComponentInParent<DroneShooterAI>();
                     if (fusilero != null) fusilero.TakeDamage();
+
+                    DroneHealerAI sanador = hit.GetComponentInParent<DroneHealerAI>();
+                    if (sanador != null) sanador.TakeDamage();
                 }
 
                 hitDestructible = true;

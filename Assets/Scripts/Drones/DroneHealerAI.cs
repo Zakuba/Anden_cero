@@ -1,0 +1,144 @@
+using Unity.Netcode;
+using UnityEngine;
+using UnityEngine.AI;
+using System.Collections.Generic;
+
+[RequireComponent(typeof(NavMeshAgent))]
+public class DroneHealerAI : NetworkBehaviour
+{
+    private NavMeshAgent agent;
+
+    [Header("Configuración del Dron Sanador")]
+    [SerializeField] private GameObject healthPickupPrefab; // El prefab del Corazón con HealthPickup.cs
+    [SerializeField] private float dropInterval = 10f;      // Tiempo entre cada corazón dejado en el suelo
+    [SerializeField] private float gridSize = 1f;
+    [SerializeField] private float spawnHeight = -1f;       // Altura de apoyo en el suelo
+
+    private float dropTimer;
+    private Vector3 currentDirection = Vector3.forward;
+
+    private void Awake()
+    {
+        agent = GetComponent<NavMeshAgent>();
+    }
+
+    public override void OnNetworkSpawn()
+    {
+        if (!IsServer)
+        {
+            agent.enabled = false;
+            return;
+        }
+        
+        // Alineamos al dron a la cuadrícula al nacer
+        transform.position = GetGridCenter(transform.position);
+        SetNextGridDestination();
+        dropTimer = dropInterval;
+    }
+
+    private void Update()
+    {
+        if (!IsServer) return;
+
+        HandleMovement();
+        HandleHeartDropping();
+    }
+
+    private void HandleMovement()
+    {
+        // Si el dron está cerca del centro de la celda destino, elige la siguiente de forma aleatoria
+        if (!agent.pathPending && agent.remainingDistance < 0.05f)
+        {
+            SetNextGridDestination();
+        }
+    }
+
+    private void SetNextGridDestination()
+    {
+        Vector3 currentGridPos = GetGridCenter(transform.position);
+        List<Vector3> possibleDirections = new List<Vector3> { Vector3.forward, Vector3.back, Vector3.right, Vector3.left };
+        List<Vector3> validDestinations = new List<Vector3>();
+
+        // 1. Prioridad a seguir en línea recta
+        Vector3 straightCell = currentGridPos + (currentDirection * gridSize);
+        if (IsCellWalkable(straightCell))
+        {
+            validDestinations.Add(straightCell);
+            validDestinations.Add(straightCell);
+            validDestinations.Add(straightCell);
+            validDestinations.Add(straightCell);
+        }
+
+        // 2. Evaluar giros (lados)
+        foreach (Vector3 dir in possibleDirections)
+        {
+            if (dir == currentDirection) continue;
+            if (dir == -currentDirection && validDestinations.Count > 0) continue;
+
+            Vector3 nextCell = currentGridPos + (dir * gridSize);
+            if (IsCellWalkable(nextCell))
+            {
+                validDestinations.Add(nextCell);
+            }
+        }
+
+        // 3. Elegir destino
+        if (validDestinations.Count > 0)
+        {
+            Vector3 chosenCell = validDestinations[Random.Range(0, validDestinations.Count)];
+            currentDirection = (chosenCell - currentGridPos).normalized;
+            agent.SetDestination(chosenCell);
+            transform.rotation = Quaternion.LookRotation(currentDirection);
+        }
+    }
+
+    private bool IsCellWalkable(Vector3 targetPosition)
+    {
+        NavMeshPath path = new NavMeshPath();
+        agent.CalculatePath(targetPosition, path);
+        return path.status == NavMeshPathStatus.PathComplete;
+    }
+
+    private void HandleHeartDropping()
+    {
+        dropTimer -= Time.deltaTime;
+        if (dropTimer <= 0f)
+        {
+            DropHeart();
+            dropTimer = dropInterval;
+        }
+    }
+
+    private void DropHeart()
+    {
+        if (healthPickupPrefab == null) return;
+
+        Vector3 spawnPosition = GetGridCenter(transform.position);
+        
+        // Instancia y spawnea el corazón en la red para que todos los clientes lo vean
+        GameObject heartInstance = Instantiate(healthPickupPrefab, spawnPosition, Quaternion.identity);
+        NetworkObject heartNetObj = heartInstance.GetComponent<NetworkObject>();
+        
+        if (heartNetObj != null)
+        {
+            heartNetObj.Spawn();
+        }
+    }
+
+    private Vector3 GetGridCenter(Vector3 pos)
+    {
+        float x = Mathf.Round(pos.x / gridSize) * gridSize;
+        float z = Mathf.Round(pos.z / gridSize) * gridSize;
+        return new Vector3(x, spawnHeight, z);
+    }
+
+    // Permite que el dron aliado también pueda ser destruido si le cae una bomba por accidente
+    public void TakeDamage()
+    {
+        if (!IsServer) return;
+        if (NetworkObject != null && NetworkObject.IsSpawned)
+        {
+            NetworkObject.Despawn(true);
+        }
+    }
+}

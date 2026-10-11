@@ -8,6 +8,7 @@ TagManager:
   - Indestructible
   - Drone
   - Bridge
+  - FxTemporaire
   layers:
   - Default
   - TransparentFX
@@ -16,7 +17,7 @@ TagManager:
   - Water
   - UI
   - Enemigos
-  - 
+  - Sanador
   - 
   - 
   - 
