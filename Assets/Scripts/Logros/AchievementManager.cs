@@ -23,7 +23,6 @@ public class AchievementManager : MonoBehaviour
         if (Instance == null)
         {
             Instance = this;
-            DontDestroyOnLoad(gameObject); // Persiste entre cambios de escena
         }
         else
         {
