@@ -33,6 +33,7 @@ public class DroneShooterAI : NetworkBehaviour
     private ShooterState currentState = ShooterState.Patrol;
     private Transform targetPlayer;
     private float fireTimer;
+    private PerimeterCollapse perimeterCollapse;
     private Vector3 currentDirection = Vector3.forward;
 
     private void Awake()
@@ -47,6 +48,9 @@ public class DroneShooterAI : NetworkBehaviour
             agent.enabled = false;
             return;
         }
+
+        // Buscamos la referencia al sistema de perímetro
+        perimeterCollapse = Object.FindFirstObjectByType<PerimeterCollapse>();
         
         transform.position = GetGridCenter(transform.position);
         agent.speed = patrolSpeed;
@@ -149,24 +153,32 @@ public class DroneShooterAI : NetworkBehaviour
         Vector3 currentGridPos = GetGridCenter(transform.position);
         List<Vector3> possibleDirections = new List<Vector3> { Vector3.forward, Vector3.back, Vector3.right, Vector3.left };
         List<Vector3> validDestinations = new List<Vector3>();
+        List<Vector3> fallbackDestinations = new List<Vector3>();
 
-        // Busca todas las celdas contiguas transitables
+        // Busca celdas contiguas transitables y seguras
         foreach (Vector3 dir in possibleDirections)
         {
             Vector3 nextCell = currentGridPos + (dir * gridSize);
             if (IsCellWalkable(nextCell))
             {
-                validDestinations.Add(nextCell);
+                if (!IsCellInDanger(nextCell))
+                {
+                    validDestinations.Add(nextCell);
+                }
+                else
+                {
+                    fallbackDestinations.Add(nextCell);
+                }
             }
         }
 
+        Vector3 chosenCell;
+
         if (validDestinations.Count > 0)
         {
-            Vector3 chosenCell;
-
             if (currentState == ShooterState.Attack && targetPlayer != null)
             {
-                // MODO ATAQUE: Elige la celda contigua que lo acerque más al jugador
+                // MODO ATAQUE Y SEGURO: Elige la celda segura que lo acerque más al jugador
                 chosenCell = validDestinations[0];
                 float minDistance = Vector3.Distance(chosenCell, targetPlayer.position);
 
@@ -182,19 +194,44 @@ public class DroneShooterAI : NetworkBehaviour
             }
             else
             {
-                // MODO PATRULLA: Aleatorio, intentando no volver por donde vino si es posible
+                // MODO PATRULLA Y SEGURO: Aleatorio entre las seguras
                 chosenCell = validDestinations[Random.Range(0, validDestinations.Count)];
             }
+        }
+        else if (fallbackDestinations.Count > 0)
+        {
+            // Si todas las celdas están en peligro, usa fallback hacia el centro del mapa (Vector3.zero)
+            chosenCell = fallbackDestinations[0];
+            float minDistanceToCenter = Vector3.Distance(chosenCell, new Vector3(0, chosenCell.y, 0));
 
-            currentDirection = (chosenCell - currentGridPos).normalized;
-            agent.SetDestination(chosenCell);
-
-            // Si patrulla, mira hacia donde camina. En ataque, la rotación la maneja RotateTowardsTarget
-            if (currentState == ShooterState.Patrol)
+            foreach (var cell in fallbackDestinations)
             {
-                transform.rotation = Quaternion.LookRotation(currentDirection);
+                float dist = Vector3.Distance(cell, new Vector3(0, cell.y, 0));
+                if (dist < minDistanceToCenter)
+                {
+                    minDistanceToCenter = dist;
+                    chosenCell = cell;
+                }
             }
         }
+        else
+        {
+            return;
+        }
+
+        currentDirection = (chosenCell - currentGridPos).normalized;
+        agent.SetDestination(chosenCell);
+
+        if (currentState == ShooterState.Patrol)
+        {
+            transform.rotation = Quaternion.LookRotation(currentDirection);
+        }
+    }
+
+    private bool IsCellInDanger(Vector3 targetPosition)
+    {
+        if (perimeterCollapse == null) return false;
+        return perimeterCollapse.IsPositionInDangerOrWarning(targetPosition);
     }
 
     private bool IsCellWalkable(Vector3 targetPosition)

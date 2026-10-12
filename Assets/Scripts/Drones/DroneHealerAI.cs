@@ -16,6 +16,7 @@ public class DroneHealerAI : NetworkBehaviour
 
     private float dropTimer;
     private Vector3 currentDirection = Vector3.forward;
+    private PerimeterCollapse perimeterCollapse;
 
     private void Awake()
     {
@@ -30,6 +31,9 @@ public class DroneHealerAI : NetworkBehaviour
             return;
         }
         
+        // Buscamos la referencia al sistema de perímetro
+        perimeterCollapse = Object.FindFirstObjectByType<PerimeterCollapse>();
+
         // Alineamos al dron a la cuadrícula al nacer
         transform.position = GetGridCenter(transform.position);
         SetNextGridDestination();
@@ -58,38 +62,81 @@ public class DroneHealerAI : NetworkBehaviour
         Vector3 currentGridPos = GetGridCenter(transform.position);
         List<Vector3> possibleDirections = new List<Vector3> { Vector3.forward, Vector3.back, Vector3.right, Vector3.left };
         List<Vector3> validDestinations = new List<Vector3>();
+        List<Vector3> fallbackDestinations = new List<Vector3>();
 
-        // 1. Prioridad a seguir en línea recta
+        // 1. Evaluar dirección recta
         Vector3 straightCell = currentGridPos + (currentDirection * gridSize);
         if (IsCellWalkable(straightCell))
         {
-            validDestinations.Add(straightCell);
-            validDestinations.Add(straightCell);
-            validDestinations.Add(straightCell);
-            validDestinations.Add(straightCell);
+            if (!IsCellInDanger(straightCell))
+            {
+                validDestinations.Add(straightCell);
+                validDestinations.Add(straightCell);
+                validDestinations.Add(straightCell);
+                validDestinations.Add(straightCell);
+            }
+            else
+            {
+                fallbackDestinations.Add(straightCell);
+            }
         }
 
-        // 2. Evaluar giros (lados)
+        // 2. Evaluar giros
         foreach (Vector3 dir in possibleDirections)
         {
             if (dir == currentDirection) continue;
-            if (dir == -currentDirection && validDestinations.Count > 0) continue;
+            if (dir == -currentDirection && validDestinations.Count > 0 && fallbackDestinations.Count == 0) continue;
 
             Vector3 nextCell = currentGridPos + (dir * gridSize);
             if (IsCellWalkable(nextCell))
             {
-                validDestinations.Add(nextCell);
+                if (!IsCellInDanger(nextCell))
+                {
+                    validDestinations.Add(nextCell);
+                }
+                else
+                {
+                    fallbackDestinations.Add(nextCell);
+                }
             }
         }
 
-        // 3. Elegir destino
+        Vector3 chosenCell;
+
+        // 3. Elegir destino seguro o fallback hacia el centro
         if (validDestinations.Count > 0)
         {
-            Vector3 chosenCell = validDestinations[Random.Range(0, validDestinations.Count)];
-            currentDirection = (chosenCell - currentGridPos).normalized;
-            agent.SetDestination(chosenCell);
-            transform.rotation = Quaternion.LookRotation(currentDirection);
+            chosenCell = validDestinations[Random.Range(0, validDestinations.Count)];
         }
+        else if (fallbackDestinations.Count > 0)
+        {
+            chosenCell = fallbackDestinations[0];
+            float minDistanceToCenter = Vector3.Distance(chosenCell, new Vector3(0, chosenCell.y, 0));
+
+            foreach (var cell in fallbackDestinations)
+            {
+                float dist = Vector3.Distance(cell, new Vector3(0, cell.y, 0));
+                if (dist < minDistanceToCenter)
+                {
+                    minDistanceToCenter = dist;
+                    chosenCell = cell;
+                }
+            }
+        }
+        else
+        {
+            return;
+        }
+
+        currentDirection = (chosenCell - currentGridPos).normalized;
+        agent.SetDestination(chosenCell);
+        transform.rotation = Quaternion.LookRotation(currentDirection);
+    }
+
+    private bool IsCellInDanger(Vector3 targetPosition)
+    {
+        if (perimeterCollapse == null) return false;
+        return perimeterCollapse.IsPositionInDangerOrWarning(targetPosition);
     }
 
     private bool IsCellWalkable(Vector3 targetPosition)
