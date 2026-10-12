@@ -9,6 +9,13 @@ public class AchievementManager : MonoBehaviour
     [Tooltip("Arrastra aquí los ScriptableObjects de tus logros creados.")]
     [SerializeField] private List<AchievementSO> achievementsCatalog;
 
+    [Header("Objetos asociados al logro")]
+    [SerializeField] private string achievementId = "bateador_experto";
+    [SerializeField] private GameObject btnDesbloqueado;
+    [SerializeField] private GameObject objetoDesbloqueado;
+    [SerializeField] private GameObject btnBloqueado;
+    [SerializeField] private GameObject objetoBloqueado;
+
     private PlayerData currentData;
 
     private void Awake()
@@ -27,6 +34,8 @@ public class AchievementManager : MonoBehaviour
     private void Start()
     {
         currentData = PersistenceManager.LoadData();
+
+        ActualizarObjetosLogro();
     }
 
     /// <summary>
@@ -59,6 +68,8 @@ public class AchievementManager : MonoBehaviour
         currentData.unlockedAchievements.Add(achievement.id);
         PersistenceManager.SaveData(currentData);
 
+        ActualizarObjetosLogro();
+
         if (NotificationManager.Instance != null)
         {
             NotificationManager.Instance.ShowAchievement(achievement.title);
@@ -67,6 +78,20 @@ public class AchievementManager : MonoBehaviour
         {
             Debug.LogWarning("Logro obtenido: " + achievement.title + " (Falta NotificationManager en escena)");
         }
+    }
+
+    private void ActualizarObjetosLogro()
+    {
+        bool desbloqueado =
+            currentData.unlockedAchievements.Contains(achievementId);
+
+        if (objetoDesbloqueado != null)
+            objetoDesbloqueado.SetActive(desbloqueado);
+            btnDesbloqueado.SetActive(desbloqueado);
+
+        if (objetoBloqueado != null)
+            objetoBloqueado.SetActive(!desbloqueado);
+            btnBloqueado.SetActive(!desbloqueado);
     }
 
 
