@@ -26,8 +26,8 @@ public class PlayerStateManager : NetworkBehaviour
     [SerializeField] private Color colorMuerto = Color.gray;
 
     private MatchManager subscribedMatchManager;
-
     private PlayerLivesUI localLivesUI;
+    private bool isShieldGraceActive = false;
 
     public NetworkVariable<PlayerState> currentState =
         new NetworkVariable<PlayerState>(
@@ -111,36 +111,46 @@ public class PlayerStateManager : NetworkBehaviour
             localLivesUI.UpdateHearts(newValue);
     }
 
-    [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Everyone)]
-    public void TakeDamageServerRpc()
+[Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Everyone)]
+public void TakeDamageServerRpc()
+{
+    if (MatchManager.Instance != null && !MatchManager.Instance.IsMatchRunning)
+        return;
+
+    // Si está muerto, aturdido o en el breve periodo de gracia tras perder el escudo, ignora el daño
+    if (currentState.Value == PlayerState.Muerto || 
+        currentState.Value == PlayerState.Aturdido ||
+        isShieldGraceActive)
+        return;
+
+    PlayerStats stats = GetComponent<PlayerStats>();
+
+    if (stats != null && stats.IsShielded)
     {
-        if (MatchManager.Instance != null &&
-            !MatchManager.Instance.IsMatchRunning)
-            return;
-
-        if (currentState.Value == PlayerState.Muerto ||
-            currentState.Value == PlayerState.Aturdido)
-            return;
-
-        PlayerStats stats = GetComponent<PlayerStats>();
-
-        if (stats != null && stats.IsShielded)
-        {
-            stats.ConsumeShield();
-            return;
-        }
-
-        currentLives.Value--;
-
-        if (currentLives.Value <= 0)
-        {
-            currentState.Value = PlayerState.Muerto;
-        }
-        else
-        {
-            StartCoroutine(StunRoutine());
-        }
+        stats.ConsumeShield();
+        StartCoroutine(ShieldGraceRoutine());
+        return; // El escudo absorbe el golpe
     }
+
+    currentLives.Value--;
+
+    if (currentLives.Value <= 0)
+    {
+        currentState.Value = PlayerState.Muerto;
+    }
+    else
+    {
+        StartCoroutine(StunRoutine());
+    }
+}
+
+private IEnumerator ShieldGraceRoutine()
+{
+    isShieldGraceActive = true;
+    // 0.3 segundos bastan para ignorar la colisión inicial de FireHazard sin desbalancear la partida
+    yield return new WaitForSeconds(0.3f);
+    isShieldGraceActive = false;
+}
 
     [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Everyone)]
     public void InstantKillServerRpc()

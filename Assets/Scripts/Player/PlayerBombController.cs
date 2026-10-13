@@ -5,17 +5,6 @@ using System.Collections.Generic;
 
 public class PlayerBombController : NetworkBehaviour
 {
-    /*
-    [Header("Configuración de Bomba")]
-    [SerializeField] private GameObject bombPrefab;
-    [SerializeField] private float gridSize = 1f;
-    [SerializeField] private float bombTimer = 3f;
-    [SerializeField] private int explosionRange = 2;
-    [SerializeField] private LayerMask explosionLayerMask;
-    [SerializeField] private KeyCode plantKey = KeyCode.Space;
-    [SerializeField] private float alturaspawnbomba = -1f;
-    */
-
     [Header("Configuración de Bomba")]
     [SerializeField] private GameObject bombPrefab;
     [SerializeField] private float gridSize = 1f;
@@ -34,8 +23,9 @@ public class PlayerBombController : NetworkBehaviour
     [Header("Efectos Visuales (VFX)")]
     [SerializeField] private GameObject explosionVfx;
     [SerializeField] private GameObject fireVfx;
+    private int EffectiveMaxBombs => maxBombs + (playerStats != null ? playerStats.MaxBombsBonus : 0);
+    private int EffectiveExplosionRange => explosionRange + (playerStats != null ? playerStats.ExplosionRangeBonus : 0);
 
-       
     private int activeBombs = 0;
     private int maxBombs = 1;
     private PlayerStats playerStats;
@@ -56,9 +46,6 @@ public class PlayerBombController : NetworkBehaviour
             localBombUI = FindObjectOfType<BombCooldownUI>(true);
         }
     }
-
-private int EffectiveMaxBombs => maxBombs + (playerStats != null ? playerStats.MaxBombsBonus : 0);
-private int EffectiveExplosionRange => explosionRange + (playerStats != null ? playerStats.ExplosionRangeBonus : 0);
 
     private void Update()
     {
@@ -102,20 +89,6 @@ private int EffectiveExplosionRange => explosionRange + (playerStats != null ? p
         }
     }
 
-/*
-private Vector3 GetGridCenter(Vector3 playerPos)
-{
-    float x = Mathf.Round(playerPos.x / gridSize) * gridSize;
-    float z = Mathf.Round(playerPos.z / gridSize) * gridSize;
-    
-    // (playerPos.y - 1.0f) es el nivel del piso donde apoya el jugador.
-    // Sumamos bombRadiusOffset (0.5f) para que la base de la esfera toque el suelo.
-    float bombCenterY = (playerPos.y - 1.0f) + bombRadiusOffset;
-
-    return new Vector3(x, bombCenterY, z);
-}
-*/
-//Prueba
 private Vector3 GetGridCenter(Vector3 playerPos)
 {
     // Lanza un rayo vertical desde el torso del jugador hacia el piso
@@ -253,7 +226,7 @@ private IEnumerator BombExplosionRoutine(NetworkObject bombNetObj)
         return cells;
     }
 
-/// Encuentra la cota real del suelo debajo de una coordenada, ignorando cajas y objetos rompibles
+/// Encuentra la cota real del suelo debajo de una coordenada, ignorando cajas, bombas y jugadores
 private Vector3 GetGroundPosition(Vector3 pos)
 {
     Vector3 rayOrigin = new Vector3(pos.x, pos.y + 2.5f, pos.z);
@@ -266,19 +239,27 @@ private Vector3 GetGroundPosition(Vector3 pos)
 
     foreach (var hit in hits)
     {
-        // 1. Si impacta con una caja destructible, la ignora porque va a desaparecer en la explosión
+        // 1. Si impacta con una caja destructible, la ignora porque desaparece en la explosión
         if (hit.collider.CompareTag("Destructible"))
         {
             continue;
         }
 
-        // 2. Si impacta con la propia bomba o su modelo hijo, también la ignora
+        // 2. Si impacta con la propia bomba o su modelo hijo, la ignora
         if (hit.collider.GetComponentInParent<BombInteractable>() != null)
         {
             continue;
         }
 
-        // 3. El primer collider sólido que no sea destructible ni la bomba es el suelo real (piso o andén)
+        // 3. Ignorar al jugador (tanto su CharacterController como componentes de avatar)
+        if (hit.collider.GetComponentInParent<PlayerStateManager>() != null || 
+            hit.collider.GetComponent<CharacterController>() != null ||
+            hit.collider.CompareTag("Player"))
+        {
+            continue;
+        }
+
+        // 4. El primer collider sólido restante es el suelo real (piso, vía o andén)
         return new Vector3(pos.x, hit.point.y, pos.z);
     }
 
