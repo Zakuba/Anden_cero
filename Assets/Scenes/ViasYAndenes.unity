@@ -35627,7 +35627,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 765794601}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 00a8d701e83e9084680e0b4430d8d9ba, type: 3}
   m_Name: 
@@ -35674,7 +35674,7 @@ BoxCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
@@ -35685,6 +35685,18 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 3753942942048378261, guid: e180453fbe3d81244b17c1aa830a09b7, type: 3}
   m_PrefabInstance: {fileID: 1645809744}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &765794606
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 765794601}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: abbb8a485a9f8244e8e2f77ea425a4bc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::TrainHazard
 --- !u!1001 &766202934
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -71117,6 +71129,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 4001643604399492628, guid: e180453fbe3d81244b17c1aa830a09b7, type: 3}
       insertIndex: -1
       addedObject: {fileID: 765794602}
+    - targetCorrespondingSourceObject: {fileID: 4001643604399492628, guid: e180453fbe3d81244b17c1aa830a09b7, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 765794606}
   m_SourcePrefab: {fileID: 100100000, guid: e180453fbe3d81244b17c1aa830a09b7, type: 3}
 --- !u!1001 &1646748761
 PrefabInstance:
@@ -80281,7 +80296,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1839807233}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 00a8d701e83e9084680e0b4430d8d9ba, type: 3}
   m_Name: 
@@ -80301,7 +80316,7 @@ BoxCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
@@ -80334,6 +80349,18 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &1839807239
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1839807233}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: abbb8a485a9f8244e8e2f77ea425a4bc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::TrainHazard
 --- !u!4 &1843325102 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2492733766199888965, guid: afbc3707153a57c4996eed561707b5aa, type: 3}
@@ -90461,6 +90488,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 5680802176122678309, guid: 7899c5f46e2286e4692bfa57b2f6c8e5, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1839807238}
+    - targetCorrespondingSourceObject: {fileID: 5680802176122678309, guid: 7899c5f46e2286e4692bfa57b2f6c8e5, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1839807239}
   m_SourcePrefab: {fileID: 100100000, guid: 7899c5f46e2286e4692bfa57b2f6c8e5, type: 3}
 --- !u!1 &2046434634
 GameObject:
