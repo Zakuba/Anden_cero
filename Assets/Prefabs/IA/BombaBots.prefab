@@ -160,5 +160,5 @@ MonoBehaviour:
   explosionLayerMask:
     serializedVersion: 2
     m_Bits: 193
-  explosionVfx: {fileID: 1737463432510393942, guid: c6e879bb9ad505341aa895aae1ef89f8, type: 3}
-  fireVfx: {fileID: 1737463432510393942, guid: c6e879bb9ad505341aa895aae1ef89f8, type: 3}
+  explosionVfx: {fileID: 1737463432510393942, guid: de1a9daf04b3c734f8e4910f711357ab, type: 3}
+  fireVfx: {fileID: 1737463432510393942, guid: de1a9daf04b3c734f8e4910f711357ab, type: 3}
