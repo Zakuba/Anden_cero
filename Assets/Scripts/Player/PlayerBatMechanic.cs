@@ -126,67 +126,73 @@ private void TryBatLocal()
     }
 
 [ServerRpc]
-    private void RequestBatBombServerRpc(NetworkObjectReference bombRef, Vector3 direction)
+private void RequestBatBombServerRpc(NetworkObjectReference bombRef, Vector3 direction)
+{
+    if (MatchManager.Instance != null && !MatchManager.Instance.IsMatchRunning) return;
+
+    if (!bombRef.TryGet(out NetworkObject bombNetObj)) return;
+
+    BombInteractable bomb = bombNetObj.GetComponent<BombInteractable>();
+    if (bomb == null || bomb.isMoving.Value) return;
+
+    Vector3 diff = bomb.transform.position - transform.position;
+    diff.y = 0;
+    if (diff.magnitude > gridSize * 1.8f || diff.magnitude < 0.25f) return;
+
+    int maxCellsToSlide = 1;
+    if (playerStats != null && playerStats.BateoMultiplier > 1f)
     {
-        if (MatchManager.Instance != null && !MatchManager.Instance.IsMatchRunning)
+        maxCellsToSlide = Mathf.RoundToInt(playerStats.BateoMultiplier);
+        if (maxCellsToSlide < 2) maxCellsToSlide = 2;
+    }
+
+    Vector3 currentBombPos = bomb.transform.position;
+    Vector3 finalDestination = currentBombPos;
+
+    for (int i = 1; i <= maxCellsToSlide; i++)
+    {
+        Vector3 nextCell = currentBombPos + (direction * gridSize * i);
+
+        // 1. Validar que la casilla destino esté libre
+        // 2. Validar que en el trayecto recto NO haya un muro cruzándose en el camino
+        if (!IsCellBlocked(nextCell) && !IsPathBlocked(currentBombPos, direction, gridSize * i))
         {
-            Debug.LogWarning("[Bat-Server] MatchManager no está corriendo.");
-            return;
-        }
-
-        if (!bombRef.TryGet(out NetworkObject bombNetObj))
-        {
-            Debug.LogWarning("[Bat-Server] No se pudo resolver la referencia de red de la bomba.");
-            return;
-        }
-
-        BombInteractable bomb = bombNetObj.GetComponent<BombInteractable>();
-        if (bomb == null || bomb.isMoving.Value) return;
-
-        Vector3 diff = bomb.transform.position - transform.position;
-        diff.y = 0;
-        if (diff.magnitude > gridSize * 1.8f || diff.magnitude < 0.25f)
-        {
-            Debug.LogWarning($"[Bat-Server] Distancia de seguridad inválida: {diff.magnitude:F2}m (Límite: {gridSize * 1.8f}m)");
-            return;
-        }
-
-        int maxCellsToSlide = 1;
-        if (playerStats != null && playerStats.BateoMultiplier > 1f)
-        {
-            maxCellsToSlide = Mathf.RoundToInt(playerStats.BateoMultiplier);
-            if (maxCellsToSlide < 2) maxCellsToSlide = 2;
-        }
-
-        Vector3 currentBombPos = bomb.transform.position;
-        Vector3 finalDestination = currentBombPos;
-
-        for (int i = 1; i <= maxCellsToSlide; i++)
-        {
-            Vector3 nextCell = currentBombPos + (direction * gridSize * i);
-
-            if (!IsCellBlocked(nextCell))
-            {
-                finalDestination = nextCell;
-            }
-            else
-            {
-                Debug.LogWarning($"[Bat-Server] Casilla {nextCell} bloqueada por obstáculo.");
-                break;
-            }
-        }
-
-        if (finalDestination != currentBombPos)
-        {
-            Debug.Log($"[Bat-Server] Éxito: Deslizando bomba hacia {finalDestination}");
-            bomb.SlideTo(finalDestination);
-            NotifySuccessfulBatClientRpc();
+            finalDestination = nextCell;
         }
         else
         {
-            Debug.LogWarning("[Bat-Server] La bomba no se movió: Casilla destino bloqueada.");
+            Debug.LogWarning($"[Bat-Server] Movimiento bloqueado hacia {nextCell}");
+            break;
         }
     }
+
+    if (finalDestination != currentBombPos)
+    {
+        bomb.SlideTo(finalDestination);
+        NotifySuccessfulBatClientRpc();
+    }
+}
+
+/// Lanza un rayo a la altura del cuerpo de la bomba para asegurar que ninguna pared intermedia sea atravesada.
+private bool IsPathBlocked(Vector3 startPos, Vector3 dir, float distance)
+{
+    Vector3 origin = startPos + Vector3.up * 0.5f;
+    RaycastHit[] hits = Physics.RaycastAll(origin, dir, distance, ~0, QueryTriggerInteraction.Ignore);
+
+    foreach (var hit in hits)
+    {
+        if (hit.collider.GetComponentInParent<BombInteractable>() != null) continue;
+        if (hit.collider.isTrigger) continue;
+
+        if (hit.collider.CompareTag(indestructibleTag) || hit.collider.CompareTag(destructibleTag))
+        {
+            Debug.LogWarning($"[Bat-Block] Trayecto bloqueado por muro: {hit.collider.name}");
+            return true;
+        }
+    }
+
+    return false;
+}
 
     [ClientRpc]
     private void NotifySuccessfulBatClientRpc()
@@ -198,60 +204,32 @@ private void TryBatLocal()
     }
 
 private bool IsCellBlocked(Vector3 cellCenter)
+{
+    // Aumentamos la altura de la caja a 1.2m para cubrir paredes completas y desniveles
+    Vector3 boxCenter = new Vector3(cellCenter.x, cellCenter.y + 0.6f, cellCenter.z);
+    Vector3 halfExtents = new Vector3(gridSize * 0.45f, 0.8f, gridSize * 0.45f);
+
+    Collider[] colliders = Physics.OverlapBox(boxCenter, halfExtents, Quaternion.identity, ~0, QueryTriggerInteraction.Collide);
+
+    foreach (Collider col in colliders)
     {
-        Vector3 boxCenter = new Vector3(cellCenter.x, cellCenter.y + 0.7f, cellCenter.z);
-        Vector3 halfExtents = new Vector3(gridSize * 0.42f, 0.45f, gridSize * 0.42f);
+        if (col.GetComponentInParent<BombInteractable>() != null) continue;
+        if (col.isTrigger) continue;
 
-        Collider[] colliders = Physics.OverlapBox(boxCenter, halfExtents, Quaternion.identity, ~0, QueryTriggerInteraction.Collide);
-
-        foreach (Collider col in colliders)
+        // 1. Bloqueo inmediato por Tags de obstáculo
+        if (col.CompareTag(indestructibleTag) || col.CompareTag(destructibleTag) || col.CompareTag(playerTag))
         {
-            // 1. Ignorar la propia bomba
-            if (col.GetComponentInParent<BombInteractable>() != null) continue;
-
-            // 2. Ignorar triggers decorativos
-            if (col.isTrigger) continue;
-
-            // 3. Ignorar suelo, andenes, casillas y volúmenes de límites de cámara
-            string colName = col.gameObject.name.ToLower();
-            string rootName = col.transform.root.gameObject.name.ToLower();
-            
-            if (colName.Contains("casilla") || colName.Contains("piso") || colName.Contains("floor") 
-                || colName.Contains("suelo") || colName.Contains("anden") || colName.Contains("via")
-                || colName.Contains("camara") || colName.Contains("camera") || colName.Contains("limite")
-                || rootName.Contains("casilla") || rootName.Contains("grid") || rootName.Contains("piso")
-                || rootName.Contains("camara") || rootName.Contains("camera"))
-            {
-                continue;
-            }
-
-            // 4. Bloqueo explícito por Tags de juego
-            if (col.CompareTag(indestructibleTag) || col.CompareTag(destructibleTag) || col.CompareTag(playerTag))
-            {
-                Debug.LogWarning($"[Bat-Block] Bloqueado por Tag: {col.name} ({col.tag})");
-                return true;
-            }
-
-            // 5. Bloqueo de avatares de jugadores vivos
-            if (col.GetComponent<CharacterController>() != null || col.GetComponentInParent<CharacterController>() != null)
-            {
-                Debug.LogWarning($"[Bat-Block] Bloqueado por Jugador: {col.name}");
-                return true;
-            }
-
-            // 6. Muros y obstáculos sólidos Untagged
-            if (col.CompareTag("Untagged") && !col.isTrigger)
-            {
-                if (col.bounds.max.y <= cellCenter.y - 0.2f)
-                {
-                    continue; // Es una plataforma/piso debajo de la bomba, ignorar
-                }
-
-                Debug.LogWarning($"[Bat-Block] Bloqueado por Muro Untagged: {col.name}");
-                return true;
-            }
+            Debug.LogWarning($"[Bat-Block] Casilla bloqueada por Tag: {col.name}");
+            return true;
         }
 
-        return false;
+        // 2. Bloqueo de jugadores vivos
+        if (col.GetComponent<CharacterController>() != null || col.GetComponentInParent<CharacterController>() != null)
+        {
+            return true;
+        }
     }
+
+    return false;
+}
 }

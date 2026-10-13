@@ -171,6 +171,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: trashcan_orange
       objectReference: {fileID: 0}
+    - target: {fileID: 2940675822082881470, guid: 6e97ae1c2d167e445a640a60c910e512, type: 3}
+      propertyPath: m_TagString
+      value: Indestructible
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -192,6 +196,10 @@ PrefabInstance:
     - target: {fileID: 2288406028141466598, guid: c43305611d9783f429ff40efcfe9c852, type: 3}
       propertyPath: m_Name
       value: wall_bigbrick (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 2288406028141466598, guid: c43305611d9783f429ff40efcfe9c852, type: 3}
+      propertyPath: m_TagString
+      value: Indestructible
       objectReference: {fileID: 0}
     - target: {fileID: 4572870206382554111, guid: c43305611d9783f429ff40efcfe9c852, type: 3}
       propertyPath: m_LocalPosition.x
@@ -298,6 +306,10 @@ PrefabInstance:
     - target: {fileID: 6380180318284396385, guid: c75ab5267d637734f9645c8b91f3e930, type: 3}
       propertyPath: m_Name
       value: pipe_orangedark (9)
+      objectReference: {fileID: 0}
+    - target: {fileID: 6380180318284396385, guid: c75ab5267d637734f9645c8b91f3e930, type: 3}
+      propertyPath: m_TagString
+      value: Indestructible
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -840,7 +852,7 @@ GameObject:
   - component: {fileID: 22748624}
   m_Layer: 0
   m_Name: Pared izq
-  m_TagString: Untagged
+  m_TagString: Indestructible
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1122,6 +1134,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SM_Bld_Base_Floor_Combined_01 (32)
       objectReference: {fileID: 0}
+    - target: {fileID: 218261247472390261, guid: 14c2043f70fad33459f6bbab2bef8720, type: 3}
+      propertyPath: m_TagString
+      value: Indestructible
+      objectReference: {fileID: 0}
     - target: {fileID: 598059413250706127, guid: 14c2043f70fad33459f6bbab2bef8720, type: 3}
       propertyPath: m_LocalPosition.x
       value: -2.0120273
@@ -1192,6 +1208,10 @@ PrefabInstance:
     - target: {fileID: 4735673862266277512, guid: 5700a83164807704dbe8d7688211f485, type: 3}
       propertyPath: m_Name
       value: SM_Bld_Base_Roof_Trim_01 (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 4735673862266277512, guid: 5700a83164807704dbe8d7688211f485, type: 3}
+      propertyPath: m_TagString
+      value: Indestructible
       objectReference: {fileID: 0}
     - target: {fileID: 5400852680590201906, guid: 5700a83164807704dbe8d7688211f485, type: 3}
       propertyPath: m_LocalScale.x
@@ -1388,6 +1408,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SM_Bld_Base_Floor_Combined_01 (18)
       objectReference: {fileID: 0}
+    - target: {fileID: 218261247472390261, guid: 14c2043f70fad33459f6bbab2bef8720, type: 3}
+      propertyPath: m_TagString
+      value: Indestructible
+      objectReference: {fileID: 0}
     - target: {fileID: 598059413250706127, guid: 14c2043f70fad33459f6bbab2bef8720, type: 3}
       propertyPath: m_LocalPosition.x
       value: -2.0119991
@@ -1448,6 +1472,10 @@ PrefabInstance:
     - target: {fileID: 218261247472390261, guid: 14c2043f70fad33459f6bbab2bef8720, type: 3}
       propertyPath: m_Name
       value: SM_Bld_Base_Floor_Combined_01 (31)
+      objectReference: {fileID: 0}
+    - target: {fileID: 218261247472390261, guid: 14c2043f70fad33459f6bbab2bef8720, type: 3}
+      propertyPath: m_TagString
+      value: Indestructible
       objectReference: {fileID: 0}
     - target: {fileID: 598059413250706127, guid: 14c2043f70fad33459f6bbab2bef8720, type: 3}
       propertyPath: m_LocalPosition.x
@@ -1612,6 +1640,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SM_Bld_Base_Floor_Combined_01 (23)
       objectReference: {fileID: 0}
+    - target: {fileID: 218261247472390261, guid: 14c2043f70fad33459f6bbab2bef8720, type: 3}
+      propertyPath: m_TagString
+      value: Indestructible
+      objectReference: {fileID: 0}
     - target: {fileID: 598059413250706127, guid: 14c2043f70fad33459f6bbab2bef8720, type: 3}
       propertyPath: m_LocalPosition.x
       value: -2.0119991
@@ -1734,6 +1766,10 @@ PrefabInstance:
     - target: {fileID: 218261247472390261, guid: 14c2043f70fad33459f6bbab2bef8720, type: 3}
       propertyPath: m_Name
       value: SM_Bld_Base_Floor_Combined_01 (4)
+      objectReference: {fileID: 0}
+    - target: {fileID: 218261247472390261, guid: 14c2043f70fad33459f6bbab2bef8720, type: 3}
+      propertyPath: m_TagString
+      value: Indestructible
       objectReference: {fileID: 0}
     - target: {fileID: 598059413250706127, guid: 14c2043f70fad33459f6bbab2bef8720, type: 3}
       propertyPath: m_LocalPosition.x
@@ -2094,6 +2130,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: pipe_orangeling_verticalcorner
       objectReference: {fileID: 0}
+    - target: {fileID: 4045406231036552987, guid: b602db105b8e96340bf88627c348494b, type: 3}
+      propertyPath: m_TagString
+      value: Indestructible
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -2271,6 +2311,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: box_two (3)
       objectReference: {fileID: 0}
+    - target: {fileID: 7363129911535224152, guid: ec70bcb9f14a5f6469a9228ff7ccd4a6, type: 3}
+      propertyPath: m_TagString
+      value: Indestructible
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -2332,6 +2376,10 @@ PrefabInstance:
     - target: {fileID: 2071493936748033074, guid: 32a7c31054f446d41baacd380a88ba96, type: 3}
       propertyPath: m_Name
       value: SM_Gen_Bld_Pipe_Corner_01
+      objectReference: {fileID: 0}
+    - target: {fileID: 2071493936748033074, guid: 32a7c31054f446d41baacd380a88ba96, type: 3}
+      propertyPath: m_TagString
+      value: Indestructible
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -2659,6 +2707,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SM_Bld_Base_Floor_Combined_01 (14)
       objectReference: {fileID: 0}
+    - target: {fileID: 218261247472390261, guid: 14c2043f70fad33459f6bbab2bef8720, type: 3}
+      propertyPath: m_TagString
+      value: Indestructible
+      objectReference: {fileID: 0}
     - target: {fileID: 598059413250706127, guid: 14c2043f70fad33459f6bbab2bef8720, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.48799992
@@ -2874,6 +2926,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: wall_bigbrick_window (3)
       objectReference: {fileID: 0}
+    - target: {fileID: 7149563675170420664, guid: cdedbee85a6d5e742b8e93841978a274, type: 3}
+      propertyPath: m_TagString
+      value: Indestructible
+      objectReference: {fileID: 0}
     - target: {fileID: 8123323965371703376, guid: cdedbee85a6d5e742b8e93841978a274, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
@@ -3024,6 +3080,10 @@ PrefabInstance:
     - target: {fileID: 218261247472390261, guid: 14c2043f70fad33459f6bbab2bef8720, type: 3}
       propertyPath: m_Name
       value: SM_Bld_Base_Floor_Combined_01 (30)
+      objectReference: {fileID: 0}
+    - target: {fileID: 218261247472390261, guid: 14c2043f70fad33459f6bbab2bef8720, type: 3}
+      propertyPath: m_TagString
+      value: Indestructible
       objectReference: {fileID: 0}
     - target: {fileID: 598059413250706127, guid: 14c2043f70fad33459f6bbab2bef8720, type: 3}
       propertyPath: m_LocalPosition.x
@@ -3577,6 +3637,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SM_Bld_Base_Floor_Combined_01 (9)
       objectReference: {fileID: 0}
+    - target: {fileID: 218261247472390261, guid: 14c2043f70fad33459f6bbab2bef8720, type: 3}
+      propertyPath: m_TagString
+      value: Indestructible
+      objectReference: {fileID: 0}
     - target: {fileID: 598059413250706127, guid: 14c2043f70fad33459f6bbab2bef8720, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.48799992
@@ -3879,6 +3943,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: pallet (3)
       objectReference: {fileID: 0}
+    - target: {fileID: 244289930534617555, guid: ba2b5e0c3a018f04187b7c11ae5e3679, type: 3}
+      propertyPath: m_TagString
+      value: Indestructible
+      objectReference: {fileID: 0}
     - target: {fileID: 8653069220427406119, guid: ba2b5e0c3a018f04187b7c11ae5e3679, type: 3}
       propertyPath: m_LocalPosition.x
       value: -2.5499992
@@ -4147,6 +4215,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SM_Bld_Base_Floor_Combined_01 (38)
       objectReference: {fileID: 0}
+    - target: {fileID: 218261247472390261, guid: 14c2043f70fad33459f6bbab2bef8720, type: 3}
+      propertyPath: m_TagString
+      value: Indestructible
+      objectReference: {fileID: 0}
     - target: {fileID: 598059413250706127, guid: 14c2043f70fad33459f6bbab2bef8720, type: 3}
       propertyPath: m_LocalPosition.x
       value: 2.99
@@ -4254,6 +4326,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SM_Bld_Base_Floor_Combined_01 (7)
       objectReference: {fileID: 0}
+    - target: {fileID: 218261247472390261, guid: 14c2043f70fad33459f6bbab2bef8720, type: 3}
+      propertyPath: m_TagString
+      value: Indestructible
+      objectReference: {fileID: 0}
     - target: {fileID: 598059413250706127, guid: 14c2043f70fad33459f6bbab2bef8720, type: 3}
       propertyPath: m_LocalPosition.x
       value: 2.988
@@ -4319,6 +4395,10 @@ PrefabInstance:
     - target: {fileID: 218261247472390261, guid: 14c2043f70fad33459f6bbab2bef8720, type: 3}
       propertyPath: m_Name
       value: SM_Bld_Base_Floor_Combined_01 (30)
+      objectReference: {fileID: 0}
+    - target: {fileID: 218261247472390261, guid: 14c2043f70fad33459f6bbab2bef8720, type: 3}
+      propertyPath: m_TagString
+      value: Indestructible
       objectReference: {fileID: 0}
     - target: {fileID: 598059413250706127, guid: 14c2043f70fad33459f6bbab2bef8720, type: 3}
       propertyPath: m_LocalPosition.x
@@ -4755,6 +4835,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: vent_corner
       objectReference: {fileID: 0}
+    - target: {fileID: 7555865226883729135, guid: 8d7b51298a8f3ee4783e2463a21c0038, type: 3}
+      propertyPath: m_TagString
+      value: Indestructible
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -4883,6 +4967,10 @@ PrefabInstance:
     - target: {fileID: 218261247472390261, guid: 14c2043f70fad33459f6bbab2bef8720, type: 3}
       propertyPath: m_Name
       value: SM_Bld_Base_Floor_Combined_01 (22)
+      objectReference: {fileID: 0}
+    - target: {fileID: 218261247472390261, guid: 14c2043f70fad33459f6bbab2bef8720, type: 3}
+      propertyPath: m_TagString
+      value: Indestructible
       objectReference: {fileID: 0}
     - target: {fileID: 598059413250706127, guid: 14c2043f70fad33459f6bbab2bef8720, type: 3}
       propertyPath: m_LocalPosition.x
@@ -5123,6 +5211,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: pipe_orangedark (6)
       objectReference: {fileID: 0}
+    - target: {fileID: 6380180318284396385, guid: c75ab5267d637734f9645c8b91f3e930, type: 3}
+      propertyPath: m_TagString
+      value: Indestructible
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -5304,6 +5396,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: pipe_orangedark (3)
       objectReference: {fileID: 0}
+    - target: {fileID: 6380180318284396385, guid: c75ab5267d637734f9645c8b91f3e930, type: 3}
+      propertyPath: m_TagString
+      value: Indestructible
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -5325,6 +5421,10 @@ PrefabInstance:
     - target: {fileID: 1357037131130400367, guid: 7a17f6fa89a62d04faf48289e07bce2e, type: 3}
       propertyPath: m_Name
       value: woodenbox_x (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 1357037131130400367, guid: 7a17f6fa89a62d04faf48289e07bce2e, type: 3}
+      propertyPath: m_TagString
+      value: Indestructible
       objectReference: {fileID: 0}
     - target: {fileID: 9150499792419321911, guid: 7a17f6fa89a62d04faf48289e07bce2e, type: 3}
       propertyPath: m_LocalPosition.x
@@ -5387,6 +5487,10 @@ PrefabInstance:
     - target: {fileID: 218261247472390261, guid: 14c2043f70fad33459f6bbab2bef8720, type: 3}
       propertyPath: m_Name
       value: SM_Bld_Base_Floor_Combined_01 (35)
+      objectReference: {fileID: 0}
+    - target: {fileID: 218261247472390261, guid: 14c2043f70fad33459f6bbab2bef8720, type: 3}
+      propertyPath: m_TagString
+      value: Indestructible
       objectReference: {fileID: 0}
     - target: {fileID: 598059413250706127, guid: 14c2043f70fad33459f6bbab2bef8720, type: 3}
       propertyPath: m_LocalPosition.x
@@ -5596,6 +5700,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SM_Bld_Base_Wall_Trim_01 (3)
       objectReference: {fileID: 0}
+    - target: {fileID: 3469433918781084406, guid: e2d98a84f7bc5234da3ec9787cd05a65, type: 3}
+      propertyPath: m_TagString
+      value: Indestructible
+      objectReference: {fileID: 0}
     - target: {fileID: 4282421219620489292, guid: e2d98a84f7bc5234da3ec9787cd05a65, type: 3}
       propertyPath: m_LocalScale.x
       value: 1.6952001
@@ -5662,6 +5770,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: wall_bigbrick (3)
       objectReference: {fileID: 0}
+    - target: {fileID: 2288406028141466598, guid: c43305611d9783f429ff40efcfe9c852, type: 3}
+      propertyPath: m_TagString
+      value: Indestructible
+      objectReference: {fileID: 0}
     - target: {fileID: 4572870206382554111, guid: c43305611d9783f429ff40efcfe9c852, type: 3}
       propertyPath: m_LocalPosition.x
       value: -39.249996
@@ -5727,6 +5839,10 @@ PrefabInstance:
     - target: {fileID: 218261247472390261, guid: 14c2043f70fad33459f6bbab2bef8720, type: 3}
       propertyPath: m_Name
       value: SM_Bld_Base_Floor_Combined_01 (3)
+      objectReference: {fileID: 0}
+    - target: {fileID: 218261247472390261, guid: 14c2043f70fad33459f6bbab2bef8720, type: 3}
+      propertyPath: m_TagString
+      value: Indestructible
       objectReference: {fileID: 0}
     - target: {fileID: 598059413250706127, guid: 14c2043f70fad33459f6bbab2bef8720, type: 3}
       propertyPath: m_LocalPosition.x
@@ -6095,6 +6211,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: pallet (2)
       objectReference: {fileID: 0}
+    - target: {fileID: 244289930534617555, guid: ba2b5e0c3a018f04187b7c11ae5e3679, type: 3}
+      propertyPath: m_TagString
+      value: Indestructible
+      objectReference: {fileID: 0}
     - target: {fileID: 8653069220427406119, guid: ba2b5e0c3a018f04187b7c11ae5e3679, type: 3}
       propertyPath: m_LocalPosition.x
       value: -2.5499992
@@ -6387,6 +6507,10 @@ PrefabInstance:
     - target: {fileID: 218261247472390261, guid: 14c2043f70fad33459f6bbab2bef8720, type: 3}
       propertyPath: m_Name
       value: SM_Bld_Base_Floor_Combined_01 (21)
+      objectReference: {fileID: 0}
+    - target: {fileID: 218261247472390261, guid: 14c2043f70fad33459f6bbab2bef8720, type: 3}
+      propertyPath: m_TagString
+      value: Indestructible
       objectReference: {fileID: 0}
     - target: {fileID: 598059413250706127, guid: 14c2043f70fad33459f6bbab2bef8720, type: 3}
       propertyPath: m_LocalPosition.x
@@ -6776,6 +6900,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: pipe_orangedark (2)
       objectReference: {fileID: 0}
+    - target: {fileID: 6380180318284396385, guid: c75ab5267d637734f9645c8b91f3e930, type: 3}
+      propertyPath: m_TagString
+      value: Indestructible
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -6979,6 +7107,10 @@ PrefabInstance:
     - target: {fileID: 218261247472390261, guid: 14c2043f70fad33459f6bbab2bef8720, type: 3}
       propertyPath: m_Name
       value: SM_Bld_Base_Floor_Combined_01 (40)
+      objectReference: {fileID: 0}
+    - target: {fileID: 218261247472390261, guid: 14c2043f70fad33459f6bbab2bef8720, type: 3}
+      propertyPath: m_TagString
+      value: Indestructible
       objectReference: {fileID: 0}
     - target: {fileID: 598059413250706127, guid: 14c2043f70fad33459f6bbab2bef8720, type: 3}
       propertyPath: m_LocalPosition.x
@@ -7210,6 +7342,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: pipe_orangedark (16)
       objectReference: {fileID: 0}
+    - target: {fileID: 6380180318284396385, guid: c75ab5267d637734f9645c8b91f3e930, type: 3}
+      propertyPath: m_TagString
+      value: Indestructible
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -7231,6 +7367,10 @@ PrefabInstance:
     - target: {fileID: 8305309674477336414, guid: 74041acf00146d442b15dec90c15c5cc, type: 3}
       propertyPath: m_Name
       value: SM_Gen_Bld_Pipe_Straight_03 (2)
+      objectReference: {fileID: 0}
+    - target: {fileID: 8305309674477336414, guid: 74041acf00146d442b15dec90c15c5cc, type: 3}
+      propertyPath: m_TagString
+      value: Indestructible
       objectReference: {fileID: 0}
     - target: {fileID: 8649641963997785572, guid: 74041acf00146d442b15dec90c15c5cc, type: 3}
       propertyPath: m_LocalPosition.x
@@ -8006,6 +8146,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SM_Bld_Base_45_Wall_01 (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 983350997453425439, guid: eccddf70dbb7cd243a2f37f4aa5c95d6, type: 3}
+      propertyPath: m_TagString
+      value: Indestructible
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -8237,6 +8381,10 @@ PrefabInstance:
     - target: {fileID: 983350997453425439, guid: eccddf70dbb7cd243a2f37f4aa5c95d6, type: 3}
       propertyPath: m_Name
       value: SM_Bld_Base_45_Wall_01 (5)
+      objectReference: {fileID: 0}
+    - target: {fileID: 983350997453425439, guid: eccddf70dbb7cd243a2f37f4aa5c95d6, type: 3}
+      propertyPath: m_TagString
+      value: Indestructible
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -8538,6 +8686,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SM_Bld_Base_Wall_Trim_01 (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 3469433918781084406, guid: e2d98a84f7bc5234da3ec9787cd05a65, type: 3}
+      propertyPath: m_TagString
+      value: Indestructible
+      objectReference: {fileID: 0}
     - target: {fileID: 4282421219620489292, guid: e2d98a84f7bc5234da3ec9787cd05a65, type: 3}
       propertyPath: m_LocalScale.x
       value: 6.531768
@@ -8648,6 +8800,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SM_Bld_Base_Pillar_Half_04 (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 4105061365573460961, guid: 46b3f5b0591bdcb4892a4051d65ba2a6, type: 3}
+      propertyPath: m_TagString
+      value: Indestructible
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -8715,6 +8871,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: waterbox
       objectReference: {fileID: 0}
+    - target: {fileID: 8934298312698090098, guid: c915ffb51fa45234f963b3db7d2f1499, type: 3}
+      propertyPath: m_TagString
+      value: Indestructible
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -8736,6 +8896,10 @@ PrefabInstance:
     - target: {fileID: 218261247472390261, guid: 14c2043f70fad33459f6bbab2bef8720, type: 3}
       propertyPath: m_Name
       value: SM_Bld_Base_Floor_Combined_01 (31)
+      objectReference: {fileID: 0}
+    - target: {fileID: 218261247472390261, guid: 14c2043f70fad33459f6bbab2bef8720, type: 3}
+      propertyPath: m_TagString
+      value: Indestructible
       objectReference: {fileID: 0}
     - target: {fileID: 598059413250706127, guid: 14c2043f70fad33459f6bbab2bef8720, type: 3}
       propertyPath: m_LocalPosition.x
@@ -9255,6 +9419,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: pallet (2)
       objectReference: {fileID: 0}
+    - target: {fileID: 244289930534617555, guid: ba2b5e0c3a018f04187b7c11ae5e3679, type: 3}
+      propertyPath: m_TagString
+      value: Indestructible
+      objectReference: {fileID: 0}
     - target: {fileID: 8653069220427406119, guid: ba2b5e0c3a018f04187b7c11ae5e3679, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.53530943
@@ -9479,6 +9647,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SM_Bld_Base_Pillar_Half_04
       objectReference: {fileID: 0}
+    - target: {fileID: 4105061365573460961, guid: 46b3f5b0591bdcb4892a4051d65ba2a6, type: 3}
+      propertyPath: m_TagString
+      value: Indestructible
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -9500,6 +9672,10 @@ PrefabInstance:
     - target: {fileID: 218261247472390261, guid: 14c2043f70fad33459f6bbab2bef8720, type: 3}
       propertyPath: m_Name
       value: SM_Bld_Base_Floor_Combined_01 (28)
+      objectReference: {fileID: 0}
+    - target: {fileID: 218261247472390261, guid: 14c2043f70fad33459f6bbab2bef8720, type: 3}
+      propertyPath: m_TagString
+      value: Indestructible
       objectReference: {fileID: 0}
     - target: {fileID: 598059413250706127, guid: 14c2043f70fad33459f6bbab2bef8720, type: 3}
       propertyPath: m_LocalPosition.x
@@ -9742,6 +9918,10 @@ PrefabInstance:
     - target: {fileID: 7363129911535224152, guid: ec70bcb9f14a5f6469a9228ff7ccd4a6, type: 3}
       propertyPath: m_Name
       value: box_two
+      objectReference: {fileID: 0}
+    - target: {fileID: 7363129911535224152, guid: ec70bcb9f14a5f6469a9228ff7ccd4a6, type: 3}
+      propertyPath: m_TagString
+      value: Indestructible
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -10015,6 +10195,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: pipe_orangedark (7)
       objectReference: {fileID: 0}
+    - target: {fileID: 6380180318284396385, guid: c75ab5267d637734f9645c8b91f3e930, type: 3}
+      propertyPath: m_TagString
+      value: Indestructible
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -10242,6 +10426,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: vent (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 6386151828563780047, guid: 006174ab269693b4e9a3380c9adb7744, type: 3}
+      propertyPath: m_TagString
+      value: Indestructible
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -10446,6 +10634,10 @@ PrefabInstance:
     - target: {fileID: 2288406028141466598, guid: c43305611d9783f429ff40efcfe9c852, type: 3}
       propertyPath: m_Name
       value: wall_bigbrick (6)
+      objectReference: {fileID: 0}
+    - target: {fileID: 2288406028141466598, guid: c43305611d9783f429ff40efcfe9c852, type: 3}
+      propertyPath: m_TagString
+      value: Indestructible
       objectReference: {fileID: 0}
     - target: {fileID: 4572870206382554111, guid: c43305611d9783f429ff40efcfe9c852, type: 3}
       propertyPath: m_LocalPosition.x
@@ -10973,6 +11165,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SM_Bld_Base_45_Wall_01 (6)
       objectReference: {fileID: 0}
+    - target: {fileID: 983350997453425439, guid: eccddf70dbb7cd243a2f37f4aa5c95d6, type: 3}
+      propertyPath: m_TagString
+      value: Indestructible
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -11102,6 +11298,10 @@ PrefabInstance:
     - target: {fileID: 8305309674477336414, guid: 74041acf00146d442b15dec90c15c5cc, type: 3}
       propertyPath: m_Name
       value: SM_Gen_Bld_Pipe_Straight_03 (2)
+      objectReference: {fileID: 0}
+    - target: {fileID: 8305309674477336414, guid: 74041acf00146d442b15dec90c15c5cc, type: 3}
+      propertyPath: m_TagString
+      value: Indestructible
       objectReference: {fileID: 0}
     - target: {fileID: 8649641963997785572, guid: 74041acf00146d442b15dec90c15c5cc, type: 3}
       propertyPath: m_LocalPosition.x
@@ -11335,6 +11535,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SM_Bld_Base_Floor_Combined_01 (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 218261247472390261, guid: 14c2043f70fad33459f6bbab2bef8720, type: 3}
+      propertyPath: m_TagString
+      value: Indestructible
+      objectReference: {fileID: 0}
     - target: {fileID: 598059413250706127, guid: 14c2043f70fad33459f6bbab2bef8720, type: 3}
       propertyPath: m_LocalPosition.x
       value: 2.988
@@ -11448,6 +11652,10 @@ PrefabInstance:
     - target: {fileID: 4105061365573460961, guid: 46b3f5b0591bdcb4892a4051d65ba2a6, type: 3}
       propertyPath: m_Name
       value: SM_Bld_Base_Pillar_Half_04 (2)
+      objectReference: {fileID: 0}
+    - target: {fileID: 4105061365573460961, guid: 46b3f5b0591bdcb4892a4051d65ba2a6, type: 3}
+      propertyPath: m_TagString
+      value: Indestructible
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -11773,6 +11981,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SM_Bld_Base_Wall_Door_Double_Large_01
       objectReference: {fileID: 0}
+    - target: {fileID: 6601050566410634084, guid: 80f8de5fa3b15d8459024f191962186c, type: 3}
+      propertyPath: m_TagString
+      value: Indestructible
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -11829,6 +12041,10 @@ PrefabInstance:
     - target: {fileID: 6380180318284396385, guid: c75ab5267d637734f9645c8b91f3e930, type: 3}
       propertyPath: m_Name
       value: pipe_orangedark (14)
+      objectReference: {fileID: 0}
+    - target: {fileID: 6380180318284396385, guid: c75ab5267d637734f9645c8b91f3e930, type: 3}
+      propertyPath: m_TagString
+      value: Indestructible
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -12018,6 +12234,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SM_Bld_Base_Floor_Combined_01 (38)
       objectReference: {fileID: 0}
+    - target: {fileID: 218261247472390261, guid: 14c2043f70fad33459f6bbab2bef8720, type: 3}
+      propertyPath: m_TagString
+      value: Indestructible
+      objectReference: {fileID: 0}
     - target: {fileID: 598059413250706127, guid: 14c2043f70fad33459f6bbab2bef8720, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.48799992
@@ -12153,6 +12373,10 @@ PrefabInstance:
     - target: {fileID: 3469433918781084406, guid: e2d98a84f7bc5234da3ec9787cd05a65, type: 3}
       propertyPath: m_Name
       value: SM_Bld_Base_Wall_Trim_01
+      objectReference: {fileID: 0}
+    - target: {fileID: 3469433918781084406, guid: e2d98a84f7bc5234da3ec9787cd05a65, type: 3}
+      propertyPath: m_TagString
+      value: Indestructible
       objectReference: {fileID: 0}
     - target: {fileID: 4282421219620489292, guid: e2d98a84f7bc5234da3ec9787cd05a65, type: 3}
       propertyPath: m_LocalScale.x
@@ -12417,6 +12641,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SM_Gen_Bld_Pipe_Corner_01
       objectReference: {fileID: 0}
+    - target: {fileID: 2071493936748033074, guid: 32a7c31054f446d41baacd380a88ba96, type: 3}
+      propertyPath: m_TagString
+      value: Indestructible
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -12669,6 +12897,10 @@ PrefabInstance:
     - target: {fileID: 218261247472390261, guid: 14c2043f70fad33459f6bbab2bef8720, type: 3}
       propertyPath: m_Name
       value: SM_Bld_Base_Floor_Combined_01 (40)
+      objectReference: {fileID: 0}
+    - target: {fileID: 218261247472390261, guid: 14c2043f70fad33459f6bbab2bef8720, type: 3}
+      propertyPath: m_TagString
+      value: Indestructible
       objectReference: {fileID: 0}
     - target: {fileID: 598059413250706127, guid: 14c2043f70fad33459f6bbab2bef8720, type: 3}
       propertyPath: m_LocalPosition.x
@@ -13149,6 +13381,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: box_two (4)
       objectReference: {fileID: 0}
+    - target: {fileID: 7363129911535224152, guid: ec70bcb9f14a5f6469a9228ff7ccd4a6, type: 3}
+      propertyPath: m_TagString
+      value: Indestructible
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -13283,6 +13519,10 @@ PrefabInstance:
     - target: {fileID: 2697173135071063382, guid: cbaa9d009d132ea45abad114375b0393, type: 3}
       propertyPath: m_Name
       value: SM_Gen_Bld_Pipe_Cap_02
+      objectReference: {fileID: 0}
+    - target: {fileID: 2697173135071063382, guid: cbaa9d009d132ea45abad114375b0393, type: 3}
+      propertyPath: m_TagString
+      value: Indestructible
       objectReference: {fileID: 0}
     - target: {fileID: 3325231032345786348, guid: cbaa9d009d132ea45abad114375b0393, type: 3}
       propertyPath: m_LocalPosition.x
@@ -13470,6 +13710,10 @@ PrefabInstance:
     - target: {fileID: 2288406028141466598, guid: c43305611d9783f429ff40efcfe9c852, type: 3}
       propertyPath: m_Name
       value: wall_bigbrick (7)
+      objectReference: {fileID: 0}
+    - target: {fileID: 2288406028141466598, guid: c43305611d9783f429ff40efcfe9c852, type: 3}
+      propertyPath: m_TagString
+      value: Indestructible
       objectReference: {fileID: 0}
     - target: {fileID: 4572870206382554111, guid: c43305611d9783f429ff40efcfe9c852, type: 3}
       propertyPath: m_LocalPosition.x
@@ -13725,6 +13969,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: box_opened
       objectReference: {fileID: 0}
+    - target: {fileID: 4415916230558959849, guid: ee7533ae95fdeba4984b9b4bbb8a203e, type: 3}
+      propertyPath: m_TagString
+      value: Indestructible
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -13782,6 +14030,10 @@ PrefabInstance:
     - target: {fileID: 218261247472390261, guid: 14c2043f70fad33459f6bbab2bef8720, type: 3}
       propertyPath: m_Name
       value: SM_Bld_Base_Floor_Combined_01 (41)
+      objectReference: {fileID: 0}
+    - target: {fileID: 218261247472390261, guid: 14c2043f70fad33459f6bbab2bef8720, type: 3}
+      propertyPath: m_TagString
+      value: Indestructible
       objectReference: {fileID: 0}
     - target: {fileID: 598059413250706127, guid: 14c2043f70fad33459f6bbab2bef8720, type: 3}
       propertyPath: m_LocalPosition.x
@@ -13889,6 +14141,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SM_Bld_Base_45_Wall_01 (9)
       objectReference: {fileID: 0}
+    - target: {fileID: 983350997453425439, guid: eccddf70dbb7cd243a2f37f4aa5c95d6, type: 3}
+      propertyPath: m_TagString
+      value: Indestructible
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -13967,6 +14223,10 @@ PrefabInstance:
     - target: {fileID: 7363129911535224152, guid: ec70bcb9f14a5f6469a9228ff7ccd4a6, type: 3}
       propertyPath: m_Name
       value: box_two (6)
+      objectReference: {fileID: 0}
+    - target: {fileID: 7363129911535224152, guid: ec70bcb9f14a5f6469a9228ff7ccd4a6, type: 3}
+      propertyPath: m_TagString
+      value: Indestructible
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -14560,6 +14820,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SM_Bld_Base_Floor_Combined_01 (29)
       objectReference: {fileID: 0}
+    - target: {fileID: 218261247472390261, guid: 14c2043f70fad33459f6bbab2bef8720, type: 3}
+      propertyPath: m_TagString
+      value: Indestructible
+      objectReference: {fileID: 0}
     - target: {fileID: 598059413250706127, guid: 14c2043f70fad33459f6bbab2bef8720, type: 3}
       propertyPath: m_LocalPosition.x
       value: 2.988
@@ -14677,6 +14941,10 @@ PrefabInstance:
     - target: {fileID: 6386151828563780047, guid: 006174ab269693b4e9a3380c9adb7744, type: 3}
       propertyPath: m_Name
       value: vent (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 6386151828563780047, guid: 006174ab269693b4e9a3380c9adb7744, type: 3}
+      propertyPath: m_TagString
+      value: Indestructible
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -14936,6 +15204,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SM_Bld_Base_Floor_Combined_01 (24)
       objectReference: {fileID: 0}
+    - target: {fileID: 218261247472390261, guid: 14c2043f70fad33459f6bbab2bef8720, type: 3}
+      propertyPath: m_TagString
+      value: Indestructible
+      objectReference: {fileID: 0}
     - target: {fileID: 598059413250706127, guid: 14c2043f70fad33459f6bbab2bef8720, type: 3}
       propertyPath: m_LocalPosition.x
       value: -2.0119991
@@ -14996,6 +15268,10 @@ PrefabInstance:
     - target: {fileID: 4537262186616173632, guid: 6355aae3f5efd0847a1774face5ab65e, type: 3}
       propertyPath: m_Name
       value: bighightpipe_small
+      objectReference: {fileID: 0}
+    - target: {fileID: 4537262186616173632, guid: 6355aae3f5efd0847a1774face5ab65e, type: 3}
+      propertyPath: m_TagString
+      value: Indestructible
       objectReference: {fileID: 0}
     - target: {fileID: 5417833476610773579, guid: 6355aae3f5efd0847a1774face5ab65e, type: 3}
       propertyPath: m_LocalPosition.x
@@ -15058,6 +15334,10 @@ PrefabInstance:
     - target: {fileID: 244289930534617555, guid: ba2b5e0c3a018f04187b7c11ae5e3679, type: 3}
       propertyPath: m_Name
       value: pallet (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 244289930534617555, guid: ba2b5e0c3a018f04187b7c11ae5e3679, type: 3}
+      propertyPath: m_TagString
+      value: Indestructible
       objectReference: {fileID: 0}
     - target: {fileID: 8653069220427406119, guid: ba2b5e0c3a018f04187b7c11ae5e3679, type: 3}
       propertyPath: m_LocalPosition.x
@@ -15616,6 +15896,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SM_Bld_Base_Pillar_Half_04 (3)
       objectReference: {fileID: 0}
+    - target: {fileID: 4105061365573460961, guid: 46b3f5b0591bdcb4892a4051d65ba2a6, type: 3}
+      propertyPath: m_TagString
+      value: Indestructible
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -15751,6 +16035,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: pallet
       objectReference: {fileID: 0}
+    - target: {fileID: 244289930534617555, guid: ba2b5e0c3a018f04187b7c11ae5e3679, type: 3}
+      propertyPath: m_TagString
+      value: Indestructible
+      objectReference: {fileID: 0}
     - target: {fileID: 8653069220427406119, guid: ba2b5e0c3a018f04187b7c11ae5e3679, type: 3}
       propertyPath: m_LocalPosition.x
       value: -2.5
@@ -15812,6 +16100,10 @@ PrefabInstance:
     - target: {fileID: 218261247472390261, guid: 14c2043f70fad33459f6bbab2bef8720, type: 3}
       propertyPath: m_Name
       value: SM_Bld_Base_Floor_Combined_01 (13)
+      objectReference: {fileID: 0}
+    - target: {fileID: 218261247472390261, guid: 14c2043f70fad33459f6bbab2bef8720, type: 3}
+      propertyPath: m_TagString
+      value: Indestructible
       objectReference: {fileID: 0}
     - target: {fileID: 598059413250706127, guid: 14c2043f70fad33459f6bbab2bef8720, type: 3}
       propertyPath: m_LocalPosition.x
@@ -16258,6 +16550,10 @@ PrefabInstance:
     - target: {fileID: 7363129911535224152, guid: ec70bcb9f14a5f6469a9228ff7ccd4a6, type: 3}
       propertyPath: m_Name
       value: box_two (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 7363129911535224152, guid: ec70bcb9f14a5f6469a9228ff7ccd4a6, type: 3}
+      propertyPath: m_TagString
+      value: Indestructible
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -17271,6 +17567,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SM_Bld_Base_45_Wall_01 (8)
       objectReference: {fileID: 0}
+    - target: {fileID: 983350997453425439, guid: eccddf70dbb7cd243a2f37f4aa5c95d6, type: 3}
+      propertyPath: m_TagString
+      value: Indestructible
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -17292,6 +17592,10 @@ PrefabInstance:
     - target: {fileID: 218261247472390261, guid: 14c2043f70fad33459f6bbab2bef8720, type: 3}
       propertyPath: m_Name
       value: SM_Bld_Base_Floor_Combined_01 (17)
+      objectReference: {fileID: 0}
+    - target: {fileID: 218261247472390261, guid: 14c2043f70fad33459f6bbab2bef8720, type: 3}
+      propertyPath: m_TagString
+      value: Indestructible
       objectReference: {fileID: 0}
     - target: {fileID: 598059413250706127, guid: 14c2043f70fad33459f6bbab2bef8720, type: 3}
       propertyPath: m_LocalPosition.x
@@ -17515,6 +17819,10 @@ PrefabInstance:
     - target: {fileID: 2095505155170527388, guid: c5c2a8e6bf649504c9a44506e4e45bd9, type: 3}
       propertyPath: m_Name
       value: SM_Bld_Base_Wall_Window_Double_01
+      objectReference: {fileID: 0}
+    - target: {fileID: 2095505155170527388, guid: c5c2a8e6bf649504c9a44506e4e45bd9, type: 3}
+      propertyPath: m_TagString
+      value: Indestructible
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -17850,6 +18158,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SM_Bld_Base_Wall_Window_Double_01
       objectReference: {fileID: 0}
+    - target: {fileID: 2095505155170527388, guid: c5c2a8e6bf649504c9a44506e4e45bd9, type: 3}
+      propertyPath: m_TagString
+      value: Indestructible
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -18080,6 +18392,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SM_Bld_Base_Floor_Combined_01 (12)
       objectReference: {fileID: 0}
+    - target: {fileID: 218261247472390261, guid: 14c2043f70fad33459f6bbab2bef8720, type: 3}
+      propertyPath: m_TagString
+      value: Indestructible
+      objectReference: {fileID: 0}
     - target: {fileID: 598059413250706127, guid: 14c2043f70fad33459f6bbab2bef8720, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.48799992
@@ -18140,6 +18456,10 @@ PrefabInstance:
     - target: {fileID: 218261247472390261, guid: 14c2043f70fad33459f6bbab2bef8720, type: 3}
       propertyPath: m_Name
       value: SM_Bld_Base_Floor_Combined_01 (35)
+      objectReference: {fileID: 0}
+    - target: {fileID: 218261247472390261, guid: 14c2043f70fad33459f6bbab2bef8720, type: 3}
+      propertyPath: m_TagString
+      value: Indestructible
       objectReference: {fileID: 0}
     - target: {fileID: 598059413250706127, guid: 14c2043f70fad33459f6bbab2bef8720, type: 3}
       propertyPath: m_LocalPosition.x
@@ -18739,6 +19059,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SM_Bld_Base_Floor_Combined_01 (26)
       objectReference: {fileID: 0}
+    - target: {fileID: 218261247472390261, guid: 14c2043f70fad33459f6bbab2bef8720, type: 3}
+      propertyPath: m_TagString
+      value: Indestructible
+      objectReference: {fileID: 0}
     - target: {fileID: 598059413250706127, guid: 14c2043f70fad33459f6bbab2bef8720, type: 3}
       propertyPath: m_LocalPosition.x
       value: -2.0119991
@@ -18805,7 +19129,7 @@ GameObject:
   - component: {fileID: 785406484}
   m_Layer: 0
   m_Name: LimiteInterior
-  m_TagString: Untagged
+  m_TagString: Indestructible
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -19050,6 +19374,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: wall_bigbrick
       objectReference: {fileID: 0}
+    - target: {fileID: 2288406028141466598, guid: c43305611d9783f429ff40efcfe9c852, type: 3}
+      propertyPath: m_TagString
+      value: Indestructible
+      objectReference: {fileID: 0}
     - target: {fileID: 4572870206382554111, guid: c43305611d9783f429ff40efcfe9c852, type: 3}
       propertyPath: m_LocalPosition.x
       value: -39.249996
@@ -19223,6 +19551,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SM_Bld_Base_Floor_Combined_01 (4)
       objectReference: {fileID: 0}
+    - target: {fileID: 218261247472390261, guid: 14c2043f70fad33459f6bbab2bef8720, type: 3}
+      propertyPath: m_TagString
+      value: Indestructible
+      objectReference: {fileID: 0}
     - target: {fileID: 598059413250706127, guid: 14c2043f70fad33459f6bbab2bef8720, type: 3}
       propertyPath: m_LocalPosition.x
       value: 2.988
@@ -19381,6 +19713,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SM_Bld_Base_Wall_Door_Double_Large_01
       objectReference: {fileID: 0}
+    - target: {fileID: 6601050566410634084, guid: 80f8de5fa3b15d8459024f191962186c, type: 3}
+      propertyPath: m_TagString
+      value: Indestructible
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -19402,6 +19738,10 @@ PrefabInstance:
     - target: {fileID: 218261247472390261, guid: 14c2043f70fad33459f6bbab2bef8720, type: 3}
       propertyPath: m_Name
       value: SM_Bld_Base_Floor_Combined_01 (27)
+      objectReference: {fileID: 0}
+    - target: {fileID: 218261247472390261, guid: 14c2043f70fad33459f6bbab2bef8720, type: 3}
+      propertyPath: m_TagString
+      value: Indestructible
       objectReference: {fileID: 0}
     - target: {fileID: 598059413250706127, guid: 14c2043f70fad33459f6bbab2bef8720, type: 3}
       propertyPath: m_LocalPosition.x
@@ -19871,6 +20211,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SM_Bld_Base_Floor_Combined_01 (10)
       objectReference: {fileID: 0}
+    - target: {fileID: 218261247472390261, guid: 14c2043f70fad33459f6bbab2bef8720, type: 3}
+      propertyPath: m_TagString
+      value: Indestructible
+      objectReference: {fileID: 0}
     - target: {fileID: 598059413250706127, guid: 14c2043f70fad33459f6bbab2bef8720, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.48799992
@@ -20049,6 +20393,10 @@ PrefabInstance:
     - target: {fileID: 218261247472390261, guid: 14c2043f70fad33459f6bbab2bef8720, type: 3}
       propertyPath: m_Name
       value: SM_Bld_Base_Floor_Combined_01 (13)
+      objectReference: {fileID: 0}
+    - target: {fileID: 218261247472390261, guid: 14c2043f70fad33459f6bbab2bef8720, type: 3}
+      propertyPath: m_TagString
+      value: Indestructible
       objectReference: {fileID: 0}
     - target: {fileID: 598059413250706127, guid: 14c2043f70fad33459f6bbab2bef8720, type: 3}
       propertyPath: m_LocalPosition.x
@@ -20408,6 +20756,10 @@ PrefabInstance:
     - target: {fileID: 1357037131130400367, guid: 7a17f6fa89a62d04faf48289e07bce2e, type: 3}
       propertyPath: m_Name
       value: woodenbox_x (2)
+      objectReference: {fileID: 0}
+    - target: {fileID: 1357037131130400367, guid: 7a17f6fa89a62d04faf48289e07bce2e, type: 3}
+      propertyPath: m_TagString
+      value: Indestructible
       objectReference: {fileID: 0}
     - target: {fileID: 9150499792419321911, guid: 7a17f6fa89a62d04faf48289e07bce2e, type: 3}
       propertyPath: m_LocalPosition.x
@@ -20792,6 +21144,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SM_Bld_Base_Floor_Combined_01
       objectReference: {fileID: 0}
+    - target: {fileID: 218261247472390261, guid: 14c2043f70fad33459f6bbab2bef8720, type: 3}
+      propertyPath: m_TagString
+      value: Indestructible
+      objectReference: {fileID: 0}
     - target: {fileID: 598059413250706127, guid: 14c2043f70fad33459f6bbab2bef8720, type: 3}
       propertyPath: m_LocalPosition.x
       value: 2.988
@@ -20857,6 +21213,10 @@ PrefabInstance:
     - target: {fileID: 4537262186616173632, guid: 6355aae3f5efd0847a1774face5ab65e, type: 3}
       propertyPath: m_Name
       value: bighightpipe_small (2)
+      objectReference: {fileID: 0}
+    - target: {fileID: 4537262186616173632, guid: 6355aae3f5efd0847a1774face5ab65e, type: 3}
+      propertyPath: m_TagString
+      value: Indestructible
       objectReference: {fileID: 0}
     - target: {fileID: 5417833476610773579, guid: 6355aae3f5efd0847a1774face5ab65e, type: 3}
       propertyPath: m_LocalPosition.x
@@ -20959,6 +21319,10 @@ PrefabInstance:
     - target: {fileID: 983350997453425439, guid: eccddf70dbb7cd243a2f37f4aa5c95d6, type: 3}
       propertyPath: m_Name
       value: SM_Bld_Base_45_Wall_01 (4)
+      objectReference: {fileID: 0}
+    - target: {fileID: 983350997453425439, guid: eccddf70dbb7cd243a2f37f4aa5c95d6, type: 3}
+      propertyPath: m_TagString
+      value: Indestructible
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -21157,6 +21521,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SM_Bld_Base_Floor_Combined_01 (2)
       objectReference: {fileID: 0}
+    - target: {fileID: 218261247472390261, guid: 14c2043f70fad33459f6bbab2bef8720, type: 3}
+      propertyPath: m_TagString
+      value: Indestructible
+      objectReference: {fileID: 0}
     - target: {fileID: 598059413250706127, guid: 14c2043f70fad33459f6bbab2bef8720, type: 3}
       propertyPath: m_LocalPosition.x
       value: 2.988
@@ -21223,6 +21591,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SM_Bld_Base_Floor_Combined_01 (36)
       objectReference: {fileID: 0}
+    - target: {fileID: 218261247472390261, guid: 14c2043f70fad33459f6bbab2bef8720, type: 3}
+      propertyPath: m_TagString
+      value: Indestructible
+      objectReference: {fileID: 0}
     - target: {fileID: 598059413250706127, guid: 14c2043f70fad33459f6bbab2bef8720, type: 3}
       propertyPath: m_LocalPosition.x
       value: 2.988
@@ -21288,6 +21660,10 @@ PrefabInstance:
     - target: {fileID: 218261247472390261, guid: 14c2043f70fad33459f6bbab2bef8720, type: 3}
       propertyPath: m_Name
       value: SM_Bld_Base_Floor_Combined_01 (24)
+      objectReference: {fileID: 0}
+    - target: {fileID: 218261247472390261, guid: 14c2043f70fad33459f6bbab2bef8720, type: 3}
+      propertyPath: m_TagString
+      value: Indestructible
       objectReference: {fileID: 0}
     - target: {fileID: 598059413250706127, guid: 14c2043f70fad33459f6bbab2bef8720, type: 3}
       propertyPath: m_LocalPosition.x
@@ -21561,6 +21937,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SM_Bld_Base_Floor_Combined_01 (41)
       objectReference: {fileID: 0}
+    - target: {fileID: 218261247472390261, guid: 14c2043f70fad33459f6bbab2bef8720, type: 3}
+      propertyPath: m_TagString
+      value: Indestructible
+      objectReference: {fileID: 0}
     - target: {fileID: 598059413250706127, guid: 14c2043f70fad33459f6bbab2bef8720, type: 3}
       propertyPath: m_LocalPosition.x
       value: -2.0119991
@@ -21626,6 +22006,10 @@ PrefabInstance:
     - target: {fileID: 218261247472390261, guid: 14c2043f70fad33459f6bbab2bef8720, type: 3}
       propertyPath: m_Name
       value: SM_Bld_Base_Floor_Combined_01 (8)
+      objectReference: {fileID: 0}
+    - target: {fileID: 218261247472390261, guid: 14c2043f70fad33459f6bbab2bef8720, type: 3}
+      propertyPath: m_TagString
+      value: Indestructible
       objectReference: {fileID: 0}
     - target: {fileID: 598059413250706127, guid: 14c2043f70fad33459f6bbab2bef8720, type: 3}
       propertyPath: m_LocalPosition.x
@@ -21873,6 +22257,10 @@ PrefabInstance:
     - target: {fileID: 983350997453425439, guid: eccddf70dbb7cd243a2f37f4aa5c95d6, type: 3}
       propertyPath: m_Name
       value: SM_Bld_Base_45_Wall_01
+      objectReference: {fileID: 0}
+    - target: {fileID: 983350997453425439, guid: eccddf70dbb7cd243a2f37f4aa5c95d6, type: 3}
+      propertyPath: m_TagString
+      value: Indestructible
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -22145,6 +22533,10 @@ PrefabInstance:
     - target: {fileID: 244289930534617555, guid: ba2b5e0c3a018f04187b7c11ae5e3679, type: 3}
       propertyPath: m_Name
       value: pallet (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 244289930534617555, guid: ba2b5e0c3a018f04187b7c11ae5e3679, type: 3}
+      propertyPath: m_TagString
+      value: Indestructible
       objectReference: {fileID: 0}
     - target: {fileID: 8653069220427406119, guid: ba2b5e0c3a018f04187b7c11ae5e3679, type: 3}
       propertyPath: m_LocalPosition.x
@@ -22619,6 +23011,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SM_Bld_Base_Floor_Combined_01 (28)
       objectReference: {fileID: 0}
+    - target: {fileID: 218261247472390261, guid: 14c2043f70fad33459f6bbab2bef8720, type: 3}
+      propertyPath: m_TagString
+      value: Indestructible
+      objectReference: {fileID: 0}
     - target: {fileID: 598059413250706127, guid: 14c2043f70fad33459f6bbab2bef8720, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.48799992
@@ -22803,6 +23199,10 @@ PrefabInstance:
     - target: {fileID: 6380180318284396385, guid: c75ab5267d637734f9645c8b91f3e930, type: 3}
       propertyPath: m_Name
       value: pipe_orangedark (17)
+      objectReference: {fileID: 0}
+    - target: {fileID: 6380180318284396385, guid: c75ab5267d637734f9645c8b91f3e930, type: 3}
+      propertyPath: m_TagString
+      value: Indestructible
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -23075,6 +23475,10 @@ PrefabInstance:
     - target: {fileID: 983350997453425439, guid: eccddf70dbb7cd243a2f37f4aa5c95d6, type: 3}
       propertyPath: m_Name
       value: SM_Bld_Base_45_Wall_01 (9)
+      objectReference: {fileID: 0}
+    - target: {fileID: 983350997453425439, guid: eccddf70dbb7cd243a2f37f4aa5c95d6, type: 3}
+      propertyPath: m_TagString
+      value: Indestructible
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -23631,6 +24035,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: pipe_orangedark (15)
       objectReference: {fileID: 0}
+    - target: {fileID: 6380180318284396385, guid: c75ab5267d637734f9645c8b91f3e930, type: 3}
+      propertyPath: m_TagString
+      value: Indestructible
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -23652,6 +24060,10 @@ PrefabInstance:
     - target: {fileID: 218261247472390261, guid: 14c2043f70fad33459f6bbab2bef8720, type: 3}
       propertyPath: m_Name
       value: SM_Bld_Base_Floor_Combined_01 (6)
+      objectReference: {fileID: 0}
+    - target: {fileID: 218261247472390261, guid: 14c2043f70fad33459f6bbab2bef8720, type: 3}
+      propertyPath: m_TagString
+      value: Indestructible
       objectReference: {fileID: 0}
     - target: {fileID: 598059413250706127, guid: 14c2043f70fad33459f6bbab2bef8720, type: 3}
       propertyPath: m_LocalPosition.x
@@ -23713,6 +24125,10 @@ PrefabInstance:
     - target: {fileID: 218261247472390261, guid: 14c2043f70fad33459f6bbab2bef8720, type: 3}
       propertyPath: m_Name
       value: SM_Bld_Base_Floor_Combined_01 (33)
+      objectReference: {fileID: 0}
+    - target: {fileID: 218261247472390261, guid: 14c2043f70fad33459f6bbab2bef8720, type: 3}
+      propertyPath: m_TagString
+      value: Indestructible
       objectReference: {fileID: 0}
     - target: {fileID: 598059413250706127, guid: 14c2043f70fad33459f6bbab2bef8720, type: 3}
       propertyPath: m_LocalPosition.x
@@ -24057,6 +24473,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: pallet
       objectReference: {fileID: 0}
+    - target: {fileID: 244289930534617555, guid: ba2b5e0c3a018f04187b7c11ae5e3679, type: 3}
+      propertyPath: m_TagString
+      value: Indestructible
+      objectReference: {fileID: 0}
     - target: {fileID: 8653069220427406119, guid: ba2b5e0c3a018f04187b7c11ae5e3679, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.53530943
@@ -24158,6 +24578,10 @@ PrefabInstance:
     - target: {fileID: 983350997453425439, guid: eccddf70dbb7cd243a2f37f4aa5c95d6, type: 3}
       propertyPath: m_Name
       value: SM_Bld_Base_45_Wall_01 (2)
+      objectReference: {fileID: 0}
+    - target: {fileID: 983350997453425439, guid: eccddf70dbb7cd243a2f37f4aa5c95d6, type: 3}
+      propertyPath: m_TagString
+      value: Indestructible
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -24492,6 +24916,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: pallet (4)
       objectReference: {fileID: 0}
+    - target: {fileID: 244289930534617555, guid: ba2b5e0c3a018f04187b7c11ae5e3679, type: 3}
+      propertyPath: m_TagString
+      value: Indestructible
+      objectReference: {fileID: 0}
     - target: {fileID: 8653069220427406119, guid: ba2b5e0c3a018f04187b7c11ae5e3679, type: 3}
       propertyPath: m_LocalPosition.x
       value: -2.460001
@@ -24553,6 +24981,10 @@ PrefabInstance:
     - target: {fileID: 2288406028141466598, guid: c43305611d9783f429ff40efcfe9c852, type: 3}
       propertyPath: m_Name
       value: wall_bigbrick (2)
+      objectReference: {fileID: 0}
+    - target: {fileID: 2288406028141466598, guid: c43305611d9783f429ff40efcfe9c852, type: 3}
+      propertyPath: m_TagString
+      value: Indestructible
       objectReference: {fileID: 0}
     - target: {fileID: 4572870206382554111, guid: c43305611d9783f429ff40efcfe9c852, type: 3}
       propertyPath: m_LocalPosition.x
@@ -24769,6 +25201,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SM_Bld_Base_Floor_Combined_01 (18)
       objectReference: {fileID: 0}
+    - target: {fileID: 218261247472390261, guid: 14c2043f70fad33459f6bbab2bef8720, type: 3}
+      propertyPath: m_TagString
+      value: Indestructible
+      objectReference: {fileID: 0}
     - target: {fileID: 598059413250706127, guid: 14c2043f70fad33459f6bbab2bef8720, type: 3}
       propertyPath: m_LocalPosition.x
       value: -2.0119991
@@ -24835,6 +25271,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SM_Bld_Base_Floor_Combined_01 (44)
       objectReference: {fileID: 0}
+    - target: {fileID: 218261247472390261, guid: 14c2043f70fad33459f6bbab2bef8720, type: 3}
+      propertyPath: m_TagString
+      value: Indestructible
+      objectReference: {fileID: 0}
     - target: {fileID: 598059413250706127, guid: 14c2043f70fad33459f6bbab2bef8720, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.48799992
@@ -24900,6 +25340,10 @@ PrefabInstance:
     - target: {fileID: 218261247472390261, guid: 14c2043f70fad33459f6bbab2bef8720, type: 3}
       propertyPath: m_Name
       value: SM_Bld_Base_Floor_Combined_01 (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 218261247472390261, guid: 14c2043f70fad33459f6bbab2bef8720, type: 3}
+      propertyPath: m_TagString
+      value: Indestructible
       objectReference: {fileID: 0}
     - target: {fileID: 598059413250706127, guid: 14c2043f70fad33459f6bbab2bef8720, type: 3}
       propertyPath: m_LocalPosition.x
@@ -25116,6 +25560,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: pipe_orangedark_corner (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 6007945116293281260, guid: fe78a349a93c12346a4d3182da8eeba0, type: 3}
+      propertyPath: m_TagString
+      value: Indestructible
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -25234,6 +25682,10 @@ PrefabInstance:
     - target: {fileID: 983350997453425439, guid: eccddf70dbb7cd243a2f37f4aa5c95d6, type: 3}
       propertyPath: m_Name
       value: SM_Bld_Base_45_Wall_01 (7)
+      objectReference: {fileID: 0}
+    - target: {fileID: 983350997453425439, guid: eccddf70dbb7cd243a2f37f4aa5c95d6, type: 3}
+      propertyPath: m_TagString
+      value: Indestructible
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -25438,6 +25890,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SM_Bld_Base_Floor_Combined_01 (33)
       objectReference: {fileID: 0}
+    - target: {fileID: 218261247472390261, guid: 14c2043f70fad33459f6bbab2bef8720, type: 3}
+      propertyPath: m_TagString
+      value: Indestructible
+      objectReference: {fileID: 0}
     - target: {fileID: 598059413250706127, guid: 14c2043f70fad33459f6bbab2bef8720, type: 3}
       propertyPath: m_LocalPosition.x
       value: -2.0119991
@@ -25593,6 +26049,10 @@ PrefabInstance:
     - target: {fileID: 218261247472390261, guid: 14c2043f70fad33459f6bbab2bef8720, type: 3}
       propertyPath: m_Name
       value: SM_Bld_Base_Floor_Combined_01 (11)
+      objectReference: {fileID: 0}
+    - target: {fileID: 218261247472390261, guid: 14c2043f70fad33459f6bbab2bef8720, type: 3}
+      propertyPath: m_TagString
+      value: Indestructible
       objectReference: {fileID: 0}
     - target: {fileID: 598059413250706127, guid: 14c2043f70fad33459f6bbab2bef8720, type: 3}
       propertyPath: m_LocalPosition.x
@@ -25944,6 +26404,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: box_opened
       objectReference: {fileID: 0}
+    - target: {fileID: 4415916230558959849, guid: ee7533ae95fdeba4984b9b4bbb8a203e, type: 3}
+      propertyPath: m_TagString
+      value: Indestructible
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -26005,6 +26469,10 @@ PrefabInstance:
     - target: {fileID: 983350997453425439, guid: eccddf70dbb7cd243a2f37f4aa5c95d6, type: 3}
       propertyPath: m_Name
       value: SM_Bld_Base_45_Wall_01 (13)
+      objectReference: {fileID: 0}
+    - target: {fileID: 983350997453425439, guid: eccddf70dbb7cd243a2f37f4aa5c95d6, type: 3}
+      propertyPath: m_TagString
+      value: Indestructible
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -26146,6 +26614,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SM_Bld_Base_Floor_Combined_01 (22)
       objectReference: {fileID: 0}
+    - target: {fileID: 218261247472390261, guid: 14c2043f70fad33459f6bbab2bef8720, type: 3}
+      propertyPath: m_TagString
+      value: Indestructible
+      objectReference: {fileID: 0}
     - target: {fileID: 598059413250706127, guid: 14c2043f70fad33459f6bbab2bef8720, type: 3}
       propertyPath: m_LocalPosition.x
       value: -2.0119991
@@ -26222,6 +26694,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SM_Bld_Base_Floor_Combined_01 (43)
       objectReference: {fileID: 0}
+    - target: {fileID: 218261247472390261, guid: 14c2043f70fad33459f6bbab2bef8720, type: 3}
+      propertyPath: m_TagString
+      value: Indestructible
+      objectReference: {fileID: 0}
     - target: {fileID: 598059413250706127, guid: 14c2043f70fad33459f6bbab2bef8720, type: 3}
       propertyPath: m_LocalPosition.x
       value: 2.988
@@ -26297,7 +26773,7 @@ GameObject:
   - component: {fileID: 1083727261}
   m_Layer: 0
   m_Name: Pared der
-  m_TagString: Untagged
+  m_TagString: Indestructible
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -26493,6 +26969,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SM_Gen_Prop_Aircon_Roof_03
       objectReference: {fileID: 0}
+    - target: {fileID: 4585469192269141785, guid: d6de22598f94e93469612e5e9ca6cf35, type: 3}
+      propertyPath: m_TagString
+      value: Indestructible
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -26628,6 +27108,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SM_Bld_Base_Wall_Trim_01 (2)
       objectReference: {fileID: 0}
+    - target: {fileID: 3469433918781084406, guid: e2d98a84f7bc5234da3ec9787cd05a65, type: 3}
+      propertyPath: m_TagString
+      value: Indestructible
+      objectReference: {fileID: 0}
     - target: {fileID: 4282421219620489292, guid: e2d98a84f7bc5234da3ec9787cd05a65, type: 3}
       propertyPath: m_LocalScale.x
       value: 6.531768
@@ -26738,6 +27222,10 @@ PrefabInstance:
     - target: {fileID: 6380180318284396385, guid: c75ab5267d637734f9645c8b91f3e930, type: 3}
       propertyPath: m_Name
       value: pipe_orangedark (4)
+      objectReference: {fileID: 0}
+    - target: {fileID: 6380180318284396385, guid: c75ab5267d637734f9645c8b91f3e930, type: 3}
+      propertyPath: m_TagString
+      value: Indestructible
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -27329,6 +27817,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SM_Bld_Base_45_Wall_01 (6)
       objectReference: {fileID: 0}
+    - target: {fileID: 983350997453425439, guid: eccddf70dbb7cd243a2f37f4aa5c95d6, type: 3}
+      propertyPath: m_TagString
+      value: Indestructible
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -27682,6 +28174,10 @@ PrefabInstance:
     - target: {fileID: 3469433918781084406, guid: e2d98a84f7bc5234da3ec9787cd05a65, type: 3}
       propertyPath: m_Name
       value: SM_Bld_Base_Wall_Trim_01 (4)
+      objectReference: {fileID: 0}
+    - target: {fileID: 3469433918781084406, guid: e2d98a84f7bc5234da3ec9787cd05a65, type: 3}
+      propertyPath: m_TagString
+      value: Indestructible
       objectReference: {fileID: 0}
     - target: {fileID: 4282421219620489292, guid: e2d98a84f7bc5234da3ec9787cd05a65, type: 3}
       propertyPath: m_LocalScale.x
@@ -28144,6 +28640,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: pipe_orangedark_corner
       objectReference: {fileID: 0}
+    - target: {fileID: 6007945116293281260, guid: fe78a349a93c12346a4d3182da8eeba0, type: 3}
+      propertyPath: m_TagString
+      value: Indestructible
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -28165,6 +28665,10 @@ PrefabInstance:
     - target: {fileID: 218261247472390261, guid: 14c2043f70fad33459f6bbab2bef8720, type: 3}
       propertyPath: m_Name
       value: SM_Bld_Base_Floor_Combined_01 (23)
+      objectReference: {fileID: 0}
+    - target: {fileID: 218261247472390261, guid: 14c2043f70fad33459f6bbab2bef8720, type: 3}
+      propertyPath: m_TagString
+      value: Indestructible
       objectReference: {fileID: 0}
     - target: {fileID: 598059413250706127, guid: 14c2043f70fad33459f6bbab2bef8720, type: 3}
       propertyPath: m_LocalPosition.x
@@ -28559,6 +29063,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: pipe_orangedark (10)
       objectReference: {fileID: 0}
+    - target: {fileID: 6380180318284396385, guid: c75ab5267d637734f9645c8b91f3e930, type: 3}
+      propertyPath: m_TagString
+      value: Indestructible
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -28773,6 +29281,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: pipe_orangedark (13)
       objectReference: {fileID: 0}
+    - target: {fileID: 6380180318284396385, guid: c75ab5267d637734f9645c8b91f3e930, type: 3}
+      propertyPath: m_TagString
+      value: Indestructible
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -28794,6 +29306,10 @@ PrefabInstance:
     - target: {fileID: 4735673862266277512, guid: 5700a83164807704dbe8d7688211f485, type: 3}
       propertyPath: m_Name
       value: SM_Bld_Base_Roof_Trim_01 (2)
+      objectReference: {fileID: 0}
+    - target: {fileID: 4735673862266277512, guid: 5700a83164807704dbe8d7688211f485, type: 3}
+      propertyPath: m_TagString
+      value: Indestructible
       objectReference: {fileID: 0}
     - target: {fileID: 5400852680590201906, guid: 5700a83164807704dbe8d7688211f485, type: 3}
       propertyPath: m_LocalScale.x
@@ -29348,6 +29864,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SM_Bld_Base_45_Wall_01 (4)
       objectReference: {fileID: 0}
+    - target: {fileID: 983350997453425439, guid: eccddf70dbb7cd243a2f37f4aa5c95d6, type: 3}
+      propertyPath: m_TagString
+      value: Indestructible
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -29425,6 +29945,10 @@ PrefabInstance:
     - target: {fileID: 218261247472390261, guid: 14c2043f70fad33459f6bbab2bef8720, type: 3}
       propertyPath: m_Name
       value: SM_Bld_Base_Floor_Combined_01 (25)
+      objectReference: {fileID: 0}
+    - target: {fileID: 218261247472390261, guid: 14c2043f70fad33459f6bbab2bef8720, type: 3}
+      propertyPath: m_TagString
+      value: Indestructible
       objectReference: {fileID: 0}
     - target: {fileID: 598059413250706127, guid: 14c2043f70fad33459f6bbab2bef8720, type: 3}
       propertyPath: m_LocalPosition.x
@@ -29763,6 +30287,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: pipe_orangedark (11)
       objectReference: {fileID: 0}
+    - target: {fileID: 6380180318284396385, guid: c75ab5267d637734f9645c8b91f3e930, type: 3}
+      propertyPath: m_TagString
+      value: Indestructible
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -29920,6 +30448,10 @@ PrefabInstance:
     - target: {fileID: 218261247472390261, guid: 14c2043f70fad33459f6bbab2bef8720, type: 3}
       propertyPath: m_Name
       value: SM_Bld_Base_Floor_Combined_01 (8)
+      objectReference: {fileID: 0}
+    - target: {fileID: 218261247472390261, guid: 14c2043f70fad33459f6bbab2bef8720, type: 3}
+      propertyPath: m_TagString
+      value: Indestructible
       objectReference: {fileID: 0}
     - target: {fileID: 598059413250706127, guid: 14c2043f70fad33459f6bbab2bef8720, type: 3}
       propertyPath: m_LocalPosition.x
@@ -30277,6 +30809,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: pipe_orangelignt
       objectReference: {fileID: 0}
+    - target: {fileID: 4883556769224924022, guid: a86f7ad244ef21c4eaa021bb8da86884, type: 3}
+      propertyPath: m_TagString
+      value: Indestructible
+      objectReference: {fileID: 0}
     - target: {fileID: 5045807056398805852, guid: a86f7ad244ef21c4eaa021bb8da86884, type: 3}
       propertyPath: m_LocalPosition.x
       value: 1.5378383
@@ -30452,6 +30988,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: wall_bigbrick (7)
       objectReference: {fileID: 0}
+    - target: {fileID: 2288406028141466598, guid: c43305611d9783f429ff40efcfe9c852, type: 3}
+      propertyPath: m_TagString
+      value: Indestructible
+      objectReference: {fileID: 0}
     - target: {fileID: 4572870206382554111, guid: c43305611d9783f429ff40efcfe9c852, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -30572,6 +31112,10 @@ PrefabInstance:
     - target: {fileID: 983350997453425439, guid: eccddf70dbb7cd243a2f37f4aa5c95d6, type: 3}
       propertyPath: m_Name
       value: SM_Bld_Base_45_Wall_01 (12)
+      objectReference: {fileID: 0}
+    - target: {fileID: 983350997453425439, guid: eccddf70dbb7cd243a2f37f4aa5c95d6, type: 3}
+      propertyPath: m_TagString
+      value: Indestructible
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -30832,6 +31376,10 @@ PrefabInstance:
     - target: {fileID: 218261247472390261, guid: 14c2043f70fad33459f6bbab2bef8720, type: 3}
       propertyPath: m_Name
       value: SM_Bld_Base_Floor_Combined_01 (10)
+      objectReference: {fileID: 0}
+    - target: {fileID: 218261247472390261, guid: 14c2043f70fad33459f6bbab2bef8720, type: 3}
+      propertyPath: m_TagString
+      value: Indestructible
       objectReference: {fileID: 0}
     - target: {fileID: 598059413250706127, guid: 14c2043f70fad33459f6bbab2bef8720, type: 3}
       propertyPath: m_LocalPosition.x
@@ -31140,6 +31688,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SM_Bld_Base_Floor_Combined_01 (2)
       objectReference: {fileID: 0}
+    - target: {fileID: 218261247472390261, guid: 14c2043f70fad33459f6bbab2bef8720, type: 3}
+      propertyPath: m_TagString
+      value: Indestructible
+      objectReference: {fileID: 0}
     - target: {fileID: 598059413250706127, guid: 14c2043f70fad33459f6bbab2bef8720, type: 3}
       propertyPath: m_LocalPosition.x
       value: 2.988
@@ -31205,6 +31757,10 @@ PrefabInstance:
     - target: {fileID: 2129839366036535584, guid: b31c41d2dbae24e4dba48bafc9ede74a, type: 3}
       propertyPath: m_Name
       value: shelf3 (2)
+      objectReference: {fileID: 0}
+    - target: {fileID: 2129839366036535584, guid: b31c41d2dbae24e4dba48bafc9ede74a, type: 3}
+      propertyPath: m_TagString
+      value: Indestructible
       objectReference: {fileID: 0}
     - target: {fileID: 8069635859854236977, guid: b31c41d2dbae24e4dba48bafc9ede74a, type: 3}
       propertyPath: m_LocalScale.x
@@ -31279,6 +31835,10 @@ PrefabInstance:
     - target: {fileID: 346990622248844987, guid: 898c71d0293fbd5479f4b1891151f1cb, type: 3}
       propertyPath: m_Name
       value: metalpipes
+      objectReference: {fileID: 0}
+    - target: {fileID: 346990622248844987, guid: 898c71d0293fbd5479f4b1891151f1cb, type: 3}
+      propertyPath: m_TagString
+      value: Indestructible
       objectReference: {fileID: 0}
     - target: {fileID: 8888016084050532661, guid: 898c71d0293fbd5479f4b1891151f1cb, type: 3}
       propertyPath: m_LocalPosition.x
@@ -31486,6 +32046,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SM_Bld_Base_Wall_Trim_01
       objectReference: {fileID: 0}
+    - target: {fileID: 3469433918781084406, guid: e2d98a84f7bc5234da3ec9787cd05a65, type: 3}
+      propertyPath: m_TagString
+      value: Indestructible
+      objectReference: {fileID: 0}
     - target: {fileID: 4282421219620489292, guid: e2d98a84f7bc5234da3ec9787cd05a65, type: 3}
       propertyPath: m_LocalScale.x
       value: 1.6952001
@@ -31665,6 +32229,10 @@ PrefabInstance:
     - target: {fileID: 3469433918781084406, guid: e2d98a84f7bc5234da3ec9787cd05a65, type: 3}
       propertyPath: m_Name
       value: SM_Bld_Base_Wall_Trim_01 (2)
+      objectReference: {fileID: 0}
+    - target: {fileID: 3469433918781084406, guid: e2d98a84f7bc5234da3ec9787cd05a65, type: 3}
+      propertyPath: m_TagString
+      value: Indestructible
       objectReference: {fileID: 0}
     - target: {fileID: 4282421219620489292, guid: e2d98a84f7bc5234da3ec9787cd05a65, type: 3}
       propertyPath: m_LocalScale.x
@@ -31911,6 +32479,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: vent
       objectReference: {fileID: 0}
+    - target: {fileID: 6386151828563780047, guid: 006174ab269693b4e9a3380c9adb7744, type: 3}
+      propertyPath: m_TagString
+      value: Indestructible
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -31932,6 +32504,10 @@ PrefabInstance:
     - target: {fileID: 218261247472390261, guid: 14c2043f70fad33459f6bbab2bef8720, type: 3}
       propertyPath: m_Name
       value: SM_Bld_Base_Floor_Combined_01 (7)
+      objectReference: {fileID: 0}
+    - target: {fileID: 218261247472390261, guid: 14c2043f70fad33459f6bbab2bef8720, type: 3}
+      propertyPath: m_TagString
+      value: Indestructible
       objectReference: {fileID: 0}
     - target: {fileID: 598059413250706127, guid: 14c2043f70fad33459f6bbab2bef8720, type: 3}
       propertyPath: m_LocalPosition.x
@@ -32207,6 +32783,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SM_Bld_Base_Floor_Combined_01 (29)
       objectReference: {fileID: 0}
+    - target: {fileID: 218261247472390261, guid: 14c2043f70fad33459f6bbab2bef8720, type: 3}
+      propertyPath: m_TagString
+      value: Indestructible
+      objectReference: {fileID: 0}
     - target: {fileID: 598059413250706127, guid: 14c2043f70fad33459f6bbab2bef8720, type: 3}
       propertyPath: m_LocalPosition.x
       value: -2.0120125
@@ -32272,6 +32852,10 @@ PrefabInstance:
     - target: {fileID: 4735673862266277512, guid: 5700a83164807704dbe8d7688211f485, type: 3}
       propertyPath: m_Name
       value: SM_Bld_Base_Roof_Trim_01 (4)
+      objectReference: {fileID: 0}
+    - target: {fileID: 4735673862266277512, guid: 5700a83164807704dbe8d7688211f485, type: 3}
+      propertyPath: m_TagString
+      value: Indestructible
       objectReference: {fileID: 0}
     - target: {fileID: 5400852680590201906, guid: 5700a83164807704dbe8d7688211f485, type: 3}
       propertyPath: m_LocalScale.x
@@ -32344,6 +32928,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SM_Bld_Base_Floor_Combined_01 (39)
       objectReference: {fileID: 0}
+    - target: {fileID: 218261247472390261, guid: 14c2043f70fad33459f6bbab2bef8720, type: 3}
+      propertyPath: m_TagString
+      value: Indestructible
+      objectReference: {fileID: 0}
     - target: {fileID: 598059413250706127, guid: 14c2043f70fad33459f6bbab2bef8720, type: 3}
       propertyPath: m_LocalPosition.x
       value: -2.0119991
@@ -32409,6 +32997,10 @@ PrefabInstance:
     - target: {fileID: 218261247472390261, guid: 14c2043f70fad33459f6bbab2bef8720, type: 3}
       propertyPath: m_Name
       value: SM_Bld_Base_Floor_Combined_01 (37)
+      objectReference: {fileID: 0}
+    - target: {fileID: 218261247472390261, guid: 14c2043f70fad33459f6bbab2bef8720, type: 3}
+      propertyPath: m_TagString
+      value: Indestructible
       objectReference: {fileID: 0}
     - target: {fileID: 598059413250706127, guid: 14c2043f70fad33459f6bbab2bef8720, type: 3}
       propertyPath: m_LocalPosition.x
@@ -32588,6 +33180,10 @@ PrefabInstance:
     - target: {fileID: 218261247472390261, guid: 14c2043f70fad33459f6bbab2bef8720, type: 3}
       propertyPath: m_Name
       value: SM_Bld_Base_Floor_Combined_01 (3)
+      objectReference: {fileID: 0}
+    - target: {fileID: 218261247472390261, guid: 14c2043f70fad33459f6bbab2bef8720, type: 3}
+      propertyPath: m_TagString
+      value: Indestructible
       objectReference: {fileID: 0}
     - target: {fileID: 598059413250706127, guid: 14c2043f70fad33459f6bbab2bef8720, type: 3}
       propertyPath: m_LocalPosition.x
@@ -32808,6 +33404,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SM_Bld_Base_Roof_Trim_01 (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 4735673862266277512, guid: 5700a83164807704dbe8d7688211f485, type: 3}
+      propertyPath: m_TagString
+      value: Indestructible
+      objectReference: {fileID: 0}
     - target: {fileID: 5400852680590201906, guid: 5700a83164807704dbe8d7688211f485, type: 3}
       propertyPath: m_LocalScale.x
       value: 9.274381
@@ -32988,6 +33588,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SM_Bld_Base_Floor_Combined_01 (39)
       objectReference: {fileID: 0}
+    - target: {fileID: 218261247472390261, guid: 14c2043f70fad33459f6bbab2bef8720, type: 3}
+      propertyPath: m_TagString
+      value: Indestructible
+      objectReference: {fileID: 0}
     - target: {fileID: 598059413250706127, guid: 14c2043f70fad33459f6bbab2bef8720, type: 3}
       propertyPath: m_LocalPosition.x
       value: 2.99
@@ -33053,6 +33657,10 @@ PrefabInstance:
     - target: {fileID: 218261247472390261, guid: 14c2043f70fad33459f6bbab2bef8720, type: 3}
       propertyPath: m_Name
       value: SM_Bld_Base_Floor_Combined_01 (19)
+      objectReference: {fileID: 0}
+    - target: {fileID: 218261247472390261, guid: 14c2043f70fad33459f6bbab2bef8720, type: 3}
+      propertyPath: m_TagString
+      value: Indestructible
       objectReference: {fileID: 0}
     - target: {fileID: 598059413250706127, guid: 14c2043f70fad33459f6bbab2bef8720, type: 3}
       propertyPath: m_LocalPosition.x
@@ -33328,6 +33936,10 @@ PrefabInstance:
     - target: {fileID: 4735673862266277512, guid: 5700a83164807704dbe8d7688211f485, type: 3}
       propertyPath: m_Name
       value: SM_Bld_Base_Roof_Trim_01 (3)
+      objectReference: {fileID: 0}
+    - target: {fileID: 4735673862266277512, guid: 5700a83164807704dbe8d7688211f485, type: 3}
+      propertyPath: m_TagString
+      value: Indestructible
       objectReference: {fileID: 0}
     - target: {fileID: 5400852680590201906, guid: 5700a83164807704dbe8d7688211f485, type: 3}
       propertyPath: m_LocalScale.x
@@ -34204,6 +34816,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SM_Bld_Base_Floor_Combined_01 (34)
       objectReference: {fileID: 0}
+    - target: {fileID: 218261247472390261, guid: 14c2043f70fad33459f6bbab2bef8720, type: 3}
+      propertyPath: m_TagString
+      value: Indestructible
+      objectReference: {fileID: 0}
     - target: {fileID: 598059413250706127, guid: 14c2043f70fad33459f6bbab2bef8720, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.48799992
@@ -34383,6 +34999,10 @@ PrefabInstance:
     - target: {fileID: 218261247472390261, guid: 14c2043f70fad33459f6bbab2bef8720, type: 3}
       propertyPath: m_Name
       value: SM_Bld_Base_Floor_Combined_01 (14)
+      objectReference: {fileID: 0}
+    - target: {fileID: 218261247472390261, guid: 14c2043f70fad33459f6bbab2bef8720, type: 3}
+      propertyPath: m_TagString
+      value: Indestructible
       objectReference: {fileID: 0}
     - target: {fileID: 598059413250706127, guid: 14c2043f70fad33459f6bbab2bef8720, type: 3}
       propertyPath: m_LocalPosition.x
@@ -34799,6 +35419,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SM_Bld_Base_Door_Large_01
       objectReference: {fileID: 0}
+    - target: {fileID: 3872603109300624465, guid: 2a0efb0670c655d4ea90059acb092716, type: 3}
+      propertyPath: m_TagString
+      value: Indestructible
+      objectReference: {fileID: 0}
     - target: {fileID: 4536691277036488427, guid: 2a0efb0670c655d4ea90059acb092716, type: 3}
       propertyPath: m_LocalPosition.x
       value: 2.9770002
@@ -34896,6 +35520,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SM_Bld_Base_45_Wall_01 (3)
       objectReference: {fileID: 0}
+    - target: {fileID: 983350997453425439, guid: eccddf70dbb7cd243a2f37f4aa5c95d6, type: 3}
+      propertyPath: m_TagString
+      value: Indestructible
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -34958,6 +35586,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SM_Bld_Base_45_Wall_01
       objectReference: {fileID: 0}
+    - target: {fileID: 983350997453425439, guid: eccddf70dbb7cd243a2f37f4aa5c95d6, type: 3}
+      propertyPath: m_TagString
+      value: Indestructible
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -34979,6 +35611,10 @@ PrefabInstance:
     - target: {fileID: 4735673862266277512, guid: 5700a83164807704dbe8d7688211f485, type: 3}
       propertyPath: m_Name
       value: SM_Bld_Base_Roof_Trim_01 (2)
+      objectReference: {fileID: 0}
+    - target: {fileID: 4735673862266277512, guid: 5700a83164807704dbe8d7688211f485, type: 3}
+      propertyPath: m_TagString
+      value: Indestructible
       objectReference: {fileID: 0}
     - target: {fileID: 5400852680590201906, guid: 5700a83164807704dbe8d7688211f485, type: 3}
       propertyPath: m_LocalScale.x
@@ -35045,6 +35681,10 @@ PrefabInstance:
     - target: {fileID: 218261247472390261, guid: 14c2043f70fad33459f6bbab2bef8720, type: 3}
       propertyPath: m_Name
       value: SM_Bld_Base_Floor_Combined_01 (34)
+      objectReference: {fileID: 0}
+    - target: {fileID: 218261247472390261, guid: 14c2043f70fad33459f6bbab2bef8720, type: 3}
+      propertyPath: m_TagString
+      value: Indestructible
       objectReference: {fileID: 0}
     - target: {fileID: 598059413250706127, guid: 14c2043f70fad33459f6bbab2bef8720, type: 3}
       propertyPath: m_LocalPosition.x
@@ -35378,6 +36018,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SM_Bld_Base_45_Wall_01 (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 983350997453425439, guid: eccddf70dbb7cd243a2f37f4aa5c95d6, type: 3}
+      propertyPath: m_TagString
+      value: Indestructible
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -35399,6 +36043,10 @@ PrefabInstance:
     - target: {fileID: 218261247472390261, guid: 14c2043f70fad33459f6bbab2bef8720, type: 3}
       propertyPath: m_Name
       value: SM_Bld_Base_Floor_Combined_01 (36)
+      objectReference: {fileID: 0}
+    - target: {fileID: 218261247472390261, guid: 14c2043f70fad33459f6bbab2bef8720, type: 3}
+      propertyPath: m_TagString
+      value: Indestructible
       objectReference: {fileID: 0}
     - target: {fileID: 598059413250706127, guid: 14c2043f70fad33459f6bbab2bef8720, type: 3}
       propertyPath: m_LocalPosition.x
@@ -35810,6 +36458,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SM_Gen_Bld_Pipe_Straight_03
       objectReference: {fileID: 0}
+    - target: {fileID: 8305309674477336414, guid: 74041acf00146d442b15dec90c15c5cc, type: 3}
+      propertyPath: m_TagString
+      value: Indestructible
+      objectReference: {fileID: 0}
     - target: {fileID: 8649641963997785572, guid: 74041acf00146d442b15dec90c15c5cc, type: 3}
       propertyPath: m_LocalPosition.x
       value: 2.3809996
@@ -36059,6 +36711,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SM_Bld_Base_Floor_Combined_01 (46)
       objectReference: {fileID: 0}
+    - target: {fileID: 218261247472390261, guid: 14c2043f70fad33459f6bbab2bef8720, type: 3}
+      propertyPath: m_TagString
+      value: Indestructible
+      objectReference: {fileID: 0}
     - target: {fileID: 598059413250706127, guid: 14c2043f70fad33459f6bbab2bef8720, type: 3}
       propertyPath: m_LocalPosition.x
       value: -2.0119991
@@ -36278,6 +36934,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: pipe_orangedark_corner (2)
       objectReference: {fileID: 0}
+    - target: {fileID: 6007945116293281260, guid: fe78a349a93c12346a4d3182da8eeba0, type: 3}
+      propertyPath: m_TagString
+      value: Indestructible
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -36299,6 +36959,10 @@ PrefabInstance:
     - target: {fileID: 8176533473269931938, guid: e49c83dade1b1db4b92095a418f6a782, type: 3}
       propertyPath: m_Name
       value: SM_Gen_Prop_Aircon_Roof_01
+      objectReference: {fileID: 0}
+    - target: {fileID: 8176533473269931938, guid: e49c83dade1b1db4b92095a418f6a782, type: 3}
+      propertyPath: m_TagString
+      value: Indestructible
       objectReference: {fileID: 0}
     - target: {fileID: 8805436070371525912, guid: e49c83dade1b1db4b92095a418f6a782, type: 3}
       propertyPath: m_LocalPosition.x
@@ -36359,7 +37023,7 @@ GameObject:
   - component: {fileID: 1498016821}
   m_Layer: 0
   m_Name: Casila 2 (19)
-  m_TagString: Untagged
+  m_TagString: Indestructible
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -36398,7 +37062,7 @@ MeshCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 5
-  m_Convex: 0
+  m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!23 &1498016822
@@ -36480,6 +37144,10 @@ PrefabInstance:
     - target: {fileID: 2288406028141466598, guid: c43305611d9783f429ff40efcfe9c852, type: 3}
       propertyPath: m_Name
       value: wall_bigbrick (4)
+      objectReference: {fileID: 0}
+    - target: {fileID: 2288406028141466598, guid: c43305611d9783f429ff40efcfe9c852, type: 3}
+      propertyPath: m_TagString
+      value: Indestructible
       objectReference: {fileID: 0}
     - target: {fileID: 4572870206382554111, guid: c43305611d9783f429ff40efcfe9c852, type: 3}
       propertyPath: m_LocalPosition.x
@@ -36989,6 +37657,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SM_Bld_Base_Floor_Combined_01 (19)
       objectReference: {fileID: 0}
+    - target: {fileID: 218261247472390261, guid: 14c2043f70fad33459f6bbab2bef8720, type: 3}
+      propertyPath: m_TagString
+      value: Indestructible
+      objectReference: {fileID: 0}
     - target: {fileID: 598059413250706127, guid: 14c2043f70fad33459f6bbab2bef8720, type: 3}
       propertyPath: m_LocalPosition.x
       value: -2.0119991
@@ -37267,6 +37939,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SM_Bld_Base_Floor_Combined_01 (15)
       objectReference: {fileID: 0}
+    - target: {fileID: 218261247472390261, guid: 14c2043f70fad33459f6bbab2bef8720, type: 3}
+      propertyPath: m_TagString
+      value: Indestructible
+      objectReference: {fileID: 0}
     - target: {fileID: 598059413250706127, guid: 14c2043f70fad33459f6bbab2bef8720, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.48799992
@@ -37415,6 +38091,10 @@ PrefabInstance:
     - target: {fileID: 2288406028141466598, guid: c43305611d9783f429ff40efcfe9c852, type: 3}
       propertyPath: m_Name
       value: wall_bigbrick (5)
+      objectReference: {fileID: 0}
+    - target: {fileID: 2288406028141466598, guid: c43305611d9783f429ff40efcfe9c852, type: 3}
+      propertyPath: m_TagString
+      value: Indestructible
       objectReference: {fileID: 0}
     - target: {fileID: 4572870206382554111, guid: c43305611d9783f429ff40efcfe9c852, type: 3}
       propertyPath: m_LocalPosition.x
@@ -37696,6 +38376,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SM_Bld_Base_Floor_Combined_01 (45)
       objectReference: {fileID: 0}
+    - target: {fileID: 218261247472390261, guid: 14c2043f70fad33459f6bbab2bef8720, type: 3}
+      propertyPath: m_TagString
+      value: Indestructible
+      objectReference: {fileID: 0}
     - target: {fileID: 598059413250706127, guid: 14c2043f70fad33459f6bbab2bef8720, type: 3}
       propertyPath: m_LocalPosition.x
       value: 2.988
@@ -37802,6 +38486,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: pipe_orangedark (12)
       objectReference: {fileID: 0}
+    - target: {fileID: 6380180318284396385, guid: c75ab5267d637734f9645c8b91f3e930, type: 3}
+      propertyPath: m_TagString
+      value: Indestructible
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -37868,6 +38556,10 @@ PrefabInstance:
     - target: {fileID: 6380180318284396385, guid: c75ab5267d637734f9645c8b91f3e930, type: 3}
       propertyPath: m_Name
       value: pipe_orangedark (8)
+      objectReference: {fileID: 0}
+    - target: {fileID: 6380180318284396385, guid: c75ab5267d637734f9645c8b91f3e930, type: 3}
+      propertyPath: m_TagString
+      value: Indestructible
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -38004,6 +38696,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SM_Bld_Base_Floor_Combined_01 (26)
       objectReference: {fileID: 0}
+    - target: {fileID: 218261247472390261, guid: 14c2043f70fad33459f6bbab2bef8720, type: 3}
+      propertyPath: m_TagString
+      value: Indestructible
+      objectReference: {fileID: 0}
     - target: {fileID: 598059413250706127, guid: 14c2043f70fad33459f6bbab2bef8720, type: 3}
       propertyPath: m_LocalPosition.x
       value: -2.0119991
@@ -38064,6 +38760,10 @@ PrefabInstance:
     - target: {fileID: 218261247472390261, guid: 14c2043f70fad33459f6bbab2bef8720, type: 3}
       propertyPath: m_Name
       value: SM_Bld_Base_Floor_Combined_01 (6)
+      objectReference: {fileID: 0}
+    - target: {fileID: 218261247472390261, guid: 14c2043f70fad33459f6bbab2bef8720, type: 3}
+      propertyPath: m_TagString
+      value: Indestructible
       objectReference: {fileID: 0}
     - target: {fileID: 598059413250706127, guid: 14c2043f70fad33459f6bbab2bef8720, type: 3}
       propertyPath: m_LocalPosition.x
@@ -38285,6 +38985,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SM_Gen_Bld_Pipe_Cap_02
       objectReference: {fileID: 0}
+    - target: {fileID: 2697173135071063382, guid: cbaa9d009d132ea45abad114375b0393, type: 3}
+      propertyPath: m_TagString
+      value: Indestructible
+      objectReference: {fileID: 0}
     - target: {fileID: 3325231032345786348, guid: cbaa9d009d132ea45abad114375b0393, type: 3}
       propertyPath: m_LocalPosition.x
       value: 2.3710003
@@ -38346,6 +39050,10 @@ PrefabInstance:
     - target: {fileID: 218261247472390261, guid: 14c2043f70fad33459f6bbab2bef8720, type: 3}
       propertyPath: m_Name
       value: SM_Bld_Base_Floor_Combined_01 (27)
+      objectReference: {fileID: 0}
+    - target: {fileID: 218261247472390261, guid: 14c2043f70fad33459f6bbab2bef8720, type: 3}
+      propertyPath: m_TagString
+      value: Indestructible
       objectReference: {fileID: 0}
     - target: {fileID: 598059413250706127, guid: 14c2043f70fad33459f6bbab2bef8720, type: 3}
       propertyPath: m_LocalPosition.x
@@ -38412,6 +39120,10 @@ PrefabInstance:
     - target: {fileID: 6261031452048728738, guid: f9f416bf82370274186e55860447f632, type: 3}
       propertyPath: m_Name
       value: trashcan_brown
+      objectReference: {fileID: 0}
+    - target: {fileID: 6261031452048728738, guid: f9f416bf82370274186e55860447f632, type: 3}
+      propertyPath: m_TagString
+      value: Indestructible
       objectReference: {fileID: 0}
     - target: {fileID: 8752018066703672209, guid: f9f416bf82370274186e55860447f632, type: 3}
       propertyPath: m_LocalPosition.x
@@ -38612,6 +39324,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SM_Bld_Base_Floor_Combined_01 (44)
       objectReference: {fileID: 0}
+    - target: {fileID: 218261247472390261, guid: 14c2043f70fad33459f6bbab2bef8720, type: 3}
+      propertyPath: m_TagString
+      value: Indestructible
+      objectReference: {fileID: 0}
     - target: {fileID: 598059413250706127, guid: 14c2043f70fad33459f6bbab2bef8720, type: 3}
       propertyPath: m_LocalPosition.x
       value: -2.01
@@ -38735,6 +39451,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SM_Bld_Base_Wall_Trim_01 (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 3469433918781084406, guid: e2d98a84f7bc5234da3ec9787cd05a65, type: 3}
+      propertyPath: m_TagString
+      value: Indestructible
+      objectReference: {fileID: 0}
     - target: {fileID: 4282421219620489292, guid: e2d98a84f7bc5234da3ec9787cd05a65, type: 3}
       propertyPath: m_LocalScale.x
       value: 6.531768
@@ -38850,6 +39570,10 @@ PrefabInstance:
     - target: {fileID: 6380180318284396385, guid: c75ab5267d637734f9645c8b91f3e930, type: 3}
       propertyPath: m_Name
       value: pipe_orangedark (5)
+      objectReference: {fileID: 0}
+    - target: {fileID: 6380180318284396385, guid: c75ab5267d637734f9645c8b91f3e930, type: 3}
+      propertyPath: m_TagString
+      value: Indestructible
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -39093,6 +39817,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SM_Gen_Prop_Aircon_Roof_02
       objectReference: {fileID: 0}
+    - target: {fileID: 631999116285414907, guid: a1df29bf5b00fca43a8c4027a7e0aaf4, type: 3}
+      propertyPath: m_TagString
+      value: Indestructible
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -39119,6 +39847,10 @@ PrefabInstance:
     - target: {fileID: 8305309674477336414, guid: 74041acf00146d442b15dec90c15c5cc, type: 3}
       propertyPath: m_Name
       value: SM_Gen_Bld_Pipe_Straight_03 (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 8305309674477336414, guid: 74041acf00146d442b15dec90c15c5cc, type: 3}
+      propertyPath: m_TagString
+      value: Indestructible
       objectReference: {fileID: 0}
     - target: {fileID: 8649641963997785572, guid: 74041acf00146d442b15dec90c15c5cc, type: 3}
       propertyPath: m_LocalPosition.x
@@ -39511,6 +40243,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SM_Gen_Prop_Aircon_Roof_01
       objectReference: {fileID: 0}
+    - target: {fileID: 8176533473269931938, guid: e49c83dade1b1db4b92095a418f6a782, type: 3}
+      propertyPath: m_TagString
+      value: Indestructible
+      objectReference: {fileID: 0}
     - target: {fileID: 8805436070371525912, guid: e49c83dade1b1db4b92095a418f6a782, type: 3}
       propertyPath: m_LocalPosition.x
       value: 1.7676392
@@ -39576,6 +40312,10 @@ PrefabInstance:
     - target: {fileID: 4735673862266277512, guid: 5700a83164807704dbe8d7688211f485, type: 3}
       propertyPath: m_Name
       value: SM_Bld_Base_Roof_Trim_01 (3)
+      objectReference: {fileID: 0}
+    - target: {fileID: 4735673862266277512, guid: 5700a83164807704dbe8d7688211f485, type: 3}
+      propertyPath: m_TagString
+      value: Indestructible
       objectReference: {fileID: 0}
     - target: {fileID: 5400852680590201906, guid: 5700a83164807704dbe8d7688211f485, type: 3}
       propertyPath: m_LocalScale.x
@@ -39683,6 +40423,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: trashcan_green
       objectReference: {fileID: 0}
+    - target: {fileID: 9200173394024711020, guid: 91186e4856a4bb740a1cbefe0c3d275c, type: 3}
+      propertyPath: m_TagString
+      value: Indestructible
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -39704,6 +40448,10 @@ PrefabInstance:
     - target: {fileID: 218261247472390261, guid: 14c2043f70fad33459f6bbab2bef8720, type: 3}
       propertyPath: m_Name
       value: SM_Bld_Base_Floor_Combined_01 (9)
+      objectReference: {fileID: 0}
+    - target: {fileID: 218261247472390261, guid: 14c2043f70fad33459f6bbab2bef8720, type: 3}
+      propertyPath: m_TagString
+      value: Indestructible
       objectReference: {fileID: 0}
     - target: {fileID: 598059413250706127, guid: 14c2043f70fad33459f6bbab2bef8720, type: 3}
       propertyPath: m_LocalPosition.x
@@ -39848,6 +40596,10 @@ PrefabInstance:
     - target: {fileID: 218261247472390261, guid: 14c2043f70fad33459f6bbab2bef8720, type: 3}
       propertyPath: m_Name
       value: SM_Bld_Base_Floor_Combined_01 (5)
+      objectReference: {fileID: 0}
+    - target: {fileID: 218261247472390261, guid: 14c2043f70fad33459f6bbab2bef8720, type: 3}
+      propertyPath: m_TagString
+      value: Indestructible
       objectReference: {fileID: 0}
     - target: {fileID: 598059413250706127, guid: 14c2043f70fad33459f6bbab2bef8720, type: 3}
       propertyPath: m_LocalPosition.x
@@ -40027,6 +40779,10 @@ PrefabInstance:
     - target: {fileID: 7210732649774539527, guid: 73db9658465380f408ee0529a962938c, type: 3}
       propertyPath: m_Name
       value: coil_light
+      objectReference: {fileID: 0}
+    - target: {fileID: 7210732649774539527, guid: 73db9658465380f408ee0529a962938c, type: 3}
+      propertyPath: m_TagString
+      value: Indestructible
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -40231,7 +40987,7 @@ GameObject:
   - component: {fileID: 1705996727}
   m_Layer: 0
   m_Name: Luz 2
-  m_TagString: Untagged
+  m_TagString: Indestructible
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -40529,6 +41285,10 @@ PrefabInstance:
     - target: {fileID: 983350997453425439, guid: eccddf70dbb7cd243a2f37f4aa5c95d6, type: 3}
       propertyPath: m_Name
       value: SM_Bld_Base_45_Wall_01 (11)
+      objectReference: {fileID: 0}
+    - target: {fileID: 983350997453425439, guid: eccddf70dbb7cd243a2f37f4aa5c95d6, type: 3}
+      propertyPath: m_TagString
+      value: Indestructible
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -40852,6 +41612,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SM_Bld_Base_Floor_Combined_01 (42)
       objectReference: {fileID: 0}
+    - target: {fileID: 218261247472390261, guid: 14c2043f70fad33459f6bbab2bef8720, type: 3}
+      propertyPath: m_TagString
+      value: Indestructible
+      objectReference: {fileID: 0}
     - target: {fileID: 598059413250706127, guid: 14c2043f70fad33459f6bbab2bef8720, type: 3}
       propertyPath: m_LocalPosition.x
       value: 2.99
@@ -40957,6 +41721,10 @@ PrefabInstance:
     - target: {fileID: 7363129911535224152, guid: ec70bcb9f14a5f6469a9228ff7ccd4a6, type: 3}
       propertyPath: m_Name
       value: box_two
+      objectReference: {fileID: 0}
+    - target: {fileID: 7363129911535224152, guid: ec70bcb9f14a5f6469a9228ff7ccd4a6, type: 3}
+      propertyPath: m_TagString
+      value: Indestructible
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -41164,6 +41932,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: wall_bigbrick_window
       objectReference: {fileID: 0}
+    - target: {fileID: 7149563675170420664, guid: cdedbee85a6d5e742b8e93841978a274, type: 3}
+      propertyPath: m_TagString
+      value: Indestructible
+      objectReference: {fileID: 0}
     - target: {fileID: 8123323965371703376, guid: cdedbee85a6d5e742b8e93841978a274, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
@@ -41235,6 +42007,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: vent_corner
       objectReference: {fileID: 0}
+    - target: {fileID: 7555865226883729135, guid: 8d7b51298a8f3ee4783e2463a21c0038, type: 3}
+      propertyPath: m_TagString
+      value: Indestructible
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -41256,6 +42032,10 @@ PrefabInstance:
     - target: {fileID: 218261247472390261, guid: 14c2043f70fad33459f6bbab2bef8720, type: 3}
       propertyPath: m_Name
       value: SM_Bld_Base_Floor_Combined_01 (12)
+      objectReference: {fileID: 0}
+    - target: {fileID: 218261247472390261, guid: 14c2043f70fad33459f6bbab2bef8720, type: 3}
+      propertyPath: m_TagString
+      value: Indestructible
       objectReference: {fileID: 0}
     - target: {fileID: 598059413250706127, guid: 14c2043f70fad33459f6bbab2bef8720, type: 3}
       propertyPath: m_LocalPosition.x
@@ -41436,6 +42216,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SM_Bld_Base_Floor_Combined_01 (32)
       objectReference: {fileID: 0}
+    - target: {fileID: 218261247472390261, guid: 14c2043f70fad33459f6bbab2bef8720, type: 3}
+      propertyPath: m_TagString
+      value: Indestructible
+      objectReference: {fileID: 0}
     - target: {fileID: 598059413250706127, guid: 14c2043f70fad33459f6bbab2bef8720, type: 3}
       propertyPath: m_LocalPosition.x
       value: 2.988
@@ -41603,6 +42387,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SM_Bld_Base_45_Wall_01 (7)
       objectReference: {fileID: 0}
+    - target: {fileID: 983350997453425439, guid: eccddf70dbb7cd243a2f37f4aa5c95d6, type: 3}
+      propertyPath: m_TagString
+      value: Indestructible
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -41742,6 +42530,10 @@ PrefabInstance:
     - target: {fileID: 3872603109300624465, guid: 2a0efb0670c655d4ea90059acb092716, type: 3}
       propertyPath: m_Name
       value: SM_Bld_Base_Door_Large_01 (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 3872603109300624465, guid: 2a0efb0670c655d4ea90059acb092716, type: 3}
+      propertyPath: m_TagString
+      value: Indestructible
       objectReference: {fileID: 0}
     - target: {fileID: 4536691277036488427, guid: 2a0efb0670c655d4ea90059acb092716, type: 3}
       propertyPath: m_LocalPosition.x
@@ -42018,6 +42810,10 @@ PrefabInstance:
     - target: {fileID: 218261247472390261, guid: 14c2043f70fad33459f6bbab2bef8720, type: 3}
       propertyPath: m_Name
       value: SM_Bld_Base_Floor_Combined_01 (20)
+      objectReference: {fileID: 0}
+    - target: {fileID: 218261247472390261, guid: 14c2043f70fad33459f6bbab2bef8720, type: 3}
+      propertyPath: m_TagString
+      value: Indestructible
       objectReference: {fileID: 0}
     - target: {fileID: 598059413250706127, guid: 14c2043f70fad33459f6bbab2bef8720, type: 3}
       propertyPath: m_LocalPosition.x
@@ -42453,6 +43249,10 @@ PrefabInstance:
     - target: {fileID: 218261247472390261, guid: 14c2043f70fad33459f6bbab2bef8720, type: 3}
       propertyPath: m_Name
       value: SM_Bld_Base_Floor_Combined_01 (47)
+      objectReference: {fileID: 0}
+    - target: {fileID: 218261247472390261, guid: 14c2043f70fad33459f6bbab2bef8720, type: 3}
+      propertyPath: m_TagString
+      value: Indestructible
       objectReference: {fileID: 0}
     - target: {fileID: 598059413250706127, guid: 14c2043f70fad33459f6bbab2bef8720, type: 3}
       propertyPath: m_LocalPosition.x
@@ -42995,6 +43795,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: bighightpipe_small (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 4537262186616173632, guid: 6355aae3f5efd0847a1774face5ab65e, type: 3}
+      propertyPath: m_TagString
+      value: Indestructible
+      objectReference: {fileID: 0}
     - target: {fileID: 5417833476610773579, guid: 6355aae3f5efd0847a1774face5ab65e, type: 3}
       propertyPath: m_LocalPosition.x
       value: -2.28
@@ -43176,6 +43980,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: woodenbox_x
       objectReference: {fileID: 0}
+    - target: {fileID: 1357037131130400367, guid: 7a17f6fa89a62d04faf48289e07bce2e, type: 3}
+      propertyPath: m_TagString
+      value: Indestructible
+      objectReference: {fileID: 0}
     - target: {fileID: 9150499792419321911, guid: 7a17f6fa89a62d04faf48289e07bce2e, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.12474409
@@ -43238,6 +44046,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SM_Bld_Base_Floor_Combined_01 (25)
       objectReference: {fileID: 0}
+    - target: {fileID: 218261247472390261, guid: 14c2043f70fad33459f6bbab2bef8720, type: 3}
+      propertyPath: m_TagString
+      value: Indestructible
+      objectReference: {fileID: 0}
     - target: {fileID: 598059413250706127, guid: 14c2043f70fad33459f6bbab2bef8720, type: 3}
       propertyPath: m_LocalPosition.x
       value: -2.0119991
@@ -43298,6 +44110,10 @@ PrefabInstance:
     - target: {fileID: 3872603109300624465, guid: 2a0efb0670c655d4ea90059acb092716, type: 3}
       propertyPath: m_Name
       value: SM_Bld_Base_Door_Large_01 (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 3872603109300624465, guid: 2a0efb0670c655d4ea90059acb092716, type: 3}
+      propertyPath: m_TagString
+      value: Indestructible
       objectReference: {fileID: 0}
     - target: {fileID: 4536691277036488427, guid: 2a0efb0670c655d4ea90059acb092716, type: 3}
       propertyPath: m_LocalPosition.x
@@ -43842,6 +44658,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SM_Bld_Base_Floor_Combined_01 (5)
       objectReference: {fileID: 0}
+    - target: {fileID: 218261247472390261, guid: 14c2043f70fad33459f6bbab2bef8720, type: 3}
+      propertyPath: m_TagString
+      value: Indestructible
+      objectReference: {fileID: 0}
     - target: {fileID: 598059413250706127, guid: 14c2043f70fad33459f6bbab2bef8720, type: 3}
       propertyPath: m_LocalPosition.x
       value: 2.988
@@ -44258,6 +45078,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SM_Bld_Base_45_Wall_01 (10)
       objectReference: {fileID: 0}
+    - target: {fileID: 983350997453425439, guid: eccddf70dbb7cd243a2f37f4aa5c95d6, type: 3}
+      propertyPath: m_TagString
+      value: Indestructible
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -44284,7 +45108,7 @@ GameObject:
   - component: {fileID: 1875282903}
   m_Layer: 0
   m_Name: Luz 1
-  m_TagString: Untagged
+  m_TagString: Indestructible
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -44363,6 +45187,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: box_two (2)
       objectReference: {fileID: 0}
+    - target: {fileID: 7363129911535224152, guid: ec70bcb9f14a5f6469a9228ff7ccd4a6, type: 3}
+      propertyPath: m_TagString
+      value: Indestructible
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -44384,6 +45212,10 @@ PrefabInstance:
     - target: {fileID: 218261247472390261, guid: 14c2043f70fad33459f6bbab2bef8720, type: 3}
       propertyPath: m_Name
       value: SM_Bld_Base_Floor_Combined_01 (48)
+      objectReference: {fileID: 0}
+    - target: {fileID: 218261247472390261, guid: 14c2043f70fad33459f6bbab2bef8720, type: 3}
+      propertyPath: m_TagString
+      value: Indestructible
       objectReference: {fileID: 0}
     - target: {fileID: 598059413250706127, guid: 14c2043f70fad33459f6bbab2bef8720, type: 3}
       propertyPath: m_LocalPosition.x
@@ -44450,6 +45282,10 @@ PrefabInstance:
     - target: {fileID: 2129839366036535584, guid: b31c41d2dbae24e4dba48bafc9ede74a, type: 3}
       propertyPath: m_Name
       value: shelf3 (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 2129839366036535584, guid: b31c41d2dbae24e4dba48bafc9ede74a, type: 3}
+      propertyPath: m_TagString
+      value: Indestructible
       objectReference: {fileID: 0}
     - target: {fileID: 8069635859854236977, guid: b31c41d2dbae24e4dba48bafc9ede74a, type: 3}
       propertyPath: m_LocalScale.x
@@ -44590,6 +45426,10 @@ PrefabInstance:
     - target: {fileID: 218261247472390261, guid: 14c2043f70fad33459f6bbab2bef8720, type: 3}
       propertyPath: m_Name
       value: SM_Bld_Base_Floor_Combined_01 (16)
+      objectReference: {fileID: 0}
+    - target: {fileID: 218261247472390261, guid: 14c2043f70fad33459f6bbab2bef8720, type: 3}
+      propertyPath: m_TagString
+      value: Indestructible
       objectReference: {fileID: 0}
     - target: {fileID: 598059413250706127, guid: 14c2043f70fad33459f6bbab2bef8720, type: 3}
       propertyPath: m_LocalPosition.x
@@ -44843,6 +45683,10 @@ PrefabInstance:
     - target: {fileID: 244289930534617555, guid: ba2b5e0c3a018f04187b7c11ae5e3679, type: 3}
       propertyPath: m_Name
       value: pallet (5)
+      objectReference: {fileID: 0}
+    - target: {fileID: 244289930534617555, guid: ba2b5e0c3a018f04187b7c11ae5e3679, type: 3}
+      propertyPath: m_TagString
+      value: Indestructible
       objectReference: {fileID: 0}
     - target: {fileID: 8653069220427406119, guid: ba2b5e0c3a018f04187b7c11ae5e3679, type: 3}
       propertyPath: m_LocalPosition.x
@@ -45129,6 +45973,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SM_Bld_Base_Roof_Trim_01 (4)
       objectReference: {fileID: 0}
+    - target: {fileID: 4735673862266277512, guid: 5700a83164807704dbe8d7688211f485, type: 3}
+      propertyPath: m_TagString
+      value: Indestructible
+      objectReference: {fileID: 0}
     - target: {fileID: 5400852680590201906, guid: 5700a83164807704dbe8d7688211f485, type: 3}
       propertyPath: m_LocalScale.x
       value: 4.6714997
@@ -45348,6 +46196,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: pipe_orangedark
       objectReference: {fileID: 0}
+    - target: {fileID: 6380180318284396385, guid: c75ab5267d637734f9645c8b91f3e930, type: 3}
+      propertyPath: m_TagString
+      value: Indestructible
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -45519,6 +46371,10 @@ PrefabInstance:
     - target: {fileID: 983350997453425439, guid: eccddf70dbb7cd243a2f37f4aa5c95d6, type: 3}
       propertyPath: m_Name
       value: SM_Bld_Base_45_Wall_01 (2)
+      objectReference: {fileID: 0}
+    - target: {fileID: 983350997453425439, guid: eccddf70dbb7cd243a2f37f4aa5c95d6, type: 3}
+      propertyPath: m_TagString
+      value: Indestructible
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -45787,6 +46643,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SM_Bld_Base_Wall_Window_Double_01 (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 2095505155170527388, guid: c5c2a8e6bf649504c9a44506e4e45bd9, type: 3}
+      propertyPath: m_TagString
+      value: Indestructible
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -45965,6 +46825,10 @@ PrefabInstance:
     - target: {fileID: 7363129911535224152, guid: ec70bcb9f14a5f6469a9228ff7ccd4a6, type: 3}
       propertyPath: m_Name
       value: box_two (5)
+      objectReference: {fileID: 0}
+    - target: {fileID: 7363129911535224152, guid: ec70bcb9f14a5f6469a9228ff7ccd4a6, type: 3}
+      propertyPath: m_TagString
+      value: Indestructible
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -46449,6 +47313,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SM_Bld_Base_Door_Large_01
       objectReference: {fileID: 0}
+    - target: {fileID: 3872603109300624465, guid: 2a0efb0670c655d4ea90059acb092716, type: 3}
+      propertyPath: m_TagString
+      value: Indestructible
+      objectReference: {fileID: 0}
     - target: {fileID: 4536691277036488427, guid: 2a0efb0670c655d4ea90059acb092716, type: 3}
       propertyPath: m_LocalPosition.x
       value: 2.9770002
@@ -46623,6 +47491,10 @@ PrefabInstance:
     - target: {fileID: 218261247472390261, guid: 14c2043f70fad33459f6bbab2bef8720, type: 3}
       propertyPath: m_Name
       value: SM_Bld_Base_Floor_Combined_01 (21)
+      objectReference: {fileID: 0}
+    - target: {fileID: 218261247472390261, guid: 14c2043f70fad33459f6bbab2bef8720, type: 3}
+      propertyPath: m_TagString
+      value: Indestructible
       objectReference: {fileID: 0}
     - target: {fileID: 598059413250706127, guid: 14c2043f70fad33459f6bbab2bef8720, type: 3}
       propertyPath: m_LocalPosition.x
@@ -46807,6 +47679,10 @@ PrefabInstance:
     - target: {fileID: 218261247472390261, guid: 14c2043f70fad33459f6bbab2bef8720, type: 3}
       propertyPath: m_Name
       value: SM_Bld_Base_Floor_Combined_01 (20)
+      objectReference: {fileID: 0}
+    - target: {fileID: 218261247472390261, guid: 14c2043f70fad33459f6bbab2bef8720, type: 3}
+      propertyPath: m_TagString
+      value: Indestructible
       objectReference: {fileID: 0}
     - target: {fileID: 598059413250706127, guid: 14c2043f70fad33459f6bbab2bef8720, type: 3}
       propertyPath: m_LocalPosition.x
@@ -47161,6 +48037,10 @@ PrefabInstance:
     - target: {fileID: 8305309674477336414, guid: 74041acf00146d442b15dec90c15c5cc, type: 3}
       propertyPath: m_Name
       value: SM_Gen_Bld_Pipe_Straight_03
+      objectReference: {fileID: 0}
+    - target: {fileID: 8305309674477336414, guid: 74041acf00146d442b15dec90c15c5cc, type: 3}
+      propertyPath: m_TagString
+      value: Indestructible
       objectReference: {fileID: 0}
     - target: {fileID: 8649641963997785572, guid: 74041acf00146d442b15dec90c15c5cc, type: 3}
       propertyPath: m_LocalPosition.x
@@ -47558,6 +48438,10 @@ PrefabInstance:
     - target: {fileID: 8305309674477336414, guid: 74041acf00146d442b15dec90c15c5cc, type: 3}
       propertyPath: m_Name
       value: SM_Gen_Bld_Pipe_Straight_03 (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 8305309674477336414, guid: 74041acf00146d442b15dec90c15c5cc, type: 3}
+      propertyPath: m_TagString
+      value: Indestructible
       objectReference: {fileID: 0}
     - target: {fileID: 8649641963997785572, guid: 74041acf00146d442b15dec90c15c5cc, type: 3}
       propertyPath: m_LocalPosition.x
@@ -48349,6 +49233,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SM_Bld_Base_Floor_Combined_01 (17)
       objectReference: {fileID: 0}
+    - target: {fileID: 218261247472390261, guid: 14c2043f70fad33459f6bbab2bef8720, type: 3}
+      propertyPath: m_TagString
+      value: Indestructible
+      objectReference: {fileID: 0}
     - target: {fileID: 598059413250706127, guid: 14c2043f70fad33459f6bbab2bef8720, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.48799992
@@ -48577,6 +49465,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SM_Bld_Base_45_Wall_01 (10)
       objectReference: {fileID: 0}
+    - target: {fileID: 983350997453425439, guid: eccddf70dbb7cd243a2f37f4aa5c95d6, type: 3}
+      propertyPath: m_TagString
+      value: Indestructible
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -48639,6 +49531,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SM_Bld_Base_45_Wall_01 (5)
       objectReference: {fileID: 0}
+    - target: {fileID: 983350997453425439, guid: eccddf70dbb7cd243a2f37f4aa5c95d6, type: 3}
+      propertyPath: m_TagString
+      value: Indestructible
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -48665,6 +49561,10 @@ PrefabInstance:
     - target: {fileID: 218261247472390261, guid: 14c2043f70fad33459f6bbab2bef8720, type: 3}
       propertyPath: m_Name
       value: SM_Bld_Base_Floor_Combined_01
+      objectReference: {fileID: 0}
+    - target: {fileID: 218261247472390261, guid: 14c2043f70fad33459f6bbab2bef8720, type: 3}
+      propertyPath: m_TagString
+      value: Indestructible
       objectReference: {fileID: 0}
     - target: {fileID: 598059413250706127, guid: 14c2043f70fad33459f6bbab2bef8720, type: 3}
       propertyPath: m_LocalPosition.x
@@ -48731,6 +49631,10 @@ PrefabInstance:
     - target: {fileID: 2288406028141466598, guid: c43305611d9783f429ff40efcfe9c852, type: 3}
       propertyPath: m_Name
       value: wall_bigbrick (9)
+      objectReference: {fileID: 0}
+    - target: {fileID: 2288406028141466598, guid: c43305611d9783f429ff40efcfe9c852, type: 3}
+      propertyPath: m_TagString
+      value: Indestructible
       objectReference: {fileID: 0}
     - target: {fileID: 4572870206382554111, guid: c43305611d9783f429ff40efcfe9c852, type: 3}
       propertyPath: m_LocalPosition.x
@@ -48962,6 +49866,10 @@ PrefabInstance:
     - target: {fileID: 6386151828563780047, guid: 006174ab269693b4e9a3380c9adb7744, type: 3}
       propertyPath: m_Name
       value: vent
+      objectReference: {fileID: 0}
+    - target: {fileID: 6386151828563780047, guid: 006174ab269693b4e9a3380c9adb7744, type: 3}
+      propertyPath: m_TagString
+      value: Indestructible
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -49324,6 +50232,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SM_Bld_Base_Floor_Combined_01 (43)
       objectReference: {fileID: 0}
+    - target: {fileID: 218261247472390261, guid: 14c2043f70fad33459f6bbab2bef8720, type: 3}
+      propertyPath: m_TagString
+      value: Indestructible
+      objectReference: {fileID: 0}
     - target: {fileID: 598059413250706127, guid: 14c2043f70fad33459f6bbab2bef8720, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.49
@@ -49610,6 +50522,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SM_Bld_Base_Floor_Combined_01 (37)
       objectReference: {fileID: 0}
+    - target: {fileID: 218261247472390261, guid: 14c2043f70fad33459f6bbab2bef8720, type: 3}
+      propertyPath: m_TagString
+      value: Indestructible
+      objectReference: {fileID: 0}
     - target: {fileID: 598059413250706127, guid: 14c2043f70fad33459f6bbab2bef8720, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.49
@@ -49788,6 +50704,10 @@ PrefabInstance:
     - target: {fileID: 218261247472390261, guid: 14c2043f70fad33459f6bbab2bef8720, type: 3}
       propertyPath: m_Name
       value: SM_Bld_Base_Floor_Combined_01 (11)
+      objectReference: {fileID: 0}
+    - target: {fileID: 218261247472390261, guid: 14c2043f70fad33459f6bbab2bef8720, type: 3}
+      propertyPath: m_TagString
+      value: Indestructible
       objectReference: {fileID: 0}
     - target: {fileID: 598059413250706127, guid: 14c2043f70fad33459f6bbab2bef8720, type: 3}
       propertyPath: m_LocalPosition.x
@@ -50649,6 +51569,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SM_Bld_Base_45_Wall_01 (8)
       objectReference: {fileID: 0}
+    - target: {fileID: 983350997453425439, guid: eccddf70dbb7cd243a2f37f4aa5c95d6, type: 3}
+      propertyPath: m_TagString
+      value: Indestructible
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -50670,6 +51594,10 @@ PrefabInstance:
     - target: {fileID: 218261247472390261, guid: 14c2043f70fad33459f6bbab2bef8720, type: 3}
       propertyPath: m_Name
       value: SM_Bld_Base_Floor_Combined_01 (42)
+      objectReference: {fileID: 0}
+    - target: {fileID: 218261247472390261, guid: 14c2043f70fad33459f6bbab2bef8720, type: 3}
+      propertyPath: m_TagString
+      value: Indestructible
       objectReference: {fileID: 0}
     - target: {fileID: 598059413250706127, guid: 14c2043f70fad33459f6bbab2bef8720, type: 3}
       propertyPath: m_LocalPosition.x
@@ -50955,6 +51883,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: pipe_orangedark (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 6380180318284396385, guid: c75ab5267d637734f9645c8b91f3e930, type: 3}
+      propertyPath: m_TagString
+      value: Indestructible
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -51016,6 +51948,10 @@ PrefabInstance:
     - target: {fileID: 631999116285414907, guid: a1df29bf5b00fca43a8c4027a7e0aaf4, type: 3}
       propertyPath: m_Name
       value: SM_Gen_Prop_Aircon_Roof_02
+      objectReference: {fileID: 0}
+    - target: {fileID: 631999116285414907, guid: a1df29bf5b00fca43a8c4027a7e0aaf4, type: 3}
+      propertyPath: m_TagString
+      value: Indestructible
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -51163,6 +52099,10 @@ PrefabInstance:
     - target: {fileID: 4585469192269141785, guid: d6de22598f94e93469612e5e9ca6cf35, type: 3}
       propertyPath: m_Name
       value: SM_Gen_Prop_Aircon_Roof_03
+      objectReference: {fileID: 0}
+    - target: {fileID: 4585469192269141785, guid: d6de22598f94e93469612e5e9ca6cf35, type: 3}
+      propertyPath: m_TagString
+      value: Indestructible
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -51323,6 +52263,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SM_Bld_Base_Floor_Combined_01 (15)
       objectReference: {fileID: 0}
+    - target: {fileID: 218261247472390261, guid: 14c2043f70fad33459f6bbab2bef8720, type: 3}
+      propertyPath: m_TagString
+      value: Indestructible
+      objectReference: {fileID: 0}
     - target: {fileID: 598059413250706127, guid: 14c2043f70fad33459f6bbab2bef8720, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.48799992
@@ -51383,6 +52327,10 @@ PrefabInstance:
     - target: {fileID: 218261247472390261, guid: 14c2043f70fad33459f6bbab2bef8720, type: 3}
       propertyPath: m_Name
       value: SM_Bld_Base_Floor_Combined_01 (16)
+      objectReference: {fileID: 0}
+    - target: {fileID: 218261247472390261, guid: 14c2043f70fad33459f6bbab2bef8720, type: 3}
+      propertyPath: m_TagString
+      value: Indestructible
       objectReference: {fileID: 0}
     - target: {fileID: 598059413250706127, guid: 14c2043f70fad33459f6bbab2bef8720, type: 3}
       propertyPath: m_LocalPosition.x
