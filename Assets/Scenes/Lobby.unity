@@ -31539,6 +31539,7 @@ MonoBehaviour:
   hostButton: {fileID: 1944157303}
   selectorEscenario: {fileID: 1774380827}
   mapaPorDefecto: MainGame
+  usarRelay: 1
 --- !u!4 &2060902974
 Transform:
   m_ObjectHideFlags: 0
