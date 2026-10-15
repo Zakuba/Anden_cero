@@ -2,6 +2,7 @@ using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using System.Collections;
 
 public class NetworkBootstrap : MonoBehaviour
 {
@@ -22,6 +23,36 @@ public class NetworkBootstrap : MonoBehaviour
         if (hostButton != null)
         {
             hostButton.onClick.AddListener(OnHostClicked);
+        }
+    }
+
+    private void Start()
+    {
+        if (usarRelay && hostButton != null)
+        {
+            StartCoroutine(EsperarServicios());
+        }
+    }
+
+    private IEnumerator EsperarServicios()
+    {
+        // El botón queda apagado hasta que Unity Services esté listo
+        hostButton.interactable = false;
+
+        // Esperamos como máximo 8 segundos: si no hay internet, no queremos
+        // dejar el botón muerto, porque queda el respaldo por IP directa
+        float espera = 0f;
+        while (!UnityServicesInitializer.IsReady && espera < 8f)
+        {
+            espera += Time.unscaledDeltaTime;
+            yield return null;
+        }
+
+        hostButton.interactable = true;
+
+        if (!UnityServicesInitializer.IsReady)
+        {
+            Debug.LogWarning("Los servicios online no estuvieron listos a tiempo. Se podrá crear la partida por IP directa.");
         }
     }
 
@@ -90,28 +121,28 @@ public class NetworkBootstrap : MonoBehaviour
             }
         };
         if (usarRelay)
-{
-    // Evita doble clic mientras se crea la sala
-    hostButton.interactable = false;
+        {
+            // Evita doble clic mientras se crea la sala
+            hostButton.interactable = false;
 
-    // MaxPlayers cuenta al host; Relay probablemente cuente solo a los invitados
-    // (la documentación no lo aclara, lo confirmamos probando)
-    string joinCode = await RelayManager.CreateRelay(MatchManager.MaxPlayers - 1);
+            // MaxPlayers cuenta al host; Relay probablemente cuente solo a los invitados
+            // (la documentación no lo aclara, lo confirmamos probando)
+            string joinCode = await RelayManager.CreateRelay(MatchManager.MaxPlayers - 1);
 
-    hostButton.interactable = true;
+            hostButton.interactable = true;
 
-    if (string.IsNullOrEmpty(joinCode))
-    {
-        // Si Relay falla (sin internet, etc.), seguimos con conexión directa por IP
-        Debug.LogWarning("No se pudo crear la sala online. Se inicia el host con conexión directa (IP).");
-    }
-    else
-    {
-        // Lo copiamos al portapapeles para poder pegarlo y enviarlo
-        GUIUtility.systemCopyBuffer = joinCode;
-        Debug.Log("Código de sala (copiado al portapapeles): " + joinCode);
-    }
-}
+            if (string.IsNullOrEmpty(joinCode))
+            {
+                // Si Relay falla (sin internet, etc.), seguimos con conexión directa por IP
+                Debug.LogWarning("No se pudo crear la sala online. Se inicia el host con conexión directa (IP).");
+            }
+            else
+            {
+                // Lo copiamos al portapapeles para poder pegarlo y enviarlo
+                GUIUtility.systemCopyBuffer = joinCode;
+                Debug.Log("Código de sala (copiado al portapapeles): " + joinCode);
+            }
+        }
 
         if (NetworkManager.Singleton.StartHost())
         {
