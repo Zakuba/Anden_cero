@@ -38,33 +38,61 @@ public class ClientConnectUI : MonoBehaviour
         }
     }
 
-    private void OnConnectClicked()
+private async void OnConnectClicked()
+{
+    // Evita doble clic mientras ya hay un intento en curso.
+    if (isAttemptingConnection) return;
+
+    connectionFailedMessage.SetActive(false);
+    isAttemptingConnection = true;
+    connectButton.interactable = false;
+
+    string texto = string.IsNullOrWhiteSpace(ipInputField.text) ? "127.0.0.1" : ipInputField.text.Trim();
+
+    if (EsCodigoRelay(texto))
     {
-        // Evita doble clic mientras ya hay un intento en curso.
-        if (isAttemptingConnection) return;
+        // Conexión online con código de sala
+        bool unido = await RelayManager.JoinRelay(texto.ToUpper());
 
-        connectionFailedMessage.SetActive(false);
-        isAttemptingConnection = true;
-        connectButton.interactable = false;
+        // Si mientras esperábamos se destruyó este objeto, no seguimos
+        if (this == null) return;
 
-        string ip = string.IsNullOrWhiteSpace(ipInputField.text) ? "127.0.0.1" : ipInputField.text.Trim();
-        if (!ushort.TryParse(portInputField.text, out ushort port))
-        {
-            port = 7777;
-        }
-
-        transport.SetConnectionData(ip, port);
-
-        if (!NetworkManager.Singleton.StartClient())
+        if (!unido)
         {
             FailConnection();
             return;
         }
 
-        // Respaldo propio: si en X segundos no llegó OnClientConnected,
-        // lo tratamos como fallo sin esperar el timeout interno de UTP.
-        timeoutCoroutine = StartCoroutine(ConnectionTimeoutWatcher());
+        // Con Relay hace falta más margen de conexión que en red local
+        transport.MaxConnectAttempts = 60;
+        transport.ConnectTimeoutMS = 1000;
     }
+    else
+    {
+        // Conexión directa por IP (como antes)
+        if (!ushort.TryParse(portInputField.text, out ushort port))
+        {
+            port = 7777;
+        }
+
+        transport.SetConnectionData(texto, port);
+    }
+
+    if (!NetworkManager.Singleton.StartClient())
+    {
+        FailConnection();
+        return;
+    }
+
+    // Respaldo propio: si en X segundos no llegó OnClientConnected,
+    // lo tratamos como fallo sin esperar el timeout interno de UTP.
+    timeoutCoroutine = StartCoroutine(ConnectionTimeoutWatcher());
+}
+    // Una IP tiene puntos (o es "localhost"); un código de Relay no
+    private bool EsCodigoRelay(string texto)
+{
+    return !texto.Contains(".") && texto.ToLower() != "localhost";
+}
 
     private IEnumerator ConnectionTimeoutWatcher()
     {

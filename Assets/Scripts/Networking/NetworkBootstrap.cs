@@ -14,6 +14,9 @@ public class NetworkBootstrap : MonoBehaviour
     [Header("Mapa por defecto")]
     [SerializeField] private string mapaPorDefecto = "MainGame";
 
+    [Header("Conexión online")]
+    [SerializeField] private bool usarRelay = true;
+
     private void Awake()
     {
         if (hostButton != null)
@@ -22,7 +25,7 @@ public class NetworkBootstrap : MonoBehaviour
         }
     }
 
-    private void OnHostClicked()
+    private async void OnHostClicked()
     {
         if (NetworkManager.Singleton == null)
         {
@@ -86,6 +89,29 @@ public class NetworkBootstrap : MonoBehaviour
                     : "La sala está llena (máximo 4 jugadores).";
             }
         };
+        if (usarRelay)
+{
+    // Evita doble clic mientras se crea la sala
+    hostButton.interactable = false;
+
+    // MaxPlayers cuenta al host; Relay probablemente cuente solo a los invitados
+    // (la documentación no lo aclara, lo confirmamos probando)
+    string joinCode = await RelayManager.CreateRelay(MatchManager.MaxPlayers - 1);
+
+    hostButton.interactable = true;
+
+    if (string.IsNullOrEmpty(joinCode))
+    {
+        // Si Relay falla (sin internet, etc.), seguimos con conexión directa por IP
+        Debug.LogWarning("No se pudo crear la sala online. Se inicia el host con conexión directa (IP).");
+    }
+    else
+    {
+        // Lo copiamos al portapapeles para poder pegarlo y enviarlo
+        GUIUtility.systemCopyBuffer = joinCode;
+        Debug.Log("Código de sala (copiado al portapapeles): " + joinCode);
+    }
+}
 
         if (NetworkManager.Singleton.StartHost())
         {
