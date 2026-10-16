@@ -5,6 +5,14 @@ using Unity.Services.Relay;
 using Unity.Services.Relay.Models;
 using UnityEngine;
 
+public enum ResultadoUnirse
+{
+    Ok,
+    SinInternet,
+    SalaNoEncontrada,
+    Error
+}
+
 public static class RelayManager
 {
     // Tipo de conexión: "dtls" cifra los datos (opciones válidas: udp, dtls, wss)
@@ -53,28 +61,45 @@ public static class RelayManager
     }
 
     // CLIENTE: se une a una sala con el código. Devuelve true si salió bien.
-    public static async Task<bool> JoinRelay(string joinCode)
+public static async Task<ResultadoUnirse> JoinRelay(string joinCode)
+{
+    // Sin red, los servicios nunca van a estar listos: lo avisamos con claridad
+    if (Application.internetReachability == NetworkReachability.NotReachable)
     {
-        if (!UnityServicesInitializer.IsReady)
-        {
-            Debug.LogError("Unity Services todavía no está listo.");
-            return false;
-        }
-
-        try
-        {
-            JoinAllocation allocation = await RelayService.Instance.JoinAllocationAsync(joinCode);
-
-            var transport = NetworkManager.Singleton.GetComponent<UnityTransport>();
-            transport.SetRelayServerData(AllocationUtils.ToRelayServerData(allocation, ConnectionType));
-
-            Debug.Log("Unido a la sala de Relay.");
-            return true;
-        }
-        catch (System.Exception e)
-        {
-            Debug.LogError("No se pudo unir a la sala de Relay: " + e.Message);
-            return false;
-        }
+        Debug.LogError("Sin conexión a internet.");
+        return ResultadoUnirse.SinInternet;
     }
+
+    if (!UnityServicesInitializer.IsReady)
+    {
+        Debug.LogError("Unity Services todavía no está listo.");
+        return ResultadoUnirse.Error;
+    }
+
+    try
+    {
+        JoinAllocation allocation = await RelayService.Instance.JoinAllocationAsync(joinCode);
+
+        var transport = NetworkManager.Singleton.GetComponent<UnityTransport>();
+        transport.SetRelayServerData(AllocationUtils.ToRelayServerData(allocation, ConnectionType));
+
+        Debug.Log("Unido a la sala de Relay.");
+        return ResultadoUnirse.Ok;
+    }
+    catch (RelayServiceException e)
+    {
+        Debug.LogError("No se pudo unir a la sala de Relay: " + e.Message);
+
+        // Relay indica con "Reason" qué pasó; si el código no existe, lo decimos
+        if (e.Reason == RelayExceptionReason.JoinCodeNotFound)
+            return ResultadoUnirse.SalaNoEncontrada;
+
+        return ResultadoUnirse.Error;
+    }
+    catch (System.Exception e)
+    {
+        Debug.LogError("No se pudo unir a la sala de Relay: " + e.Message);
+        return ResultadoUnirse.Error;
+    }
+}
 }
