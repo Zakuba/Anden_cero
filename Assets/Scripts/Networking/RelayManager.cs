@@ -10,10 +10,17 @@ public static class RelayManager
     // Tipo de conexión: "dtls" cifra los datos (opciones válidas: udp, dtls, wss)
     private const string ConnectionType = "dtls";
 
+    // Código de la sala actual (solo el host lo tiene). Es estático para que
+    // sobreviva al cambio de escena y la sala de espera pueda mostrarlo.
+    public static string JoinCodeActual { get; private set; }
+
     // HOST: Reserva una sala en Relay y devuelve el código para compartir.
     // Devuelve null si algo falla.
     public static async Task<string> CreateRelay(int maxConnections)
     {
+        // Limpiamos el código anterior para que no quede uno viejo si esto falla
+        JoinCodeActual = null;
+
         if (!UnityServicesInitializer.IsReady)
         {
             Debug.LogError("Unity Services todavía no está listo.");
@@ -31,6 +38,9 @@ public static class RelayManager
             // 3) Le decimos al transporte de red que use Relay en lugar de una IP
             var transport = NetworkManager.Singleton.GetComponent<UnityTransport>();
             transport.SetRelayServerData(AllocationUtils.ToRelayServerData(allocation, ConnectionType));
+
+            // 4) Guardamos el código solo cuando todo salió bien
+            JoinCodeActual = joinCode;
 
             Debug.Log("Sala de Relay creada. Código: " + joinCode);
             return joinCode;

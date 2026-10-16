@@ -23,6 +23,7 @@ public class MatchManager : NetworkBehaviour
     [SerializeField] private Button startMatchButton;
     [SerializeField] private GameObject waitingText;   // "Esperando jugadores..."
     [SerializeField] private GameObject waitingForHostText; // Texto para clientes: "Esperando al host..."
+    [SerializeField] private TMP_Text roomCodeText; // NUEVO: "Código de sala: XXXXXX" (solo host)
 
     [Header("Cámaras")]
     [SerializeField] private Camera lobbyCamera;
@@ -59,6 +60,10 @@ public class MatchManager : NetworkBehaviour
         if (waitingForHostText != null)
             waitingForHostText.SetActive(false);
 
+        // NUEVO
+        if (roomCodeText != null)
+            roomCodeText.gameObject.SetActive(false);
+
         ActivarLobbyCamera();
     }
 
@@ -77,6 +82,20 @@ public class MatchManager : NetworkBehaviour
         }
         if (waitingText != null) waitingText.SetActive(IsHost && !matchStarted.Value);
         if (waitingForHostText != null) waitingForHostText.SetActive(!IsHost && !matchStarted.Value);
+
+        // NUEVO: el host ve el código de sala mientras espera (solo si hay código de Relay)
+        if (roomCodeText != null)
+        {
+            bool mostrarCodigo = IsHost
+                && !matchStarted.Value
+                && !string.IsNullOrEmpty(RelayManager.JoinCodeActual);
+
+            roomCodeText.gameObject.SetActive(mostrarCodigo);
+
+            if (mostrarCodigo)
+                roomCodeText.text = "Código de sala: " + RelayManager.JoinCodeActual;
+        }
+
         if (IsServer)
         {
             foreach (var p in FindObjectsByType<PlayerStateManager>(FindObjectsSortMode.None))
@@ -122,6 +141,10 @@ public class MatchManager : NetworkBehaviour
 
         if (waitingForHostText != null)
             waitingForHostText.SetActive(false);
+
+        // NUEVO
+        if (roomCodeText != null)
+            roomCodeText.gameObject.SetActive(false);
     }
 
     // ---------- Registro de jugadores (solo servidor) ----------
