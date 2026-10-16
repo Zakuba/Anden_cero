@@ -17,10 +17,12 @@ public class ClientConnectUI : MonoBehaviour
     private UnityTransport transport;
     private bool isAttemptingConnection = false;
     private Coroutine timeoutCoroutine;
+    private TMP_Text connectionFailedText;
 
     private void Awake()
     {
         connectButton.onClick.AddListener(OnConnectClicked);
+        connectionFailedText = connectionFailedMessage.GetComponent<TMP_Text>();
     }
 
     private void Start()
@@ -51,6 +53,11 @@ private async void OnConnectClicked()
     string codigo = codigoSalaInputField != null
         ? codigoSalaInputField.text.Trim().ToUpper()
         : "";
+    if (!CodigoSalaValido(codigo))
+{
+    FailConnection("Código de sala inválido (6 caracteres).");
+    return;
+}    
 
     if (!string.IsNullOrEmpty(codigo))
     {
@@ -62,7 +69,7 @@ private async void OnConnectClicked()
 
         if (!unido)
         {
-            FailConnection();
+            FailConnection("No se pudo unir a la sala. Revisá el código.");
             return;
         }
 
@@ -100,6 +107,20 @@ private async void OnConnectClicked()
     timeoutCoroutine = StartCoroutine(ConnectionTimeoutWatcher());
 }
 
+private const string CaracteresValidosCodigo = "6789BCDFGHJKLMNPQRTW";
+
+private bool CodigoSalaValido(string codigo)
+{
+    if (codigo.Length < 6 || codigo.Length > 12) return false;
+
+    foreach (char c in codigo)
+    {
+        if (!CaracteresValidosCodigo.Contains(c)) return false;
+    }
+
+    return true;
+}
+
     private IEnumerator ConnectionTimeoutWatcher()
     {
         yield return new WaitForSeconds(connectionTimeoutSeconds);
@@ -131,15 +152,19 @@ private async void OnConnectClicked()
         }
     }
 
-    private void FailConnection()
+   private void FailConnection(string mensaje = "Conexión fallida. Verifica IP o Puerto.")
+{
+    if (timeoutCoroutine != null)
     {
-        if (timeoutCoroutine != null)
-        {
-            StopCoroutine(timeoutCoroutine);
-            timeoutCoroutine = null;
-        }
-        connectionFailedMessage.SetActive(true);
-        isAttemptingConnection = false;
-        connectButton.interactable = true;
+        StopCoroutine(timeoutCoroutine);
+        timeoutCoroutine = null;
     }
+
+    if (connectionFailedText != null)
+        connectionFailedText.text = mensaje;
+
+    connectionFailedMessage.SetActive(true);
+    isAttemptingConnection = false;
+    connectButton.interactable = true;
+}
 }
