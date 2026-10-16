@@ -12,6 +12,7 @@ public class ClientConnectUI : MonoBehaviour
     [SerializeField] private Button connectButton;
     [SerializeField] private GameObject connectionFailedMessage;
     [SerializeField] private float connectionTimeoutSeconds = 5f;
+    [SerializeField] private TMP_InputField codigoSalaInputField;
 
     private UnityTransport transport;
     private bool isAttemptingConnection = false;
@@ -47,12 +48,14 @@ private async void OnConnectClicked()
     isAttemptingConnection = true;
     connectButton.interactable = false;
 
-    string texto = string.IsNullOrWhiteSpace(ipInputField.text) ? "127.0.0.1" : ipInputField.text.Trim();
+    string codigo = codigoSalaInputField != null
+        ? codigoSalaInputField.text.Trim().ToUpper()
+        : "";
 
-    if (EsCodigoRelay(texto))
+    if (!string.IsNullOrEmpty(codigo))
     {
         // Conexión online con código de sala
-        bool unido = await RelayManager.JoinRelay(texto.ToUpper());
+        bool unido = await RelayManager.JoinRelay(codigo);
 
         // Si mientras esperábamos se destruyó este objeto, no seguimos
         if (this == null) return;
@@ -70,12 +73,20 @@ private async void OnConnectClicked()
     else
     {
         // Conexión directa por IP (como antes)
+        string ip = string.IsNullOrWhiteSpace(ipInputField.text)
+            ? "127.0.0.1"
+            : ipInputField.text.Trim();
+
         if (!ushort.TryParse(portInputField.text, out ushort port))
         {
             port = 7777;
         }
 
-        transport.SetConnectionData(texto, port);
+        // Volvemos a los valores normales por si antes se usó Relay
+        transport.MaxConnectAttempts = 3;
+        transport.ConnectTimeoutMS = 500;
+
+        transport.SetConnectionData(ip, port);
     }
 
     if (!NetworkManager.Singleton.StartClient())
@@ -87,11 +98,6 @@ private async void OnConnectClicked()
     // Respaldo propio: si en X segundos no llegó OnClientConnected,
     // lo tratamos como fallo sin esperar el timeout interno de UTP.
     timeoutCoroutine = StartCoroutine(ConnectionTimeoutWatcher());
-}
-    // Una IP tiene puntos (o es "localhost"); un código de Relay no
-    private bool EsCodigoRelay(string texto)
-{
-    return !texto.Contains(".") && texto.ToLower() != "localhost";
 }
 
     private IEnumerator ConnectionTimeoutWatcher()
