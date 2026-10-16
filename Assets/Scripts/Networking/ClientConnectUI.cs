@@ -13,6 +13,7 @@ public class ClientConnectUI : MonoBehaviour
     [SerializeField] private GameObject connectionFailedMessage;
     [SerializeField] private float connectionTimeoutSeconds = 5f;
     [SerializeField] private TMP_InputField codigoSalaInputField;
+    [SerializeField] private bool permitirConexionDirecta = false;
 
     private const string CaracteresValidosCodigo = "6789BCDFGHJKLMNPQRTW";
 
@@ -55,6 +56,12 @@ public class ClientConnectUI : MonoBehaviour
         string codigo = codigoSalaInputField != null
             ? codigoSalaInputField.text.Trim().ToUpper()
             : "";
+
+        if (string.IsNullOrEmpty(codigo) && !permitirConexionDirecta)
+{
+         FailConnection("Ingresá el código de sala.");
+        return;
+}    
 
         if (!string.IsNullOrEmpty(codigo))
         {
