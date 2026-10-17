@@ -159,12 +159,19 @@ public class ClientConnectUI : MonoBehaviour
         connectButton.interactable = true;
     }
 
-    private void OnClientDisconnected(ulong clientId)
+       private void OnClientDisconnected(ulong clientId)
     {
         if (isAttemptingConnection)
         {
+            // Hay que leer el motivo ANTES de Shutdown(), porque después se borra
+            string motivo = NetworkManager.Singleton.DisconnectReason;
+
             NetworkManager.Singleton.Shutdown();
-            FailConnection();
+
+            if (!string.IsNullOrEmpty(motivo))
+                FailConnection(motivo);
+            else
+                FailConnection();
         }
     }
 

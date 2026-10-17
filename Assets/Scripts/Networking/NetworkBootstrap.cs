@@ -3,6 +3,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using System.Collections;
+using TMPro;
 
 public class NetworkBootstrap : MonoBehaviour
 {
@@ -17,6 +18,9 @@ public class NetworkBootstrap : MonoBehaviour
 
     [Header("Conexión online")]
     [SerializeField] private bool usarRelay = true;
+
+    [Header("Mensajes")]
+    [SerializeField] private TMP_Text mensajeErrorSala;
 
     private void Awake()
     {
@@ -39,8 +43,7 @@ public class NetworkBootstrap : MonoBehaviour
         // El botón queda apagado hasta que Unity Services esté listo
         hostButton.interactable = false;
 
-        // Esperamos como máximo 8 segundos: si no hay internet, no queremos
-        // dejar el botón muerto, porque queda el respaldo por IP directa
+        // Esperamos como máximo 8 segundos para no dejar el botón muerto
         float espera = 0f;
         while (!UnityServicesInitializer.IsReady && espera < 8f)
         {
@@ -52,18 +55,32 @@ public class NetworkBootstrap : MonoBehaviour
 
         if (!UnityServicesInitializer.IsReady)
         {
-            Debug.LogWarning("Los servicios online no estuvieron listos a tiempo. Se podrá crear la partida por IP directa.");
+            MostrarErrorSala("No se pudo conectar con los servicios online. Revisá tu conexión.");
+        }
+    }
+
+    private void MostrarErrorSala(string mensaje)
+    {
+        Debug.LogWarning(mensaje);
+
+        if (mensajeErrorSala != null)
+        {
+            mensajeErrorSala.text = mensaje;
+            mensajeErrorSala.gameObject.SetActive(true);
         }
     }
 
     private async void OnHostClicked()
     {
+        // Ocultamos el mensaje de un intento anterior
+        if (mensajeErrorSala != null)
+        {
+            mensajeErrorSala.gameObject.SetActive(false);
+        }
+
         if (NetworkManager.Singleton == null)
         {
-            Debug.LogError(
-                "No se encontró el NetworkManager en la escena."
-            );
-
+            Debug.LogError("No se encontró el NetworkManager en la escena.");
             return;
         }
 
@@ -76,7 +93,7 @@ public class NetworkBootstrap : MonoBehaviour
         }
 
         // Obtenemos el mapa seleccionado
-       string mapaSeleccionado = mapaPorDefecto;
+        string mapaSeleccionado = mapaPorDefecto;
 
         if (selectorEscenario != null)
         {
@@ -87,21 +104,17 @@ public class NetworkBootstrap : MonoBehaviour
                 "Andén Central"   => "MainGame",
                 "Túneles y Vías"  => "ViasYAndenes",
                 "Sala de control" => "SalaDeControl",
-                _                 => nombre // Si no coincide con ninguno, conserva el nombre original
+                _                 => nombre
             };
         }
 
-        // Si por algún motivo el selector devuelve vacío,
-        // usamos el mapa por defecto.
         if (string.IsNullOrEmpty(mapaSeleccionado))
         {
             mapaSeleccionado = mapaPorDefecto;
         }
 
-        Debug.Log(
-            "Mapa seleccionado: " +
-            mapaSeleccionado
-        );
+        Debug.Log("Mapa seleccionado: " + mapaSeleccionado);
+
         // Rechaza entradas tarde y limita a MatchManager.MaxPlayers
         NetworkManager.Singleton.ConnectionApprovalCallback = (request, response) =>
         {
@@ -117,38 +130,36 @@ public class NetworkBootstrap : MonoBehaviour
             {
                 response.Reason = !joinsOpen
                     ? "La partida ya comenzó."
-                    : "La sala está llena (máximo 4 jugadores).";
+                    : $"La sala está llena (máximo {MatchManager.MaxPlayers} jugadores).";
             }
         };
+
         if (usarRelay)
         {
             // Evita doble clic mientras se crea la sala
             hostButton.interactable = false;
 
-            // MaxPlayers cuenta al host; Relay probablemente cuente solo a los invitados
-            // (la documentación no lo aclara, lo confirmamos probando)
             string joinCode = await RelayManager.CreateRelay(MatchManager.MaxPlayers - 1);
+
+            // Si cambió la escena mientras esperábamos, no seguimos
+            if (this == null) return;
 
             hostButton.interactable = true;
 
             if (string.IsNullOrEmpty(joinCode))
             {
-                // Si Relay falla (sin internet, etc.), seguimos con conexión directa por IP
-                Debug.LogWarning("No se pudo crear la sala online. Se inicia el host con conexión directa (IP).");
+                MostrarErrorSala("No se pudo crear la sala online. Revisá tu conexión a internet.");
+                return;
             }
-            else
-            {
-                // Lo copiamos al portapapeles para poder pegarlo y enviarlo
-                GUIUtility.systemCopyBuffer = joinCode;
-                Debug.Log("Código de sala (copiado al portapapeles): " + joinCode);
-            }
+
+            // Lo copiamos al portapapeles para poder pegarlo y enviarlo
+            GUIUtility.systemCopyBuffer = joinCode;
+            Debug.Log("Código de sala (copiado al portapapeles): " + joinCode);
         }
 
         if (NetworkManager.Singleton.StartHost())
         {
-            Debug.Log(
-                "Host inicializado correctamente."
-            );
+            Debug.Log("Host inicializado correctamente.");
 
             NetworkManager.Singleton.SceneManager.LoadScene(
                 mapaSeleccionado,
@@ -157,9 +168,7 @@ public class NetworkBootstrap : MonoBehaviour
         }
         else
         {
-            Debug.LogError(
-                "No se pudo inicializar el Host."
-            );
+            Debug.LogError("No se pudo inicializar el Host.");
         }
     }
 }
