@@ -1,7 +1,8 @@
 using UnityEngine;
+using Unity.Netcode;
 using System.Collections.Generic;
 
-public class TrainSpawnerNivel2 : MonoBehaviour
+public class TrainSpawnerNivel2 : NetworkBehaviour
 {
     [System.Serializable]
     public class Via
@@ -27,14 +28,10 @@ public class TrainSpawnerNivel2 : MonoBehaviour
     }
 
     [Header("Trenes")]
-    [SerializeField]
-    private List<GameObject> trenPrefabs =
-        new List<GameObject>();
+    [SerializeField] private List<GameObject> trenPrefabs = new List<GameObject>();
 
     [Header("Vías")]
-    [SerializeField]
-    private List<Via> vias =
-        new List<Via>();
+    [SerializeField] private List<Via> vias = new List<Via>();
 
     [Header("Movimiento")]
     [SerializeField] private float velocidad = 10f;
@@ -51,12 +48,14 @@ public class TrainSpawnerNivel2 : MonoBehaviour
 
     private float temporizador;
     private bool spawnerActivo = false;
-
     private int ultimaViaUsada = -1;
 
-    private void Start()
+    public override void OnNetworkSpawn()
     {
-        if (iniciarAutomaticamente)
+        base.OnNetworkSpawn();
+
+        // REGLA CLAVE: Solo el Servidor/Host calcula tiempos, vías y generación de trenes
+        if (IsServer && iniciarAutomaticamente)
         {
             IniciarSpawner();
         }
@@ -64,7 +63,8 @@ public class TrainSpawnerNivel2 : MonoBehaviour
 
     private void Update()
     {
-        if (!spawnerActivo)
+        // Solo el Servidor ejecuta el movimiento físico, el temporizador y la toma de decisiones
+        if (!IsServer || !spawnerActivo)
             return;
 
         MoverTrenes();
@@ -74,11 +74,7 @@ public class TrainSpawnerNivel2 : MonoBehaviour
         if (temporizador <= 0f)
         {
             IntentarCrearTren();
-
-            temporizador = Random.Range(
-                tiempoMinimo,
-                tiempoMaximo
-            );
+            temporizador = Random.Range(tiempoMinimo, tiempoMaximo);
         }
     }
 
@@ -94,20 +90,19 @@ public class TrainSpawnerNivel2 : MonoBehaviour
                 continue;
             }
 
-            MoverTren(via);
+            MoverTren(via, i);
 
             if (via.trenActual != null)
             {
                 DetectarPuentes(via.trenActual);
-                ComprobarPuntoDesaparicion(via);
+                ComprobarPuntoDesaparicion(via, i);
             }
         }
     }
 
-    private void MoverTren(Via via)
+    private void MoverTren(Via via, int indiceVia)
     {
         GameObject tren = via.trenActual;
-
         Vector3 posicionActual = tren.transform.position;
 
         Vector3 nuevaPosicion = Vector3.MoveTowards(
@@ -118,40 +113,37 @@ public class TrainSpawnerNivel2 : MonoBehaviour
 
         tren.transform.position = nuevaPosicion;
 
-        Vector3 direccion =
-            via.puntoFinal.position - posicionActual;
+        Vector3 direccion = via.puntoFinal.position - posicionActual;
 
         if (direccion != Vector3.zero)
         {
-            Quaternion rotacionObjetivo =
-                Quaternion.LookRotation(
-                    direccion.normalized
-                );
-
-            tren.transform.rotation =
-                Quaternion.Slerp(
-                    tren.transform.rotation,
-                    rotacionObjetivo,
-                    10f * Time.deltaTime
-                );
+            Quaternion rotacionObjetivo = Quaternion.LookRotation(direccion.normalized);
+            tren.transform.rotation = Quaternion.Slerp(
+                tren.transform.rotation,
+                rotacionObjetivo,
+                10f * Time.deltaTime
+            );
         }
 
-        if (Vector3.Distance(
-            tren.transform.position,
-            via.puntoFinal.position
-        ) < 0.05f)
+        // Si llegó al final del recorrido
+        if (Vector3.Distance(tren.transform.position, via.puntoFinal.position) < 0.05f)
         {
-            Destroy(tren);
+            NetworkObject netObj = tren.GetComponent<NetworkObject>();
+            if (netObj != null && netObj.IsSpawned)
+            {
+                netObj.Despawn(true);
+            }
+            else
+            {
+                Destroy(tren);
+            }
 
             via.trenActual = null;
             via.ocupada = false;
 
-            // Seguridad: si el objeto seguía activo,
-            // lo apagamos al terminar el recorrido.
-            if (via.objetoAsociado != null &&
-                via.objetoActivo)
+            if (via.objetoAsociado != null && via.objetoActivo)
             {
-                via.objetoAsociado.SetActive(false);
+                SetObjetoAsociadoClientRpc(indiceVia, false);
                 via.objetoActivo = false;
             }
         }
@@ -159,24 +151,9 @@ public class TrainSpawnerNivel2 : MonoBehaviour
 
     private void IntentarCrearTren()
     {
-        if (trenPrefabs.Count == 0)
-        {
-            Debug.LogWarning(
-                "TrainSpawnerNivel2: No hay prefabs de tren asignados."
-            );
-            return;
-        }
+        if (trenPrefabs.Count == 0 || vias.Count == 0) return;
 
-        if (vias.Count == 0)
-        {
-            Debug.LogWarning(
-                "TrainSpawnerNivel2: No hay vías configuradas."
-            );
-            return;
-        }
-
-        List<int> viasDisponibles =
-            new List<int>();
+        List<int> viasDisponibles = new List<int>();
 
         for (int i = 0; i < vias.Count; i++)
         {
@@ -191,77 +168,48 @@ public class TrainSpawnerNivel2 : MonoBehaviour
             }
         }
 
-        if (viasDisponibles.Count == 0)
-        {
-            return;
-        }
+        if (viasDisponibles.Count == 0) return;
 
-        int indiceAleatorio =
-            Random.Range(
-                0,
-                viasDisponibles.Count
-            );
+        int indiceAleatorio = Random.Range(0, viasDisponibles.Count);
+        int indiceViaElegida = viasDisponibles[indiceAleatorio];
+        Via viaElegida = vias[indiceViaElegida];
 
-        int indiceViaElegida =
-            viasDisponibles[indiceAleatorio];
-
-        Via viaElegida =
-            vias[indiceViaElegida];
-
-        CrearTrenEnVia(
-            viaElegida,
-            indiceViaElegida
-        );
+        CrearTrenEnVia(viaElegida, indiceViaElegida);
     }
 
-    private void CrearTrenEnVia(
-        Via via,
-        int indiceVia
-    )
+    private void CrearTrenEnVia(Via via, int indiceVia)
     {
-        int indiceTren =
-            Random.Range(
-                0,
-                trenPrefabs.Count
-            );
+        int indiceTren = Random.Range(0, trenPrefabs.Count);
+        GameObject trenPrefabElegido = trenPrefabs[indiceTren];
 
-        GameObject trenPrefabElegido =
-            trenPrefabs[indiceTren];
+        if (trenPrefabElegido == null) return;
 
-        if (trenPrefabElegido == null)
+        // 1. Instanciar en el Servidor
+        GameObject nuevoTren = Instantiate(
+            trenPrefabElegido,
+            via.puntoInicio.position,
+            via.puntoInicio.rotation
+        );
+
+        // 2. Spawnear por red para que se replique a los clientes
+        NetworkObject netObj = nuevoTren.GetComponent<NetworkObject>();
+        if (netObj != null)
         {
-            Debug.LogWarning(
-                "TrainSpawnerNivel2: Uno de los prefabs de tren es NULL."
-            );
-            return;
+            netObj.Spawn();
         }
 
-        GameObject nuevoTren =
-            Instantiate(
-                trenPrefabElegido,
-                via.puntoInicio.position,
-                via.puntoInicio.rotation
-            );
+        via.trenActual = nuevoTren;
+        via.ocupada = true;
+        ultimaViaUsada = indiceVia;
 
-        via.trenActual =
-            nuevoTren;
-
-        via.ocupada =
-            true;
-
-        ultimaViaUsada =
-            indiceVia;
-
-        // Activar el objeto asociado
+        // 3. Activar objeto asociado en todos los clientes sincronizadamente
         if (via.objetoAsociado != null)
         {
-            via.objetoAsociado.SetActive(true);
+            SetObjetoAsociadoClientRpc(indiceVia, true);
             via.objetoActivo = true;
         }
 
-        Rigidbody rb =
-            nuevoTren.GetComponent<Rigidbody>();
-
+        Rigidbody rb = nuevoTren.GetComponent<Rigidbody>();
         if (rb != null)
         {
             rb.isKinematic = true;
@@ -269,169 +217,160 @@ public class TrainSpawnerNivel2 : MonoBehaviour
         }
     }
 
-    private void ComprobarPuntoDesaparicion(Via via)
+    private void ComprobarPuntoDesaparicion(Via via, int indiceVia)
     {
-        if (via.trenActual == null)
+        if (via.trenActual == null || !via.objetoActivo || via.objetoAsociado == null || via.puntoDesaparicion == null)
             return;
 
-        if (!via.objetoActivo)
-            return;
-
-        if (via.objetoAsociado == null)
-            return;
-
-        if (via.puntoDesaparicion == null)
-            return;
-
-        float distancia =
-            Vector3.Distance(
-                via.trenActual.transform.position,
-                via.puntoDesaparicion.position
-            );
+        float distancia = Vector3.Distance(
+            via.trenActual.transform.position,
+            via.puntoDesaparicion.position
+        );
 
         if (distancia <= 0.5f)
         {
-            via.objetoAsociado.SetActive(false);
+            SetObjetoAsociadoClientRpc(indiceVia, false);
             via.objetoActivo = false;
         }
     }
 
     private void DetectarPuentes(GameObject tren)
     {
-        if (tren == null)
-            return;
+        if (tren == null) return;
 
-        Collider colliderTren =
-            tren.GetComponent<Collider>();
+        Collider colliderTren = tren.GetComponent<Collider>();
+        if (colliderTren == null) return;
 
-        if (colliderTren == null)
-            return;
-
-        Bounds boundsTren =
-            colliderTren.bounds;
-
-        Collider[] objetosDetectados =
-            Physics.OverlapBox(
-                boundsTren.center,
-                boundsTren.extents,
-                tren.transform.rotation
-            );
+        Bounds boundsTren = colliderTren.bounds;
+        Collider[] objetosDetectados = Physics.OverlapBox(
+            boundsTren.center,
+            boundsTren.extents,
+            tren.transform.rotation
+        );
 
         foreach (Collider objeto in objetosDetectados)
         {
-            Transform actual =
-                objeto.transform;
+            Transform actual = objeto.transform;
 
             while (actual != null)
             {
                 if (actual.CompareTag("Bridge"))
                 {
-                    Debug.Log(
-                        "💥 Tren destruyó puente: " +
-                        actual.name
-                    );
+                    Vector3 posicionPuente = actual.position;
 
-                    Vector3 posicionFX =
-                        actual.position;
-
-                    if (fxPuenteDestruido != null)
+                    // Si el puente es un NetworkObject, lo despawnea limpiamente
+                    NetworkObject puenteNetObj = actual.GetComponent<NetworkObject>();
+                    if (puenteNetObj != null && puenteNetObj.IsSpawned)
                     {
-                        GameObject fx =
-                            Instantiate(
-                                fxPuenteDestruido,
-                                posicionFX,
-                                Quaternion.identity
-                            );
-
-                        Destroy(
-                            fx,
-                            ObtenerDuracionFX(fx)
-                        );
+                        puenteNetObj.Despawn(true);
+                    }
+                    else
+                    {
+                        // Si es un objeto estático de la escena, notifica a los clientes su destrucción
+                        DestroyBridgeClientRpc(posicionPuente);
+                        Destroy(actual.gameObject);
                     }
 
-                    Destroy(
-                        actual.gameObject
-                    );
-
+                    // Notifica a los clientes para reproducir los efectos visuales del puente destruido
+                    SpawnBridgeFxClientRpc(posicionPuente);
                     break;
                 }
 
-                actual =
-                    actual.parent;
+                actual = actual.parent;
             }
         }
+    }
+
+    // --- RPCs para sincronizar estado visual y decorativo ---
+
+    [ClientRpc]
+    private void SetObjetoAsociadoClientRpc(int indiceVia, bool activo)
+    {
+        if (indiceVia >= 0 && indiceVia < vias.Count && vias[indiceVia].objetoAsociado != null)
+        {
+            vias[indiceVia].objetoAsociado.SetActive(activo);
+            vias[indiceVia].objetoActivo = activo;
+        }
+    }
+
+    [ClientRpc]
+    private void DestroyBridgeClientRpc(Vector3 pos)
+    {
+        if (IsServer) return; // El servidor ya lo destruyó localmente
+
+        Collider[] hits = Physics.OverlapSphere(pos, 1.5f);
+        foreach (Collider hit in hits)
+        {
+            if (hit.CompareTag("Bridge"))
+            {
+                Destroy(hit.transform.root.gameObject);
+                break;
+            }
+        }
+    }
+
+    [ClientRpc]
+    private void SpawnBridgeFxClientRpc(Vector3 posicion)
+    {
+        if (fxPuenteDestruido == null) return;
+
+        GameObject fx = Instantiate(fxPuenteDestruido, posicion, Quaternion.identity);
+        Destroy(fx, ObtenerDuracionFX(fx));
     }
 
     private float ObtenerDuracionFX(GameObject fx)
     {
-        ParticleSystem[] sistemas =
-            fx.GetComponentsInChildren<ParticleSystem>();
-
+        ParticleSystem[] sistemas = fx.GetComponentsInChildren<ParticleSystem>();
         float duracionMaxima = 0f;
 
         foreach (ParticleSystem sistema in sistemas)
         {
-            ParticleSystem.MainModule main =
-                sistema.main;
+            ParticleSystem.MainModule main = sistema.main;
+            float duracion = main.loop ? 2f : main.duration;
+            float duracionTotal = duracion + main.startLifetime.constantMax;
 
-            float duracion =
-                main.duration;
-
-            if (main.loop)
+            if (duracionTotal > duracionMaxima)
             {
-                duracion = 2f;
-            }
-
-            float duracionTotal =
-                duracion +
-                main.startLifetime.constantMax;
-
-            if (duracionTotal >
-                duracionMaxima)
-            {
-                duracionMaxima =
-                    duracionTotal;
+                duracionMaxima = duracionTotal;
             }
         }
 
-        if (duracionMaxima <= 0f)
-        {
-            duracionMaxima = 2f;
-        }
-
-        return duracionMaxima;
+        return duracionMaxima <= 0f ? 2f : duracionMaxima;
     }
 
     public void IniciarSpawner()
     {
-        spawnerActivo =
-            true;
+        if (!IsServer) return;
 
-        ultimaViaUsada =
-            -1;
-
-        temporizador =
-            Random.Range(
-                tiempoMinimo,
-                tiempoMaximo
-            );
+        spawnerActivo = true;
+        ultimaViaUsada = -1;
+        temporizador = Random.Range(tiempoMinimo, tiempoMaximo);
     }
 
     public void DetenerSpawner()
     {
-        spawnerActivo =
-            false;
+        if (!IsServer) return;
+        spawnerActivo = false;
     }
 
     public void EliminarTodosLosTrenes()
     {
-        foreach (Via via in vias)
+        if (!IsServer) return;
+
+        for (int i = 0; i < vias.Count; i++)
         {
+            Via via = vias[i];
             if (via.trenActual != null)
             {
-                Destroy(
-                    via.trenActual
-                );
+                NetworkObject netObj = via.trenActual.GetComponent<NetworkObject>();
+                if (netObj != null && netObj.IsSpawned)
+                {
+                    netObj.Despawn(true);
+                }
+                else
+                {
+                    Destroy(via.trenActual);
+                }
 
                 via.trenActual = null;
                 via.ocupada = false;
@@ -439,45 +378,27 @@ public class TrainSpawnerNivel2 : MonoBehaviour
 
             if (via.objetoAsociado != null)
             {
-                via.objetoAsociado.SetActive(false);
+                SetObjetoAsociadoClientRpc(i, false);
             }
-
             via.objetoActivo = false;
         }
     }
 
     private void OnDrawGizmos()
     {
-        if (vias == null)
-            return;
+        if (vias == null) return;
 
         foreach (Via via in vias)
         {
-            if (via.puntoInicio == null ||
-                via.puntoFinal == null)
-                continue;
+            if (via.puntoInicio == null || via.puntoFinal == null) continue;
 
-            Gizmos.DrawLine(
-                via.puntoInicio.position,
-                via.puntoFinal.position
-            );
-
-            Gizmos.DrawWireSphere(
-                via.puntoInicio.position,
-                0.5f
-            );
-
-            Gizmos.DrawWireSphere(
-                via.puntoFinal.position,
-                0.5f
-            );
+            Gizmos.DrawLine(via.puntoInicio.position, via.puntoFinal.position);
+            Gizmos.DrawWireSphere(via.puntoInicio.position, 0.5f);
+            Gizmos.DrawWireSphere(via.puntoFinal.position, 0.5f);
 
             if (via.puntoDesaparicion != null)
             {
-                Gizmos.DrawWireSphere(
-                    via.puntoDesaparicion.position,
-                    0.5f
-                );
+                Gizmos.DrawWireSphere(via.puntoDesaparicion.position, 0.5f);
             }
         }
     }

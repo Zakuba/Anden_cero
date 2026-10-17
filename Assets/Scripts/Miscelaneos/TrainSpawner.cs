@@ -1,7 +1,8 @@
 using UnityEngine;
+using Unity.Netcode;
 using System.Collections;
 
-public class TrainSpawner : MonoBehaviour
+public class TrainSpawner : NetworkBehaviour
 {
     [Header("Tren")]
     [SerializeField] private GameObject trainPrefab;
@@ -14,31 +15,43 @@ public class TrainSpawner : MonoBehaviour
     [SerializeField] private float spawnInterval = 30f;
     [SerializeField] private float trainSpeed = 10f;
 
-    private void Start()
+    public override void OnNetworkSpawn()
     {
-        StartCoroutine(TrainRoutine());
+        base.OnNetworkSpawn();
+
+        // REGLA CLAVE: Solo el Servidor/Host gestiona la aparición y el movimiento del tren
+        if (IsServer)
+        {
+            StartCoroutine(TrainRoutine());
+        }
     }
 
     private IEnumerator TrainRoutine()
     {
         while (true)
         {
-            // Esperar antes de generar el tren
             yield return new WaitForSeconds(spawnInterval);
 
-            // Crear el tren
+            // 1. Instanciar en el servidor
             GameObject train = Instantiate(
                 trainPrefab,
                 spawnPoint.position,
                 spawnPoint.rotation
             );
 
-            // Moverlo hasta el punto final
-            yield return StartCoroutine(MoveTrain(train));
+            // 2. Spawnear por red para que aparezca en todos los clientes
+            NetworkObject netObj = train.GetComponent<NetworkObject>();
+            if (netObj != null)
+            {
+                netObj.Spawn();
+            }
+
+            // 3. Moverlo en el servidor (NetworkTransform replicará la posición a los clientes)
+            yield return StartCoroutine(MoveTrain(train, netObj));
         }
     }
 
-    private IEnumerator MoveTrain(GameObject train)
+    private IEnumerator MoveTrain(GameObject train, NetworkObject netObj)
     {
         while (train != null)
         {
@@ -48,10 +61,17 @@ public class TrainSpawner : MonoBehaviour
                 trainSpeed * Time.deltaTime
             );
 
-            // Llegó al destino
             if (Vector3.Distance(train.transform.position, endPoint.position) < 0.1f)
             {
-                Destroy(train);
+                // Despawn de red y destrucción autoritativa
+                if (netObj != null && netObj.IsSpawned)
+                {
+                    netObj.Despawn(true);
+                }
+                else
+                {
+                    Destroy(train);
+                }
                 yield break;
             }
 
