@@ -5,6 +5,12 @@ using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.UI;
 
+public enum MatchMode
+{
+    BattleRoyale,
+    Survival
+}
+
 public class MatchManager : NetworkBehaviour
 {
     public static MatchManager Instance { get; private set; }
@@ -14,6 +20,10 @@ public class MatchManager : NetworkBehaviour
 
     public const int MaxPlayers = 6;
     private const int MinPlayersToStart = 1;
+
+    [Header("Modo de juego")]
+    [SerializeField] private MatchMode mode = MatchMode.BattleRoyale;
+    public MatchMode Mode => mode;
 
     [Header("Resultados")]
     [SerializeField] private GameObject resultsPanel;
@@ -226,6 +236,24 @@ public class MatchManager : NetworkBehaviour
         registeredPlayers.RemoveAll(p => p == null);
         var alive = registeredPlayers.FindAll(p => p.currentState.Value != PlayerState.Muerto);
 
+        // Supervivencia: la partida sigue mientras quede al menos un jugador vivo.
+        if (mode == MatchMode.Survival)
+        {
+            if (alive.Count == 0)
+            {
+                matchEnded = true;
+
+                int waveReached = 0;
+                float survivedSeconds = 0f;
+                if (WaveManager.Instance != null)
+                    WaveManager.Instance.EndRun(out waveReached, out survivedSeconds);
+
+                AnnounceSurvivalResultClientRpc(waveReached, survivedSeconds);
+            }
+
+            yield break;
+        }
+
         if (alive.Count == 1)
         {
             matchEnded = true;
@@ -236,6 +264,17 @@ public class MatchManager : NetworkBehaviour
             matchEnded = true;
             AnnounceResultClientRpc(0, default, true);
         }
+    }
+
+    [Rpc(SendTo.ClientsAndHost)]
+    private void AnnounceSurvivalResultClientRpc(int waveReached, float survivedSeconds)
+    {
+        matchEnded = true; // para que IsMatchRunning sea false también en los clientes
+        if (resultsPanel != null) resultsPanel.SetActive(true);
+        if (resultsText == null) return;
+
+        int totalSeconds = Mathf.FloorToInt(survivedSeconds);
+        resultsText.text = $"Derrota\nOleada alcanzada: {waveReached}\nTiempo: {totalSeconds / 60:00}:{totalSeconds % 60:00}";
     }
 
     [Rpc(SendTo.ClientsAndHost)]

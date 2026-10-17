@@ -17,6 +17,7 @@ GameObject:
   - component: {fileID: 6951983563759267854}
   - component: {fileID: 3125876650574946124}
   - component: {fileID: 2629055428276092509}
+  - component: {fileID: -8311499821369673246}
   m_Layer: 6
   m_Name: Dron Bombardero
   m_TagString: Drone
@@ -232,6 +233,7 @@ MonoBehaviour:
   dropInterval: 4
   gridSize: 2.5
   bombSpawnHeight: -1
+  bombsDestroyCrates: 0
 --- !u!54 &2629055428276092509
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -259,6 +261,20 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &-8311499821369673246
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4445246012756607686}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 790dfc7cbde8d46418549cc9b5e34fef, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::WaveEnemy
+  ShowTopMostFoldoutHeaderGroup: 1
+  countsForWave: 1
 --- !u!1001 &1579855923281371275
 PrefabInstance:
   m_ObjectHideFlags: 0

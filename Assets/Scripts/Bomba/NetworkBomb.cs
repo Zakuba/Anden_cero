@@ -14,6 +14,11 @@ public class NetworkBomb : NetworkBehaviour
     [Tooltip("Radio o elevación para que la bomba descanse sobre el piso sin enterrarse.")]
     [SerializeField] private float bombRadiusOffset = 0.5f;
 
+    [Header("Reglas")]
+    [Tooltip("Si es falso, las cajas Destructible actúan como un muro: el fuego no las alcanza. " +
+             "DroneBomberAI lo apaga en las bombas de los drones.")]
+    public bool destroysCrates = true;
+
     [Header("VFX")]
     public GameObject explosionVfx;
     public GameObject fireVfx;
@@ -146,7 +151,10 @@ public class NetworkBomb : NetworkBehaviour
 
             if (hit.CompareTag("Destructible"))
             {
-                hitDestructible = true;
+                if (destroysCrates)
+                    hitDestructible = true;
+                else
+                    hitIndestructible = true; // bomba de dron: la caja frena el fuego como un muro y no se toca
                 break;
             }
             

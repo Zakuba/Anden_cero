@@ -25743,6 +25743,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 21bcfdbaad150e443a0bc12e9b3b2caa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TrainSpawner
+  ShowTopMostFoldoutHeaderGroup: 1
   trainPrefab: {fileID: 4001643604399492628, guid: e180453fbe3d81244b17c1aa830a09b7, type: 3}
   spawnPoint: {fileID: 1178129081}
   endPoint: {fileID: 871768846}

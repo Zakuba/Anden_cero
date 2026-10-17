@@ -35,6 +35,7 @@ public class DroneShooterAI : NetworkBehaviour
     private float fireTimer;
     private PerimeterCollapse perimeterCollapse;
     private Vector3 currentDirection = Vector3.forward;
+    private float speedMultiplier = 1f; // lo ajusta WaveManager según la oleada
 
     private void Awake()
     {
@@ -53,7 +54,7 @@ public class DroneShooterAI : NetworkBehaviour
         perimeterCollapse = Object.FindFirstObjectByType<PerimeterCollapse>();
         
         transform.position = GetGridCenter(transform.position);
-        agent.speed = patrolSpeed;
+        ApplySpeed();
         SetNextGridDestination();
     }
 
@@ -90,6 +91,11 @@ public class DroneShooterAI : NetworkBehaviour
         {
             if (hit.CompareTag("Player"))
             {
+                // Ignorar jugadores muertos: quedan como fantasmas pero conservan el tag Player
+                PlayerStateManager playerState = hit.GetComponentInParent<PlayerStateManager>();
+                if (playerState != null && playerState.currentState.Value == PlayerState.Muerto)
+                    continue;
+
                 // Elevamos también el punto hacia donde mira (para no apuntarle a los pies)
                 Vector3 targetCenter = hit.transform.position + Vector3.up * eyeHeight;
                 
@@ -117,7 +123,7 @@ public class DroneShooterAI : NetworkBehaviour
             if (currentState == ShooterState.Patrol)
             {
                 currentState = ShooterState.Attack;
-                agent.speed = attackSpeed;
+                ApplySpeed();
             }
             targetPlayer = potentialTarget;
         }
@@ -126,7 +132,7 @@ public class DroneShooterAI : NetworkBehaviour
             if (currentState == ShooterState.Attack)
             {
                 currentState = ShooterState.Patrol;
-                agent.speed = patrolSpeed;
+                ApplySpeed();
                 targetPlayer = null;
             }
         }
@@ -294,6 +300,21 @@ public class DroneShooterAI : NetworkBehaviour
         float x = Mathf.Round(pos.x / gridSize) * gridSize;
         float z = Mathf.Round(pos.z / gridSize) * gridSize;
         return new Vector3(x, heightOffset, z);
+    }
+
+    // Lo llama WaveManager al spawnear el dron (solo servidor). 1 = velocidad base.
+    public void SetSpeedMultiplier(float multiplier)
+    {
+        if (!IsServer) return;
+        speedMultiplier = Mathf.Max(0.1f, multiplier);
+        ApplySpeed();
+    }
+
+    private void ApplySpeed()
+    {
+        if (agent == null || !agent.enabled) return;
+        float baseSpeed = currentState == ShooterState.Attack ? attackSpeed : patrolSpeed;
+        agent.speed = baseSpeed * speedMultiplier;
     }
 
     public void TakeDamage()

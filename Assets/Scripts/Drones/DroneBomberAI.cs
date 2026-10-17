@@ -7,12 +7,15 @@ using System.Collections.Generic;
 public class DroneBomberAI : NetworkBehaviour
 {
     private NavMeshAgent agent;
+    private float baseSpeed; // velocidad del prefab, antes del escalado por oleada
 
     [Header("Configuración de Bombas")]
     [SerializeField] private GameObject bombPrefab;
     [SerializeField] private float dropInterval = 4f;
     [SerializeField] private float gridSize = 2.5f;
     [SerializeField] private float bombSpawnHeight = -1f;
+    [Tooltip("Por regla de diseño las bombas de los drones no rompen cajas.")]
+    [SerializeField] private bool bombsDestroyCrates = false;
     
     private float bombTimer;
     private PerimeterCollapse perimeterCollapse;
@@ -21,6 +24,7 @@ public class DroneBomberAI : NetworkBehaviour
     private void Awake()
     {
         agent = GetComponent<NavMeshAgent>();
+        baseSpeed = agent.speed;
         
         // Evitamos rotaciones suaves para un movimiento más robótico/lineal (opcional)
         // agent.updateRotation = false; 
@@ -166,6 +170,11 @@ public class DroneBomberAI : NetworkBehaviour
         Vector3 spawnPosition = GetGridCenter(transform.position);
         GameObject bombInstance = Instantiate(bombPrefab, spawnPosition, Quaternion.identity);
         NetworkObject bombNetObj = bombInstance.GetComponent<NetworkObject>();
+
+        // Se configura antes del Spawn; la explosión se calcula en el servidor.
+        if (bombInstance.TryGetComponent(out NetworkBomb bomb))
+            bomb.destroysCrates = bombsDestroyCrates;
+
         bombNetObj.Spawn();
     }
 
@@ -174,6 +183,13 @@ public class DroneBomberAI : NetworkBehaviour
         float x = Mathf.Round(pos.x / gridSize) * gridSize;
         float z = Mathf.Round(pos.z / gridSize) * gridSize;
         return new Vector3(x, bombSpawnHeight, z);
+    }
+
+    // Lo llama WaveManager al spawnear el dron (solo servidor). 1 = velocidad base.
+    public void SetSpeedMultiplier(float multiplier)
+    {
+        if (!IsServer || agent == null || !agent.enabled) return;
+        agent.speed = baseSpeed * Mathf.Max(0.1f, multiplier);
     }
 
     public void TakeDamage()
