@@ -5882,6 +5882,7 @@ GameObject:
   m_Component:
   - component: {fileID: 114741957}
   - component: {fileID: 114741958}
+  - component: {fileID: 114741959}
   m_Layer: 0
   m_Name: Caja (1)
   m_TagString: Destructible
@@ -5928,6 +5929,22 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 2.3994195, y: 3.3980732, z: 2.5486612}
   m_Center: {x: 0.69970965, y: 1.1990366, z: -0.06793618}
+--- !u!208 &114741959
+NavMeshObstacle:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 114741956}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Shape: 1
+  m_Extents: {x: 0.5, y: 0.5, z: 0.5}
+  m_MoveThreshold: 0.1
+  m_Carve: 0
+  m_CarveOnlyStationary: 1
+  m_Center: {x: 0, y: 0, z: 0}
+  m_TimeToStationary: 0.5
 --- !u!1001 &114857952
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -15577,6 +15594,7 @@ GameObject:
   m_Component:
   - component: {fileID: 289332134}
   - component: {fileID: 289332135}
+  - component: {fileID: 289332136}
   m_Layer: 0
   m_Name: Cajas
   m_TagString: Destructible
@@ -15626,6 +15644,22 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 2.5684967, y: 2.2740326, z: 2.5436134}
   m_Center: {x: -58.31649, y: 2.4891267, z: 19.739729}
+--- !u!208 &289332136
+NavMeshObstacle:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 289332133}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Shape: 1
+  m_Extents: {x: 0.5, y: 0.5, z: 0.5}
+  m_MoveThreshold: 0.1
+  m_Carve: 0
+  m_CarveOnlyStationary: 1
+  m_Center: {x: 0, y: 0, z: 0}
+  m_TimeToStationary: 0.5
 --- !u!1 &292296979
 GameObject:
   m_ObjectHideFlags: 0
@@ -36413,9 +36447,10 @@ GameObject:
   m_Component:
   - component: {fileID: 716619216}
   - component: {fileID: 716619217}
+  - component: {fileID: 716619218}
   m_Layer: 0
   m_Name: Cajas
-  m_TagString: Untagged
+  m_TagString: Destructible
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -36459,6 +36494,22 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 2.498478, y: 2.722929, z: 2.7652435}
   m_Center: {x: -0.5551686, y: 0.40079713, z: 0.21063805}
+--- !u!208 &716619218
+NavMeshObstacle:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 716619215}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Shape: 1
+  m_Extents: {x: 0.5, y: 0.5, z: 0.5}
+  m_MoveThreshold: 0.1
+  m_Carve: 0
+  m_CarveOnlyStationary: 1
+  m_Center: {x: 0, y: 0, z: 0}
+  m_TimeToStationary: 0.5
 --- !u!1 &719304569
 GameObject:
   m_ObjectHideFlags: 0
@@ -60448,6 +60499,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1248570769}
   - component: {fileID: 1248570770}
+  - component: {fileID: 1248570771}
   m_Layer: 0
   m_Name: Caja
   m_TagString: Destructible
@@ -60494,6 +60546,22 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 2.7002287, y: 3.2438984, z: 2.6207826}
   m_Center: {x: 0.5220151, y: 1.121949, z: 0.0679549}
+--- !u!208 &1248570771
+NavMeshObstacle:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1248570768}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Shape: 1
+  m_Extents: {x: 0.5, y: 0.5, z: 0.5}
+  m_MoveThreshold: 0.1
+  m_Carve: 0
+  m_CarveOnlyStationary: 1
+  m_Center: {x: 0, y: 0, z: 0}
+  m_TimeToStationary: 0.5
 --- !u!4 &1250784787 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7607225141990315688, guid: 176d3472983c3b541b17e78ff35b4fc8, type: 3}
@@ -60795,6 +60863,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1257814994}
   - component: {fileID: 1257814995}
+  - component: {fileID: 1257814996}
   m_Layer: 0
   m_Name: Cajas (2)
   m_TagString: Destructible
@@ -60844,6 +60913,22 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 2.5684967, y: 2.2740326, z: 2.5436134}
   m_Center: {x: -58.31649, y: 2.4891267, z: 19.739729}
+--- !u!208 &1257814996
+NavMeshObstacle:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1257814993}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Shape: 1
+  m_Extents: {x: 0.5, y: 0.5, z: 0.5}
+  m_MoveThreshold: 0.1
+  m_Carve: 0
+  m_CarveOnlyStationary: 1
+  m_Center: {x: 0, y: 0, z: 0}
+  m_TimeToStationary: 0.5
 --- !u!1001 &1259420305
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -91546,6 +91631,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1881595050}
   - component: {fileID: 1881595051}
+  - component: {fileID: 1881595052}
   m_Layer: 0
   m_Name: Cajas (1)
   m_TagString: Destructible
@@ -91595,6 +91681,22 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 2.079546, y: 2.8541713, z: 2.2280803}
   m_Center: {x: -0.9665439, y: 0.22159916, z: -0.61404026}
+--- !u!208 &1881595052
+NavMeshObstacle:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1881595049}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Shape: 1
+  m_Extents: {x: 0.5, y: 0.5, z: 0.5}
+  m_MoveThreshold: 0.1
+  m_Carve: 0
+  m_CarveOnlyStationary: 1
+  m_Center: {x: 0, y: 0, z: 0}
+  m_TimeToStationary: 0.5
 --- !u!1 &1881618625
 GameObject:
   m_ObjectHideFlags: 0
@@ -95811,6 +95913,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1955479670}
   - component: {fileID: 1955479671}
+  - component: {fileID: 1955479672}
   m_Layer: 0
   m_Name: MasCajas
   m_TagString: Destructible
@@ -95854,6 +95957,22 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 2.4670353, y: 2.7537088, z: 2.5046759}
   m_Center: {x: 0.64396954, y: 0.57852006, z: 0.24435568}
+--- !u!208 &1955479672
+NavMeshObstacle:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1955479669}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Shape: 1
+  m_Extents: {x: 0.5, y: 0.5, z: 0.5}
+  m_MoveThreshold: 0.1
+  m_Carve: 0
+  m_CarveOnlyStationary: 1
+  m_Center: {x: 0, y: 0, z: 0}
+  m_TimeToStationary: 0.5
 --- !u!1001 &1955588353
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -101599,6 +101718,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SM_Gen_Prop_Crate_02
       objectReference: {fileID: 0}
+    - target: {fileID: 3813589974846415466, guid: 70ffc489c79a14a4caf59aa6cb7d74c2, type: 3}
+      propertyPath: m_TagString
+      value: Destructible
+      objectReference: {fileID: 0}
     - target: {fileID: 4586713141052078288, guid: 70ffc489c79a14a4caf59aa6cb7d74c2, type: 3}
       propertyPath: m_LocalScale.x
       value: 1.2709
@@ -105912,6 +106035,38 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 3174923170551661957, guid: defb4cdc6208f004795f0160e8fb04ed, type: 3}
   m_PrefabInstance: {fileID: 2143565270}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &855723262182394110
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8945709608378842045}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7a5ac11cc976e418e8d13136b07e1f52, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.AI.Navigation::Unity.AI.Navigation.NavMeshSurface
+  m_SerializedVersion: 0
+  m_AgentTypeID: 0
+  m_CollectObjects: 1
+  m_Size: {x: 44.79358, y: 10, z: 49.327404}
+  m_Center: {x: 3.0148163, y: 2, z: 11.488489}
+  m_LayerMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_UseGeometry: 0
+  m_DefaultArea: 0
+  m_GenerateLinks: 0
+  m_IgnoreNavMeshAgent: 1
+  m_IgnoreNavMeshObstacle: 1
+  m_OverrideTileSize: 0
+  m_TileSize: 256
+  m_OverrideVoxelSize: 0
+  m_VoxelSize: 0.16666667
+  m_MinRegionArea: 2
+  m_NavMeshData: {fileID: 23800000, guid: c619f3dfc47ba674598906cfff568cc1, type: 2}
+  m_BuildHeightMesh: 0
 --- !u!4 &2492733766450568783 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2492733766199888965, guid: afbc3707153a57c4996eed561707b5aa, type: 3}
@@ -105927,6 +106082,38 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 5254281030691748067, guid: 0974a892a73e9f84f9f725039b7047ef, type: 3}
   m_PrefabInstance: {fileID: 512588396}
   m_PrefabAsset: {fileID: 0}
+--- !u!4 &5448021240487414037
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8945709608378842045}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -1.89602, y: -0.005, z: -13.2186}
+  m_LocalScale: {x: 1, y: 1, z: 1.3734}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &8945709608378842045
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5448021240487414037}
+  - component: {fileID: 855723262182394110}
+  m_Layer: 0
+  m_Name: NavMesh_Manager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
@@ -105947,3 +106134,4 @@ SceneRoots:
   - {fileID: 345227184}
   - {fileID: 1451226777}
   - {fileID: 2008639381}
+  - {fileID: 5448021240487414037}
