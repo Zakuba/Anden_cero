@@ -3,8 +3,15 @@ using Unity.Netcode;
 
 public class HealthPickup : NetworkBehaviour
 {
-    private void OnTriggerEnter(Collider other)
+    // Evita curar dos veces si varios colliders del mismo jugador tocan el corazón en el mismo paso de física
+    private bool consumed;
+
+    // OnTriggerStay (y no Enter): si el jugador está parado sobre el corazón con la vida al máximo
+    // y después recibe daño, lo recoge sin tener que salir y volver a entrar.
+    private void OnTriggerStay(Collider other)
     {
+        if (consumed) return;
+
         // 1. Autoridad absoluta del Servidor
         if (NetworkManager.Singleton != null && !NetworkManager.Singleton.IsServer) 
             return;
@@ -24,6 +31,8 @@ public class HealthPickup : NetworkBehaviour
             // 4. SÓLO si la curación fue exitosa (el jugador tenía espacio para un corazón), despawneamos el objeto
             if (wasHealed)
             {
+                consumed = true;
+
                 if (NetworkObject != null && NetworkObject.IsSpawned)
                 {
                     NetworkObject.Despawn(true);

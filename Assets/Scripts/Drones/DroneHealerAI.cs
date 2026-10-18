@@ -13,6 +13,8 @@ public class DroneHealerAI : NetworkBehaviour
     [SerializeField] private float dropInterval = 10f;      // Tiempo entre cada corazón dejado en el suelo
     [SerializeField] private float gridSize = 1f;
     [SerializeField] private float spawnHeight = -1f;       // Altura de apoyo en el suelo
+    [Tooltip("Cuánto se eleva el corazón sobre el piso real para no quedar enterrado.")]
+    [SerializeField] private float heartHeightOffset = 0.5f;
 
     private float dropTimer;
     private Vector3 currentDirection = Vector3.forward;
@@ -160,7 +162,10 @@ public class DroneHealerAI : NetworkBehaviour
     {
         if (healthPickupPrefab == null) return;
 
+        // El corazón se apoya sobre el piso real, a la altura configurada (no sobre un Y fijo)
         Vector3 spawnPosition = GetGridCenter(transform.position);
+        if (TryGetFloorY(spawnPosition, out float floorY))
+            spawnPosition.y = floorY + heartHeightOffset;
         
         // Instancia y spawnea el corazón en la red para que todos los clientes lo vean
         GameObject heartInstance = Instantiate(healthPickupPrefab, spawnPosition, Quaternion.identity);
@@ -170,6 +175,34 @@ public class DroneHealerAI : NetworkBehaviour
         {
             heartNetObj.Spawn();
         }
+    }
+
+    // Cota Y real del piso bajo la celda. Ignora cajas, jugadores, drones, bombas y otros corazones.
+    private bool TryGetFloorY(Vector3 pos, out float floorY)
+    {
+        floorY = pos.y;
+
+        Vector3 rayOrigin = new Vector3(pos.x, pos.y + 2.5f, pos.z);
+        RaycastHit[] hits = Physics.RaycastAll(rayOrigin, Vector3.down, 10f, ~0, QueryTriggerInteraction.Ignore);
+
+        // De mayor a menor altura
+        System.Array.Sort(hits, (a, b) => b.point.y.CompareTo(a.point.y));
+
+        foreach (RaycastHit hit in hits)
+        {
+            Collider col = hit.collider;
+
+            if (col.CompareTag("Destructible")) continue;
+            if (col.GetComponentInParent<PlayerStateManager>() != null) continue;
+            if (col.GetComponentInParent<NavMeshAgent>() != null) continue; // drones
+            if (col.GetComponentInParent<NetworkBomb>() != null) continue;
+            if (col.GetComponentInParent<HealthPickup>() != null) continue;
+
+            floorY = hit.point.y;
+            return true;
+        }
+
+        return false; // sin piso debajo: se conserva la altura original
     }
 
     private Vector3 GetGridCenter(Vector3 pos)

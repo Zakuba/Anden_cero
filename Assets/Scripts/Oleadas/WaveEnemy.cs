@@ -1,11 +1,6 @@
 using Unity.Netcode;
 using UnityEngine;
 
-/// <summary>
-/// Va en cada prefab de dron (junto a NetworkObject). Los drones se destruyen
-/// con NetworkObject.Despawn desde TakeDamage(); este componente le avisa al
-/// WaveManager (solo en el servidor) para que descuente al enemigo.
-/// </summary>
 [DisallowMultipleComponent]
 public class WaveEnemy : NetworkBehaviour
 {

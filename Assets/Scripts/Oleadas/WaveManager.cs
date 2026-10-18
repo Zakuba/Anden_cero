@@ -12,10 +12,6 @@ public enum WavePhase
 }
 
 /// <summary>
-/// Spawner de oleadas del modo Supervivencia. Un WaveManager por mapa
-/// (objeto de escena con NetworkObject). Toda la lógica corre en el servidor;
-/// los clientes solo leen las NetworkVariable para mostrar el HUD.
-///
 /// Reglas:
 /// - La oleada avanza únicamente cuando no quedan drones vivos ni en cola.
 /// - Cantidad por oleada: base + (oleada - 1) * incremento.

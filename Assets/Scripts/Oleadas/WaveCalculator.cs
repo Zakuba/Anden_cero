@@ -1,15 +1,7 @@
 using System;
 
-/// <summary>
-/// Cálculos puros del modo Supervivencia (sin dependencias de Unity).
-/// Se mantiene separado de WaveManager para poder probarlo en EditMode.
-/// </summary>
 public static class WaveCalculator
 {
-    /// <summary>
-    /// Cantidad total de drones (sin contar al Sanador) de una oleada:
-    /// base + (oleada - 1) * incremento. Nunca menor a 1.
-    /// </summary>
     public static int TotalEnemies(int wave, int baseDrones, int increment)
     {
         wave = Math.Max(1, wave);
@@ -53,10 +45,7 @@ public static class WaveCalculator
         bombers = total - shooters;
     }
 
-    /// <summary>
-    /// ¿Esta oleada trae un Dron Sanador? Aparece desde firstWave y luego
-    /// cada everyN oleadas. Con firstWave o everyN menores a 1, nunca.
-    /// </summary>
+
     public static bool HasHealer(int wave, int firstWave, int everyN)
     {
         if (firstWave < 1 || everyN < 1) return false;

@@ -2,11 +2,6 @@ using TMPro;
 using Unity.Netcode;
 using UnityEngine;
 
-/// <summary>
-/// HUD de oleadas. Solo lee las NetworkVariable de WaveManager, así que se ve
-/// igual en el host y en los clientes. Si la escena no tiene WaveManager
-/// (por ejemplo Battle Royale), el panel raíz queda oculto.
-/// </summary>
 public class WaveHUD : MonoBehaviour
 {
     [Header("Referencias de UI")]
