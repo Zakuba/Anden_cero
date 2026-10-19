@@ -2,7 +2,7 @@ using UnityEngine;
 using Unity.Netcode;
 using System.Collections;
 
-public class TrainSpawner : NetworkBehaviour
+public class NetTrainSpawner : NetworkBehaviour
 {
     [Header("Tren")]
     [SerializeField] private GameObject trainPrefab;
