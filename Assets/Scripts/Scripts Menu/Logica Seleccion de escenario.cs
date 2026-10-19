@@ -41,6 +41,31 @@ public class SelectorEscenario : MonoBehaviour
         ActualizarFondos();
     }
 
+    public void seleccionEscenarioBattleRoyale(){
+        if (escenarios.Length == 0) return;
+
+        indiceActual = 0;
+
+        CambiarEscenarioConEstatica();
+    }
+
+    public void seleccionEscenarioSupervivencia(){
+        if (escenarios.Length == 0) return;
+
+        indiceActual = 1;
+
+        CambiarEscenarioConEstatica();
+    }
+
+    public void seleccionEscenarioPvP(){
+        if (escenarios.Length == 0) return;
+
+        indiceActual = 2;
+
+        CambiarEscenarioConEstatica();
+    }
+
+
     public void SiguienteEscenario()
     {
         if (escenarios.Length == 0) return;
