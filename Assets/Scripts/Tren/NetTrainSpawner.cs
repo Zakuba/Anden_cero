@@ -51,31 +51,42 @@ public class NetTrainSpawner : NetworkBehaviour
         }
     }
 
-    private IEnumerator MoveTrain(GameObject train, NetworkObject netObj)
+private IEnumerator MoveTrain(GameObject train, NetworkObject netObj)
+{
+    Rigidbody rb = train.GetComponent<Rigidbody>();
+
+    while (train != null)
     {
-        while (train != null)
+        Vector3 nextPos = Vector3.MoveTowards(
+            train.transform.position,
+            endPoint.position,
+            trainSpeed * Time.deltaTime
+        );
+
+        // Si tiene Rigidbody cinemático, mover mediante MovePosition
+        if (rb != null)
         {
-            train.transform.position = Vector3.MoveTowards(
-                train.transform.position,
-                endPoint.position,
-                trainSpeed * Time.deltaTime
-            );
-
-            if (Vector3.Distance(train.transform.position, endPoint.position) < 0.1f)
-            {
-                // Despawn de red y destrucción autoritativa
-                if (netObj != null && netObj.IsSpawned)
-                {
-                    netObj.Despawn(true);
-                }
-                else
-                {
-                    Destroy(train);
-                }
-                yield break;
-            }
-
-            yield return null;
+            rb.MovePosition(nextPos);
         }
+        else
+        {
+            train.transform.position = nextPos;
+        }
+
+        if (Vector3.Distance(train.transform.position, endPoint.position) < 0.1f)
+        {
+            if (netObj != null && netObj.IsSpawned)
+            {
+                netObj.Despawn(true);
+            }
+            else
+            {
+                Destroy(train);
+            }
+            yield break;
+        }
+
+        yield return null;
     }
+}
 }

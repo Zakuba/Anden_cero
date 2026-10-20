@@ -253,7 +253,7 @@ private IEnumerator BombExplosionRoutine(NetworkObject bombNetObj)
         return cells;
     }
 
-/// Encuentra la cota real del suelo debajo de una coordenada, ignorando cajas y objetos rompibles
+/// Encuentra la cota real del suelo debajo de una coordenada, ignorando cajas, bombas y jugadores
 private Vector3 GetGroundPosition(Vector3 pos)
 {
     Vector3 rayOrigin = new Vector3(pos.x, pos.y + 2.5f, pos.z);
@@ -266,19 +266,27 @@ private Vector3 GetGroundPosition(Vector3 pos)
 
     foreach (var hit in hits)
     {
-        // 1. Si impacta con una caja destructible, la ignora porque va a desaparecer en la explosión
+        // 1. Si impacta con una caja destructible, la ignora porque desaparece en la explosión
         if (hit.collider.CompareTag("Destructible"))
         {
             continue;
         }
 
-        // 2. Si impacta con la propia bomba o su modelo hijo, también la ignora
+        // 2. Si impacta con la propia bomba o su modelo hijo, la ignora
         if (hit.collider.GetComponentInParent<BombInteractable>() != null)
         {
             continue;
         }
 
-        // 3. El primer collider sólido que no sea destructible ni la bomba es el suelo real (piso o andén)
+        // 3. Ignorar al jugador (tanto su CharacterController como componentes de avatar)
+        if (hit.collider.GetComponentInParent<PlayerStateManager>() != null || 
+            hit.collider.GetComponent<CharacterController>() != null ||
+            hit.collider.CompareTag("Player"))
+        {
+            continue;
+        }
+
+        // 4. El primer collider sólido restante es el suelo real (piso, vía o andén)
         return new Vector3(pos.x, hit.point.y, pos.z);
     }
 
