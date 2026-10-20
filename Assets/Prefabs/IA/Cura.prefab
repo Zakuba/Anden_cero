@@ -154,3 +154,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::HealthPickup
   ShowTopMostFoldoutHeaderGroup: 1
+  lifetimeSeconds: 10
+  fxDespawn: {fileID: 1599718021928974, guid: 21461e6c060baf044ac3e717ed4170cb, type: 3}
+  duracionFX: 1
+  renderCorazon: {fileID: 0}
