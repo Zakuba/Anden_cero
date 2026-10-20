@@ -167,6 +167,9 @@ public class DroneBomberAI : NetworkBehaviour
 
     private void DropBomb()
     {
+        bool matchRunning = MatchManager.Instance == null || MatchManager.Instance.IsMatchRunning;
+        if (!matchRunning) return;
+
         Vector3 spawnPosition = GetGridCenter(transform.position);
         GameObject bombInstance = Instantiate(bombPrefab, spawnPosition, Quaternion.identity);
         NetworkObject bombNetObj = bombInstance.GetComponent<NetworkObject>();
