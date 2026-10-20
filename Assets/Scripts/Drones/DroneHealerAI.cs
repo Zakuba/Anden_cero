@@ -205,11 +205,11 @@ public class DroneHealerAI : NetworkBehaviour
         return false; // sin piso debajo: se conserva la altura original
     }
 
+    private readonly CellCenterResolver cellResolver = new CellCenterResolver();
+
     private Vector3 GetGridCenter(Vector3 pos)
     {
-        float x = Mathf.Round(pos.x / gridSize) * gridSize;
-        float z = Mathf.Round(pos.z / gridSize) * gridSize;
-        return new Vector3(x, spawnHeight, z);
+        return cellResolver.Resolve(pos, gridSize, spawnHeight);
     }
 
     // Permite que el dron aliado también pueda ser destruido si le cae una bomba por accidente

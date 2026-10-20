@@ -181,13 +181,6 @@ public class DroneBomberAI : NetworkBehaviour
         bombNetObj.Spawn();
     }
 
-    private Vector3 GetGridCenter(Vector3 pos)
-    {
-        float x = Mathf.Round(pos.x / gridSize) * gridSize;
-        float z = Mathf.Round(pos.z / gridSize) * gridSize;
-        return new Vector3(x, bombSpawnHeight, z);
-    }
-
     // Lo llama WaveManager al spawnear el dron (solo servidor). 1 = velocidad base.
     public void SetSpeedMultiplier(float multiplier)
     {
@@ -202,5 +195,11 @@ public class DroneBomberAI : NetworkBehaviour
         {
             NetworkObject.Despawn(true);
         }
+    }
+    private readonly CellCenterResolver cellResolver = new CellCenterResolver();
+
+    private Vector3 GetGridCenter(Vector3 pos)
+    {
+        return cellResolver.Resolve(pos, gridSize, bombSpawnHeight);
     }
 }

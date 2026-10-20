@@ -295,11 +295,11 @@ public class DroneShooterAI : NetworkBehaviour
         }
     }
 
+    private readonly CellCenterResolver cellResolver = new CellCenterResolver();
+
     private Vector3 GetGridCenter(Vector3 pos)
     {
-        float x = Mathf.Round(pos.x / gridSize) * gridSize;
-        float z = Mathf.Round(pos.z / gridSize) * gridSize;
-        return new Vector3(x, heightOffset, z);
+        return cellResolver.Resolve(pos, gridSize, heightOffset);
     }
 
     // Lo llama WaveManager al spawnear el dron (solo servidor). 1 = velocidad base.
