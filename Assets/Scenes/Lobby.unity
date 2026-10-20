@@ -28251,7 +28251,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8d0bd89d41d896c4b9cabce44c3825bc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SintyHelper
-  probabilidad: 50
+  probabilidad: 10
   objetoEasterEgg: {fileID: 105013285}
   botonInvisible: {fileID: 568177787}
 --- !u!114 &1592277123
