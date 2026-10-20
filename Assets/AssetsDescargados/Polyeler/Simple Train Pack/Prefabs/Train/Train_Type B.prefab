@@ -1852,8 +1852,8 @@ GameObject:
   - component: {fileID: 8859451481563533894}
   - component: {fileID: 1051088583072208612}
   - component: {fileID: 4011728759827613596}
-  - component: {fileID: 8010970506672246732}
   - component: {fileID: 1088734924229034621}
+  - component: {fileID: 8010970506672246732}
   m_Layer: 0
   m_Name: Train_Type B
   m_TagString: Untagged
@@ -1942,6 +1942,33 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: abbb8a485a9f8244e8e2f77ea425a4bc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TrainHazard
+--- !u!114 &1088734924229034621
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4001643604399492628}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.NetworkObject
+  GlobalObjectIdHash: 871988160
+  InScenePlacedSourceGlobalObjectIdHash: 871988160
+  m_InScenePlacedDisabledByDefault: 0
+  DeferredDespawnTick: 0
+  Ownership: 1
+  AlwaysReplicateAsRoot: 0
+  SynchronizeTransform: 1
+  m_InScenePlaced: 0
+  ActiveSceneSynchronization: 0
+  SceneMigrationSynchronization: 0
+  SpawnWithObservers: 1
+  DontDestroyWithOwner: 0
+  AutoObjectParentSync: 1
+  SyncOwnerTransformWhenParented: 1
+  AllowOwnerToParent: 0
 --- !u!114 &8010970506672246732
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1988,33 +2015,6 @@ MonoBehaviour:
   SwitchTransformSpaceWhenParented: 0
   Interpolate: 1
   SlerpPosition: 0
---- !u!114 &1088734924229034621
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4001643604399492628}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.NetworkObject
-  GlobalObjectIdHash: 947213974
-  InScenePlacedSourceGlobalObjectIdHash: 871988160
-  m_InScenePlacedDisabledByDefault: 0
-  DeferredDespawnTick: 0
-  Ownership: 1
-  AlwaysReplicateAsRoot: 0
-  SynchronizeTransform: 1
-  m_InScenePlaced: 1
-  ActiveSceneSynchronization: 0
-  SceneMigrationSynchronization: 0
-  SpawnWithObservers: 1
-  DontDestroyWithOwner: 0
-  AutoObjectParentSync: 1
-  SyncOwnerTransformWhenParented: 1
-  AllowOwnerToParent: 0
 --- !u!1 &4036554282153967989
 GameObject:
   m_ObjectHideFlags: 0
