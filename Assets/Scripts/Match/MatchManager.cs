@@ -266,15 +266,32 @@ public class MatchManager : NetworkBehaviour
         }
     }
 
-    [Rpc(SendTo.ClientsAndHost)]
+       [Rpc(SendTo.ClientsAndHost)]
     private void AnnounceSurvivalResultClientRpc(int waveReached, float survivedSeconds)
     {
         matchEnded = true; // para que IsMatchRunning sea false también en los clientes
         if (resultsPanel != null) resultsPanel.SetActive(true);
+
+        // Récord personal: cada jugador lo guarda en su propia máquina
+        PlayerData data = PersistenceManager.LoadData();
+        bool nuevoRecord = survivedSeconds > data.mejorTiempoSupervivencia;
+
+        if (nuevoRecord)
+        {
+            data.mejorTiempoSupervivencia = survivedSeconds;
+            PersistenceManager.SaveData(data);
+        }
+
         if (resultsText == null) return;
 
         int totalSeconds = Mathf.FloorToInt(survivedSeconds);
-        resultsText.text = $"Derrota\nOleada alcanzada: {waveReached}\nTiempo: {totalSeconds / 60:00}:{totalSeconds % 60:00}";
+        int bestSeconds = Mathf.FloorToInt(data.mejorTiempoSupervivencia);
+
+        string lineaRecord = nuevoRecord
+            ? "¡Nuevo récord!"
+            : $"Mejor tiempo: {bestSeconds / 60:00}:{bestSeconds % 60:00}";
+
+        resultsText.text = $"Derrota\nOleada alcanzada: {waveReached}\nTiempo: {totalSeconds / 60:00}:{totalSeconds % 60:00}\n{lineaRecord}";
     }
 
     [Rpc(SendTo.ClientsAndHost)]

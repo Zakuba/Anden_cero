@@ -6,6 +6,8 @@ public class PlayerData
 {
     // Contadores de estadísticas
     public int bombsBatted = 0;
+    // Mejor tiempo sobrevivido en modo Supervivencia (en segundos)
+    public float mejorTiempoSupervivencia = 0f;
     
     // Lista de IDs de logros ya desbloqueados
     public List<string> unlockedAchievements = new List<string>();

@@ -36,6 +36,15 @@ public class AchievementManager : MonoBehaviour
 
         ActualizarObjetosLogro();
     }
+    // El récord de supervivencia lo guarda MatchManager por su cuenta.
+    // Lo releemos antes de guardar para no pisarlo con una copia vieja.
+    private void GuardarProgreso()
+    {
+        currentData.mejorTiempoSupervivencia =
+            PersistenceManager.LoadData().mejorTiempoSupervivencia;
+
+        PersistenceManager.SaveData(currentData);
+    }
 
     /// <summary>
     /// Llamado localmente cada vez que el jugador dueño batea una bomba.
@@ -46,7 +55,7 @@ public class AchievementManager : MonoBehaviour
         CheckAchievement("bateador_experto", currentData.bombsBatted);
         
         // Guardamos el progreso incrementalmente
-        PersistenceManager.SaveData(currentData);
+        GuardarProgreso();
     }
 
     private void CheckAchievement(string targetId, int currentAmount)
@@ -65,7 +74,7 @@ public class AchievementManager : MonoBehaviour
     private void UnlockAchievement(AchievementSO achievement)
     {
         currentData.unlockedAchievements.Add(achievement.id);
-        PersistenceManager.SaveData(currentData);
+        GuardarProgreso();
 
         ActualizarObjetosLogro();
 
