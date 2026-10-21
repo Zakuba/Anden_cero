@@ -1,8 +1,9 @@
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Netcode;
 
-public class BridgeSpawner : MonoBehaviour
+public class BridgeSpawner : NetworkBehaviour
 {
     [System.Serializable]
     public class BridgePoint
@@ -60,17 +61,30 @@ public class BridgeSpawner : MonoBehaviour
         new List<GameObject>();
 
     private Coroutine colaSpawnCoroutine;
+    private Coroutine spawnInicialCoroutine;
 
-    private void Start()
+      public override void OnNetworkSpawn()
     {
+        // Solo el servidor decide qué cae y dónde; los clientes reciben los objetos por red
+        if (!IsServer) return;
+
         if (comenzarAutomaticamente)
         {
             IniciarSpawner();
         }
     }
 
+    public override void OnNetworkDespawn()
+    {
+        if (!IsServer) return;
+
+        DetenerCorrutinas();
+    }
+
     private void Update()
     {
+        if (!IsServer || !IsSpawned) return;
+
         LimpiarPuentesDestruidos();
     }
 
@@ -210,6 +224,9 @@ public class BridgeSpawner : MonoBehaviour
 
     private void CrearPuente(BridgePoint punto)
     {
+        if (!IsServer)
+            return;
+
         if (punto == null)
             return;
 
@@ -219,49 +236,40 @@ public class BridgeSpawner : MonoBehaviour
         if (bridgePrefabs.Count == 0)
             return;
 
-        int indiceAleatorio =
-            Random.Range(
-                0,
-                bridgePrefabs.Count
-            );
-
-        GameObject prefabElegido =
-            bridgePrefabs[indiceAleatorio];
+        int indiceAleatorio = Random.Range(0, bridgePrefabs.Count);
+        GameObject prefabElegido = bridgePrefabs[indiceAleatorio];
 
         if (prefabElegido == null)
         {
-            Debug.LogWarning(
-                "BridgeSpawner: Uno de los prefabs de la lista es NULL."
-            );
-
+            Debug.LogWarning("BridgeSpawner: Uno de los prefabs de la lista es NULL.");
             return;
         }
 
-        Vector3 posicion =
-            punto.posicion;
+        Vector3 posicion = punto.posicion;
+        posicion.y = alturaSpawn;
 
-        posicion.y =
-            alturaSpawn;
-
-        GameObject nuevoPuente =
-            Instantiate(
-                prefabElegido,
-                posicion,
-                prefabElegido.transform.rotation
-            );
-
-        punto.puenteActual =
-            nuevoPuente;
-
-        puentesSpawneados.Add(
-            nuevoPuente
+        GameObject nuevoPuente = Instantiate(
+            prefabElegido,
+            posicion,
+            prefabElegido.transform.rotation
         );
 
-        StartCoroutine(
-            CaerPuente(
-                nuevoPuente
-            )
-        );
+        NetworkObject netObj = nuevoPuente.GetComponent<NetworkObject>();
+
+        if (netObj == null)
+        {
+            Debug.LogError("BridgeSpawner: el prefab " + prefabElegido.name + " necesita NetworkObject.");
+            Destroy(nuevoPuente);
+            return;
+        }
+
+        // Spawn en red: todos los jugadores ven este mismo objeto
+        netObj.Spawn(true);
+
+        punto.puenteActual = nuevoPuente;
+        puentesSpawneados.Add(nuevoPuente);
+
+        StartCoroutine(CaerPuente(nuevoPuente));
     }
 
     // =========================================================
@@ -434,14 +442,11 @@ public class BridgeSpawner : MonoBehaviour
     // CONTROL EXTERNO
     // =========================================================
 
-    public void IniciarSpawner()
+        public void IniciarSpawner()
     {
-        if (colaSpawnCoroutine != null)
-        {
-            StopCoroutine(
-                colaSpawnCoroutine
-            );
-        }
+        if (!IsServer) return;
+
+        DetenerCorrutinas();
 
         foreach (BridgePoint punto in puntosCaida)
         {
@@ -450,33 +455,44 @@ public class BridgeSpawner : MonoBehaviour
         }
 
         // Spawn inicial
-        StartCoroutine(
-            SpawnInicial()
-        );
+        spawnInicialCoroutine = StartCoroutine(SpawnInicial());
 
         // Cola permanente de respawn
-        colaSpawnCoroutine =
-            StartCoroutine(
-                ColaRespawn()
-            );
+        colaSpawnCoroutine = StartCoroutine(ColaRespawn());
+    }
+
+    private void DetenerCorrutinas()
+    {
+        if (spawnInicialCoroutine != null)
+        {
+            StopCoroutine(spawnInicialCoroutine);
+            spawnInicialCoroutine = null;
+        }
+
+        if (colaSpawnCoroutine != null)
+        {
+            StopCoroutine(colaSpawnCoroutine);
+            colaSpawnCoroutine = null;
+        }
     }
 
     public void EliminarPuentes()
     {
-        for (
-            int i = puentesSpawneados.Count - 1;
-            i >= 0;
-            i--
-        )
+        if (!IsServer) return;
+
+        for (int i = puentesSpawneados.Count - 1; i >= 0; i--)
         {
-            if (
-                puentesSpawneados[i] != null
-            )
-            {
-                Destroy(
-                    puentesSpawneados[i]
-                );
-            }
+            GameObject puente = puentesSpawneados[i];
+
+            if (puente == null)
+                continue;
+
+            NetworkObject netObj = puente.GetComponent<NetworkObject>();
+
+            if (netObj != null && netObj.IsSpawned)
+                netObj.Despawn(true);
+            else
+                Destroy(puente);
         }
 
         puentesSpawneados.Clear();
