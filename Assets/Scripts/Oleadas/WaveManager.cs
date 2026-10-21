@@ -131,6 +131,13 @@ public class WaveManager : NetworkBehaviour
     private int frozenWaveReached;
     private float frozenSurvivedSeconds;
 
+    // Segundo de la partida en que empezó la oleada actual (para el récord)
+    private float currentWaveStartSeconds;
+    private float frozenTimeToReachWave;
+
+    /// <summary>Segundos que tardó el equipo en llegar a la oleada alcanzada. Válido tras terminar la partida (servidor).</summary>
+    public float TimeToReachWaveSeconds => frozenTimeToReachWave;
+
     public override void OnNetworkSpawn()
     {
         Instance = this;
@@ -180,6 +187,8 @@ public class WaveManager : NetworkBehaviour
         runStartTime = Time.time;
         runStartServerTime.Value = NetworkManager.ServerTime.Time;
         runEndServerTime.Value = 0d;
+        currentWaveStartSeconds = 0f;
+        frozenTimeToReachWave = 0f;
         currentWave.Value = 1;
         BeginRest(firstWaveDelay);
     }
@@ -211,6 +220,8 @@ public class WaveManager : NetworkBehaviour
 
         currentSpeedMultiplier = WaveCalculator.SpeedMultiplier(wave, speedIncreasePerWave, speedMultiplierMax);
         spawnTimer = 0f;
+
+        currentWaveStartSeconds = Time.time - runStartTime;
 
         phase.Value = WavePhase.Combat;
 
@@ -266,6 +277,9 @@ public class WaveManager : NetworkBehaviour
                 ? currentWave.Value
                 : Mathf.Max(0, currentWave.Value - 1);
             frozenSurvivedSeconds = Time.time - runStartTime;
+            frozenTimeToReachWave = currentWaveStartSeconds;
+
+            
             runEndServerTime.Value = NetworkManager.ServerTime.Time;
         }
 

@@ -8,6 +8,10 @@ public class PlayerData
     public int bombsBatted = 0;
     // Mejor tiempo sobrevivido en modo Supervivencia (en segundos)
     public float mejorTiempoSupervivencia = 0f;
+
+    // Récord de Supervivencia: oleada más alta; a igual oleada, menor tiempo en llegar a ella
+    public int mejorOleadaSupervivencia = 0;
+    public float mejorTiempoParaOleada = 0f;
     
     // Lista de IDs de logros ya desbloqueados
     public List<string> unlockedAchievements = new List<string>();

@@ -245,10 +245,14 @@ public class MatchManager : NetworkBehaviour
 
                 int waveReached = 0;
                 float survivedSeconds = 0f;
+                float timeToReachWave = 0f;
                 if (WaveManager.Instance != null)
+                {
                     WaveManager.Instance.EndRun(out waveReached, out survivedSeconds);
+                    timeToReachWave = WaveManager.Instance.TimeToReachWaveSeconds;
+                }
 
-                AnnounceSurvivalResultClientRpc(waveReached, survivedSeconds);
+                AnnounceSurvivalResultClientRpc(waveReached, survivedSeconds, timeToReachWave);
             }
 
             yield break;
@@ -266,32 +270,46 @@ public class MatchManager : NetworkBehaviour
         }
     }
 
-       [Rpc(SendTo.ClientsAndHost)]
-    private void AnnounceSurvivalResultClientRpc(int waveReached, float survivedSeconds)
+      [Rpc(SendTo.ClientsAndHost)]
+    private void AnnounceSurvivalResultClientRpc(int waveReached, float survivedSeconds, float timeToReachWave)
     {
         matchEnded = true; // para que IsMatchRunning sea false también en los clientes
         if (resultsPanel != null) resultsPanel.SetActive(true);
 
-        // Récord personal: cada jugador lo guarda en su propia máquina
+        // Récord personal: cada jugador lo guarda en su propia máquina.
+        // Manda la oleada; a igual oleada, gana el que llegó en menos tiempo.
         PlayerData data = PersistenceManager.LoadData();
-        bool nuevoRecord = survivedSeconds > data.mejorTiempoSupervivencia;
+
+        bool nuevoRecord = waveReached > 0 && (
+            waveReached > data.mejorOleadaSupervivencia ||
+            (waveReached == data.mejorOleadaSupervivencia &&
+             timeToReachWave < data.mejorTiempoParaOleada));
 
         if (nuevoRecord)
         {
-            data.mejorTiempoSupervivencia = survivedSeconds;
+            data.mejorOleadaSupervivencia = waveReached;
+            data.mejorTiempoParaOleada = timeToReachWave;
             PersistenceManager.SaveData(data);
         }
 
         if (resultsText == null) return;
 
-        int totalSeconds = Mathf.FloorToInt(survivedSeconds);
-        int bestSeconds = Mathf.FloorToInt(data.mejorTiempoSupervivencia);
-
         string lineaRecord = nuevoRecord
             ? "¡Nuevo récord!"
-            : $"Mejor tiempo: {bestSeconds / 60:00}:{bestSeconds % 60:00}";
+            : $"Mejor: oleada {data.mejorOleadaSupervivencia} en {FormatearTiempo(data.mejorTiempoParaOleada)}";
 
-        resultsText.text = $"Derrota\nOleada alcanzada: {waveReached}\nTiempo: {totalSeconds / 60:00}:{totalSeconds % 60:00}\n{lineaRecord}";
+        resultsText.text =
+            $"Derrota\n" +
+            $"Oleada alcanzada: {waveReached}\n" +
+            $"Tiempo en llegar: {FormatearTiempo(timeToReachWave)}\n" +
+            $"Tiempo total: {FormatearTiempo(survivedSeconds)}\n" +
+            lineaRecord;
+    }
+
+    private static string FormatearTiempo(float seconds)
+    {
+        int total = Mathf.FloorToInt(seconds);
+        return $"{total / 60:00}:{total % 60:00}";
     }
 
     [Rpc(SendTo.ClientsAndHost)]
