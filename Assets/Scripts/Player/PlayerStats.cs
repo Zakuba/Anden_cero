@@ -51,7 +51,7 @@ public class PlayerStats : NetworkBehaviour
         // Si el jugador entra con un powerup ya activo, usa el Singleton directamente
         if (IsOwner && activePowerUp.Value != PowerUpType.Ninguno && PowerUpUI.Instance != null)
         {
-            PowerUpUI.Instance.ActivateEffect(activePowerUp.Value, powerUpDuration);
+            PowerUpUI.Instance.ActivateEffect(activePowerUp.Value, powerUpDuration, transform.position);
         }
     }
 
@@ -98,7 +98,7 @@ public class PlayerStats : NetworkBehaviour
         {
             if (current != PowerUpType.Ninguno)
             {
-                PowerUpUI.Instance.ActivateEffect(current, powerUpDuration);
+                PowerUpUI.Instance.ActivateEffect(current, powerUpDuration, transform.position);
             }
             else
             {

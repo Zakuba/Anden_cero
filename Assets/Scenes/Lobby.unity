@@ -2148,6 +2148,10 @@ PrefabInstance:
       propertyPath: m_LocalRotation.w
       value: 0.7071079
       objectReference: {fileID: 0}
+    - target: {fileID: 8238537166795551509, guid: 73f20a1719585ed4a8cda33713f804c6, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.001
+      objectReference: {fileID: 0}
     - target: {fileID: 8358462377077582727, guid: 73f20a1719585ed4a8cda33713f804c6, type: 3}
       propertyPath: m_StaticEditorFlags
       value: 0
@@ -11511,16 +11515,16 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 718152171}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0.06983866, y: -0.00000004097819, z: -0.000000029220242, w: 0.99755836}
   m_LocalPosition: {x: 0, y: 0, z: -5.3}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 447966343}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 8.009, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -0, y: 0}
+  m_AnchoredPosition: {x: 1, y: 6.8}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &718152173
