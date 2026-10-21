@@ -58,6 +58,7 @@ GameObject:
   - component: {fileID: 2880702124819192731}
   - component: {fileID: 4317313515988791827}
   - component: {fileID: -4440210105935950766}
+  - component: {fileID: 2958801605216130286}
   m_Layer: 0
   m_Name: PlayerAvatar
   m_TagString: Player
@@ -424,6 +425,21 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerSpawnHandler
   ShowTopMostFoldoutHeaderGroup: 1
+--- !u!114 &2958801605216130286
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6023118608644461741}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6c85f09b0d007f0439fac16132f697b9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerSpectator
+  ShowTopMostFoldoutHeaderGroup: 1
+  keyPrevious: 113
+  keyNext: 101
 --- !u!1 &7732735729615609519
 GameObject:
   m_ObjectHideFlags: 0
