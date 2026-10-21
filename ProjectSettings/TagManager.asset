@@ -9,6 +9,7 @@ TagManager:
   - Drone
   - Bridge
   - FxTemporaire
+  - TeleportPoint
   layers:
   - Default
   - TransparentFX
