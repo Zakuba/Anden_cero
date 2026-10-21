@@ -97861,7 +97861,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 95e28ad10130bc34e8c50a3b6aa94316, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LuzAlarma
-  velocidadRotacion: 180
 --- !u!114 &1789237485
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -109549,7 +109548,7 @@ MonoBehaviour:
   spawnPoint: {fileID: 1049098656}
   endPoint: {fileID: 1143169589}
   spawnInterval: 10
-  trainSpeed: 10
+  trainSpeed: 50
 --- !u!114 &1980060371
 MonoBehaviour:
   m_ObjectHideFlags: 0
