@@ -87,11 +87,33 @@ public class WaveManager : NetworkBehaviour
     private readonly NetworkVariable<double> phaseEndServerTime = new NetworkVariable<double>(
         0d, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
 
+        // Instante (ServerTime) en que empezó la partida y en que terminó (0 = en curso).
+    private readonly NetworkVariable<double> runStartServerTime = new NetworkVariable<double>(
+        0d, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
+
+    private readonly NetworkVariable<double> runEndServerTime = new NetworkVariable<double>(
+        0d, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
+
     public int CurrentWave => currentWave.Value;
     public WavePhase Phase => phase.Value;
     public int EnemiesAlive => enemiesAlive.Value;
     public int EnemiesRemaining => enemiesRemaining.Value;
     public double PhaseEndServerTime => phaseEndServerTime.Value;
+
+        /// <summary>Tiempo de partida en segundos (en vivo; se congela al terminar).</summary>
+    public float SurvivedSeconds
+    {
+        get
+        {
+            if (runStartServerTime.Value <= 0d) return 0f;
+
+            double end = runEndServerTime.Value > 0d
+                ? runEndServerTime.Value
+                : NetworkManager.ServerTime.Time;
+
+            return Mathf.Max(0f, (float)(end - runStartServerTime.Value));
+        }
+    }
 
     // ---------- Estado solo del servidor ----------
     private readonly Queue<GameObject> spawnQueue = new Queue<GameObject>();
@@ -156,6 +178,8 @@ public class WaveManager : NetworkBehaviour
     {
         runStarted = true;
         runStartTime = Time.time;
+        runStartServerTime.Value = NetworkManager.ServerTime.Time;
+        runEndServerTime.Value = 0d;
         currentWave.Value = 1;
         BeginRest(firstWaveDelay);
     }
@@ -242,6 +266,7 @@ public class WaveManager : NetworkBehaviour
                 ? currentWave.Value
                 : Mathf.Max(0, currentWave.Value - 1);
             frozenSurvivedSeconds = Time.time - runStartTime;
+            runEndServerTime.Value = NetworkManager.ServerTime.Time;
         }
 
         DespawnAllEnemies();

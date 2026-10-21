@@ -12,7 +12,7 @@ public class WaveHUD : MonoBehaviour
     [SerializeField] private TMP_Text waveText;     // "Oleada 3"
     [SerializeField] private TMP_Text enemiesText;  // "Enemigos: 7"
     [SerializeField] private TMP_Text bannerText;   // "Oleada 4 en 6 s" / "¡Oleada 4!"
-
+    [SerializeField] private TMP_Text timerText;    // "03:25"
     [Header("Opciones")]
     [Tooltip("Marcado: muestra vivos + en cola (lo que falta para terminar la oleada). " +
              "Desmarcado: solo los que están vivos en el mapa en este momento.")]
@@ -22,6 +22,7 @@ public class WaveHUD : MonoBehaviour
     private int lastWave = -1;
     private int lastEnemies = -1;
     private int lastCountdown = -1;
+    private int lastTimerSeconds = -1;
     private WavePhase lastPhase = WavePhase.Idle;
     private float combatBannerUntil;
 
@@ -50,6 +51,7 @@ public class WaveHUD : MonoBehaviour
         UpdateWave(wm.CurrentWave);
         UpdateEnemies(includeQueuedEnemies ? wm.EnemiesRemaining : wm.EnemiesAlive);
         UpdateBanner(wm, phase);
+        UpdateTimer(wm);
 
         lastPhase = phase;
     }
@@ -70,6 +72,17 @@ public class WaveHUD : MonoBehaviour
 
         if (enemiesText != null)
             enemiesText.text = "Enemigos: " + count;
+    }
+
+        private void UpdateTimer(WaveManager wm)
+    {
+        if (timerText == null) return;
+
+        int total = Mathf.FloorToInt(wm.SurvivedSeconds);
+        if (total == lastTimerSeconds) return;
+        lastTimerSeconds = total;
+
+        timerText.text = string.Format("{0:00}:{1:00}", total / 60, total % 60);
     }
 
     private void UpdateBanner(WaveManager wm, WavePhase phase)
