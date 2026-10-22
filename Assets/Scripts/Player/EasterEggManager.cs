@@ -2,7 +2,7 @@ using Unity.Netcode;
 using Unity.Netcode.Components;
 using UnityEngine;
 
-public class PlayerTeleportSwap : NetworkBehaviour
+public class EasterEggManager : NetworkBehaviour
 {
     [Header("Input")]
     [SerializeField] private KeyCode teleportKey = KeyCode.T;
@@ -15,15 +15,24 @@ public class PlayerTeleportSwap : NetworkBehaviour
     [SerializeField] private GameObject[] objectsToDeactivate;
     [SerializeField] private GameObject[] objectsToActivate;
 
+    [Header("Cámaras")]
+    [SerializeField] private Camera playerCamera; // la cámara hija del prefab
+
+    [SerializeField] private TypewriterText swapTypewriter;
+
     // Estado sincronizado: lo escribe el servidor, lo leen todos (incluso quien entra tarde)
     private readonly NetworkVariable<bool> swapped = new(
         false,
         NetworkVariableReadPermission.Everyone,
         NetworkVariableWritePermission.Server);
 
+    public bool IsSwapped => swapped.Value;
+    public Camera PlayerCamera => playerCamera;
+
     private NetworkTransform netTransform;
     private Rigidbody rb;
     private CharacterController cc;
+    private bool cameraSwitched;
 
     private void Awake()
     {
@@ -36,6 +45,14 @@ public class PlayerTeleportSwap : NetworkBehaviour
     {
         swapped.OnValueChanged += OnSwappedChanged;
         ApplyVisuals(swapped.Value); // para quien se conecta con el estado ya cambiado
+
+        // La cámara del player arranca apagada en todos los clientes
+        if (playerCamera != null)
+        {
+            playerCamera.enabled = false;
+            AudioListener al = playerCamera.GetComponent<AudioListener>();
+            if (al != null) al.enabled = false;
+        }
     }
 
     public override void OnNetworkDespawn()
@@ -58,12 +75,22 @@ public class PlayerTeleportSwap : NetworkBehaviour
 
             Vector3 target = point.transform.position;
 
-            // Si el cliente tiene autoridad sobre el transform (ClientNetworkTransform), teletransporta él mismo.
-            // Si el NetworkTransform es server-authoritative, hay que pedirle al servidor que lo haga.
+            // Cliente con autoridad (ClientNetworkTransform): teletransporta él mismo.
+            // NetworkTransform server-authoritative: se lo pide al servidor.
             if (netTransform == null || netTransform.CanCommitToTransform)
                 DoTeleport(target);
             else
                 TeleportServerRpc(target);
+
+            // El cambio de cámara ocurre una sola vez
+            if (!cameraSwitched)
+            {
+                cameraSwitched = true;
+                if (MapCameraMover.Instance != null && playerCamera != null)
+                    MapCameraMover.Instance.SwitchTo(playerCamera, ActivatePlayerCamera);
+                else
+                    ActivatePlayerCamera();
+            }
 
             ToggleSwapServerRpc();
         }
@@ -95,11 +122,31 @@ public class PlayerTeleportSwap : NetworkBehaviour
         DoTeleport(position);
     }
 
+    // ---------- Cámara ----------
+
+    private void ActivatePlayerCamera()
+    {
+        if (playerCamera == null)
+        {
+            Debug.LogError("PlayerTeleportSwap: 'Player Camera' no está asignada en el prefab.");
+            return;
+        }
+
+        playerCamera.gameObject.SetActive(true); // por si algún padre quedó apagado
+        playerCamera.enabled = true;
+
+        AudioListener al = playerCamera.GetComponent<AudioListener>();
+        if (al != null) al.enabled = true;
+
+        if (swapTypewriter != null) swapTypewriter.Play();
+    }
+
     // ---------- Cambio de objetos ----------
+
     [ServerRpc]
     private void ToggleSwapServerRpc()
     {
-        swapped.Value = true; // un solo sentido: una vez hecho el swap, no se revierte
+        swapped.Value = true; // un solo sentido
     }
 
     private void OnSwappedChanged(bool oldValue, bool newValue)
@@ -109,7 +156,7 @@ public class PlayerTeleportSwap : NetworkBehaviour
 
     private void ApplyVisuals(bool isSwapped)
     {
-        // Si todavía no hubo swap, no se toca nada: los objetos quedan como están en el prefab
+        // Antes del swap no se toca nada: los objetos quedan como están en el prefab
         if (!isSwapped) return;
 
         foreach (GameObject obj in objectsToDeactivate)

@@ -7,7 +7,7 @@ using Unity.Cinemachine;
 [RequireComponent(typeof(CharacterController))]
 public class PlayerMovimientoOnline : NetworkBehaviour
 {
-[Header("Configuración de Velocidad")]
+    [Header("Configuración de Velocidad")]
     [SerializeField] private float moveSpeed = 5f;
     [SerializeField] private float rotationSpeed = 15f;
 
@@ -17,20 +17,27 @@ public class PlayerMovimientoOnline : NetworkBehaviour
     [SerializeField] private KeyCode keyLeft = KeyCode.A;
     [SerializeField] private KeyCode keyRight = KeyCode.D;
 
+    [Header("Primera persona (después del swap)")]
+    [SerializeField] private float mouseSensitivity = 2f;
+    [SerializeField] private float maxPitch = 80f;
+    [Tooltip("Multiplicador de velocidad después del swap. 0.5 = la mitad de rápido")]
+    [SerializeField] private float swappedSpeedMultiplier = 0.5f;
+
     private CharacterController controller;
     private Vector3 movementInput;
     private float verticalVelocity = 0f;
     private const float Gravity = -9.81f;
     private PlayerStats playerStats;
     private PlayerStateManager stateManager;
-
-    
+    private EasterEggManager swap;
+    private float pitch;
 
     private void Awake()
     {
         controller = GetComponent<CharacterController>();
         playerStats = GetComponent<PlayerStats>();
         stateManager = GetComponent<PlayerStateManager>();
+        swap = GetComponent<EasterEggManager>();
     }
 
     public override void OnNetworkSpawn()
@@ -58,7 +65,7 @@ public class PlayerMovimientoOnline : NetworkBehaviour
         if (CinemachineCameraRegistrar.Instance != null)
         {
             CinemachineCamera vcam = CinemachineCameraRegistrar.Instance;
-            
+
             // Asignación de target para Unity 6
             vcam.Target.TrackingTarget = transform;
             vcam.Follow = transform;
@@ -71,26 +78,34 @@ public class PlayerMovimientoOnline : NetworkBehaviour
         }
     }
 
-private void Update()
-{
-    // 1. Si el juego está pausado, ignoramos completamente cualquier input o movimiento del jugador
-    if (PauseManager.IsGamePaused) return;
+    private void Update()
+    {
+        // 1. Si el juego está pausado, ignoramos todo input. En primera persona se libera el cursor.
+        if (PauseManager.IsGamePaused)
+        {
+            if (IsOwner && swap != null && swap.IsSwapped && Cursor.lockState != CursorLockMode.None)
+            {
+                Cursor.lockState = CursorLockMode.None;
+                Cursor.visible = true;
+            }
+            return;
+        }
 
-    // Antes de arrancar la partida, los drones no pueden chocar ni empujar al jugador.
-    // Se aplica en todas las instancias, no solo en el dueño.
-    bool matchRunning = MatchManager.Instance == null || MatchManager.Instance.IsMatchRunning;
-    int enemigosMask = LayerMask.GetMask("Enemigos");
-    controller.excludeLayers = matchRunning ? 0 : enemigosMask;
+        // Antes de arrancar la partida, los drones no pueden chocar ni empujar al jugador.
+        // Se aplica en todas las instancias, no solo en el dueño.
+        bool matchRunning = MatchManager.Instance == null || MatchManager.Instance.IsMatchRunning;
+        int enemigosMask = LayerMask.GetMask("Enemigos");
+        controller.excludeLayers = matchRunning ? 0 : enemigosMask;
 
-    if (!IsOwner) return;
+        if (!IsOwner) return;
 
-    if (stateManager != null && stateManager.currentState.Value != PlayerState.Vivo) return;
+        if (stateManager != null && stateManager.currentState.Value != PlayerState.Vivo) return;
 
-    if (matchRunning) GatherCustomInput();
-    else movementInput = Vector3.zero;
+        if (matchRunning) GatherCustomInput();
+        else movementInput = Vector3.zero;
 
-    MoveAndRotate();
-}
+        MoveAndRotate();
+    }
 
     private void GatherCustomInput()
     {
@@ -116,15 +131,42 @@ private void Update()
             verticalVelocity += Gravity * Time.deltaTime;
         }
 
-        Vector3 moveDirection = new Vector3(movementInput.x, 0f, movementInput.z);
+        bool firstPerson = swap != null && swap.IsSwapped;
+        Vector3 moveDirection;
 
-        if (moveDirection.sqrMagnitude > 0.01f)
+        if (firstPerson)
         {
-            Quaternion targetRotation = Quaternion.LookRotation(moveDirection, Vector3.up);
-            transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
+            // Mouse: gira el cuerpo en horizontal y la cámara en vertical
+            if (Cursor.lockState != CursorLockMode.Locked)
+            {
+                Cursor.lockState = CursorLockMode.Locked;
+                Cursor.visible = false;
+            }
+
+            transform.Rotate(0f, Input.GetAxis("Mouse X") * mouseSensitivity, 0f);
+
+            pitch = Mathf.Clamp(pitch - Input.GetAxis("Mouse Y") * mouseSensitivity, -maxPitch, maxPitch);
+            if (swap.PlayerCamera != null)
+                swap.PlayerCamera.transform.localRotation = Quaternion.Euler(pitch, 0f, 0f);
+
+            // W = adelante, S = atrás, A/D = costados, relativos a hacia dónde mira el jugador
+            moveDirection = transform.right * movementInput.x + transform.forward * movementInput.z;
+        }
+        else
+        {
+            // Comportamiento anterior (ejes del mundo, el cuerpo se orienta hacia donde camina)
+            moveDirection = new Vector3(movementInput.x, 0f, movementInput.z);
+
+            if (moveDirection.sqrMagnitude > 0.01f)
+            {
+                Quaternion targetRotation = Quaternion.LookRotation(moveDirection, Vector3.up);
+                transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
+            }
         }
 
-       float effectiveSpeed = moveSpeed * (playerStats != null ? playerStats.MoveSpeedMultiplier : 1f);
+        float effectiveSpeed = moveSpeed * (playerStats != null ? playerStats.MoveSpeedMultiplier : 1f);
+        if (firstPerson) effectiveSpeed *= swappedSpeedMultiplier;
+
         Vector3 finalVelocity = (moveDirection * effectiveSpeed) + (Vector3.up * verticalVelocity);
         controller.Move(finalVelocity * Time.deltaTime);
     }

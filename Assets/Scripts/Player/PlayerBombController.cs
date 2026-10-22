@@ -42,10 +42,13 @@ public class PlayerBombController : NetworkBehaviour
     private PlayerStateManager stateManager;
     private BombCooldownUI localBombUI;
 
+    private EasterEggManager swap;
+
     private void Awake()
     {
         playerStats = GetComponent<PlayerStats>();
         stateManager = GetComponent<PlayerStateManager>();
+        swap = GetComponent<EasterEggManager>();
     }
 
     public override void OnNetworkSpawn()
@@ -95,8 +98,10 @@ private int EffectiveExplosionRange => explosionRange + (playerStats != null ? p
             }
         }
 
-        if (Input.GetKeyDown(plantKey) && activeBombs < EffectiveMaxBombs)
-        {   
+        bool canPlant = swap == null || !swap.IsSwapped;
+
+        if (canPlant && Input.GetKeyDown(plantKey) && activeBombs < EffectiveMaxBombs)
+        {
             Vector3 spawnPosition = GetGridCenter(transform.position);
             RequestPlantBombServerRpc(spawnPosition);
         }
@@ -151,6 +156,8 @@ private Vector3 GetGridCenter(Vector3 playerPos)
     [ServerRpc]
     private void RequestPlantBombServerRpc(Vector3 spawnPosition)
     {
+        if (swap != null && swap.IsSwapped) return;
+
         if (MatchManager.Instance != null && !MatchManager.Instance.IsMatchRunning) return;
         if (activeBombs >= EffectiveMaxBombs) return;
 
