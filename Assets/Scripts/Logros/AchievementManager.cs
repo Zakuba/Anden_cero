@@ -40,8 +40,12 @@ public class AchievementManager : MonoBehaviour
     // Lo releemos antes de guardar para no pisarlo con una copia vieja.
     private void GuardarProgreso()
     {
-        currentData.mejorTiempoSupervivencia =
-            PersistenceManager.LoadData().mejorTiempoSupervivencia;
+        // Recargar el récord desde el disco para no pisarlo con datos viejos
+        PlayerData guardado = PersistenceManager.LoadData();
+
+        currentData.mejorTiempoSupervivencia = guardado.mejorTiempoSupervivencia;
+        currentData.mejorOleadaSupervivencia = guardado.mejorOleadaSupervivencia;
+        currentData.mejorTiempoParaOleada = guardado.mejorTiempoParaOleada;
 
         PersistenceManager.SaveData(currentData);
     }
