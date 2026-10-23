@@ -29,6 +29,9 @@ public class DroneShooterAI : NetworkBehaviour
     [SerializeField] private float fireRate = 1f;
     [SerializeField] private float eyeHeight = 1f; // <-- NUEVO: Altura de los "ojos"
 
+    [SerializeField] private float scanInterval = 0.15f;
+    private float scanTimer;
+
     private NavMeshAgent agent;
     private ShooterState currentState = ShooterState.Patrol;
     private Transform targetPlayer;
@@ -62,7 +65,12 @@ public class DroneShooterAI : NetworkBehaviour
     {
         if (!IsServer) return;
 
-        CheckLineOfSight();
+        scanTimer -= Time.deltaTime;
+        if (scanTimer <= 0f)
+        {
+            scanTimer = scanInterval;
+            CheckLineOfSight();
+        }
 
         switch (currentState)
         {
@@ -80,40 +88,28 @@ public class DroneShooterAI : NetworkBehaviour
 
     private void CheckLineOfSight()
     {
-        // Elevamos el punto desde donde mira el dron
-        Vector3 eyePosition = transform.position + Vector3.up * eyeHeight; 
-        
-        Collider[] hits = Physics.OverlapSphere(eyePosition, sightRange);
+        Vector3 eyePosition = transform.position + Vector3.up * eyeHeight;
+        float sightRangeSqr = sightRange * sightRange;
+
         Transform potentialTarget = null;
-        float closestDistance = Mathf.Infinity;
-        
-    foreach (var hit in hits)
+        float closestSqr = Mathf.Infinity;
+
+        IReadOnlyList<PlayerStateManager> players = PlayerTargetCache.Players;
+
+        for (int i = 0; i < players.Count; i++)
         {
-            if (hit.CompareTag("Player"))
+            PlayerStateManager player = players[i];
+            if (player == null || player.currentState.Value == PlayerState.Muerto) continue;
+
+            Vector3 toPlayer = (player.transform.position + Vector3.up * eyeHeight) - eyePosition;
+            float sqr = toPlayer.sqrMagnitude;
+            if (sqr > sightRangeSqr || sqr >= closestSqr) continue;
+
+            float dist = Mathf.Sqrt(sqr);
+            if (dist < 0.001f || !Physics.Raycast(eyePosition, toPlayer / dist, dist, obstacleMask))
             {
-                // Ignorar jugadores muertos: quedan como fantasmas pero conservan el tag Player
-                PlayerStateManager playerState = hit.GetComponentInParent<PlayerStateManager>();
-                if (playerState != null && playerState.currentState.Value == PlayerState.Muerto)
-                    continue;
-
-                // Elevamos también el punto hacia donde mira (para no apuntarle a los pies)
-                Vector3 targetCenter = hit.transform.position + Vector3.up * eyeHeight;
-                
-                float dist = Vector3.Distance(eyePosition, targetCenter);
-                Vector3 dirToPlayer = (targetCenter - eyePosition).normalized;
-
-                // Dibuja una línea amarilla en la vista "Scene" para que veas el rayo en tiempo real
-                Debug.DrawRay(eyePosition, dirToPlayer * dist, Color.yellow); 
-
-                // Lanza el rayo. Si no choca con nada de la obstacleMask, lo vio
-                if (!Physics.Raycast(eyePosition, dirToPlayer, dist, obstacleMask))
-                {
-                    if (dist < closestDistance)
-                    {
-                        closestDistance = dist;
-                        potentialTarget = hit.transform;
-                    }
-                }
+                closestSqr = sqr;
+                potentialTarget = player.transform;
             }
         }
 
@@ -127,14 +123,11 @@ public class DroneShooterAI : NetworkBehaviour
             }
             targetPlayer = potentialTarget;
         }
-        else
+        else if (currentState == ShooterState.Attack)
         {
-            if (currentState == ShooterState.Attack)
-            {
-                currentState = ShooterState.Patrol;
-                ApplySpeed();
-                targetPlayer = null;
-            }
+            currentState = ShooterState.Patrol;
+            ApplySpeed();
+            targetPlayer = null;
         }
     }
 
@@ -240,11 +233,13 @@ public class DroneShooterAI : NetworkBehaviour
         return perimeterCollapse.IsPositionInDangerOrWarning(targetPosition);
     }
 
+    private static NavMeshPath sharedPath;
+
     private bool IsCellWalkable(Vector3 targetPosition)
     {
-        NavMeshPath path = new NavMeshPath();
-        agent.CalculatePath(targetPosition, path);
-        return path.status == NavMeshPathStatus.PathComplete;
+        if (sharedPath == null) sharedPath = new NavMeshPath();
+        agent.CalculatePath(targetPosition, sharedPath);
+        return sharedPath.status == NavMeshPathStatus.PathComplete;
     }
 
     private void HandleShooting()

@@ -141,11 +141,13 @@ public class DroneHealerAI : NetworkBehaviour
         return perimeterCollapse.IsPositionInDangerOrWarning(targetPosition);
     }
 
+    private static NavMeshPath sharedPath;
+
     private bool IsCellWalkable(Vector3 targetPosition)
     {
-        NavMeshPath path = new NavMeshPath();
-        agent.CalculatePath(targetPosition, path);
-        return path.status == NavMeshPathStatus.PathComplete;
+        if (sharedPath == null) sharedPath = new NavMeshPath();
+        agent.CalculatePath(targetPosition, sharedPath);
+        return sharedPath.status == NavMeshPathStatus.PathComplete;
     }
 
     private void HandleHeartDropping()
