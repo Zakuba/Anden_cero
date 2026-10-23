@@ -58,6 +58,14 @@ public class NetworkBomb : NetworkBehaviour
                 continue;
             }
 
+            // Ignora a jugadores y drones: si no, la bomba o el fuego quedan apoyados sobre su collider
+            if (hit.collider.GetComponentInParent<PlayerStateManager>() != null ||
+                hit.collider.CompareTag("Drone") ||
+                hit.collider.GetComponentInParent<UnityEngine.AI.NavMeshAgent>() != null)
+            {
+                continue;
+            }
+            
             // 2. Si impacta con la propia bomba, también la ignora
             if (hit.collider.GetComponentInParent<NetworkBomb>() != null)
             {
