@@ -15,4 +15,6 @@ public class PlayerData
     
     // Lista de IDs de logros ya desbloqueados
     public List<string> unlockedAchievements = new List<string>();
+    //Record Minijuego Bombas
+    public float recordMinijuegoBombas = 0f;
 }
