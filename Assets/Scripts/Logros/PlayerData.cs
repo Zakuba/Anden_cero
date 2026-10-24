@@ -4,6 +4,7 @@ using System.Collections.Generic;
 [Serializable]
 public class PlayerData
 {
+    public string nombreJugador;
     // Contadores de estadísticas
     public int bombsBatted = 0;
     // Mejor tiempo sobrevivido en modo Supervivencia (en segundos)
