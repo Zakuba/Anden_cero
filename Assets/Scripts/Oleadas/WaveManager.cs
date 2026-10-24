@@ -60,12 +60,8 @@ public class WaveManager : NetworkBehaviour
     [SerializeField] private float firstWaveDelay = 5f;
     [SerializeField] private float restDuration = 8f;
 
-    [Header("Escalado de dificultad")]
-    [SerializeField] private float speedIncreasePerWave = 0.05f;
-    [SerializeField] private float speedMultiplierMax = 1.6f;
-    // TODO (escalado futuro, según la oleada actual):
-    //  - Cadencia de disparo del Fusilero (fireRate en DroneShooterAI).
-    //  - Rango de explosión del Bombardero (vive en el prefab de la bomba).
+    // La velocidad de los drones es fija: ya no aumenta con la oleada.
+    // Pasará a depender de la dificultad elegida (perfil de dificultad).
 
     // ---------- Estado replicado (escribe solo el servidor) ----------
     private readonly NetworkVariable<int> currentWave = new NetworkVariable<int>(
@@ -124,7 +120,6 @@ public class WaveManager : NetworkBehaviour
 
     private float spawnTimer;
     private float restEndTime;
-    private float currentSpeedMultiplier = 1f;
 
     private bool runStarted;
     private float runStartTime;
@@ -218,7 +213,6 @@ public class WaveManager : NetworkBehaviour
         spawnQueue.Clear();
         foreach (GameObject prefab in composition) spawnQueue.Enqueue(prefab);
 
-        currentSpeedMultiplier = WaveCalculator.SpeedMultiplier(wave, speedIncreasePerWave, speedMultiplierMax);
         spawnTimer = 0f;
 
         currentWaveStartSeconds = Time.time - runStartTime;
@@ -361,16 +355,7 @@ public class WaveManager : NetworkBehaviour
         if (enemy.CountsForWave) activeEnemies.Add(enemy);
         else activeHealers.Add(enemy);
 
-        ApplyScaling(instance);
         return true;
-    }
-
-    private void ApplyScaling(GameObject instance)
-    {
-        if (instance.TryGetComponent(out DroneShooterAI shooter))
-            shooter.SetSpeedMultiplier(currentSpeedMultiplier);
-        else if (instance.TryGetComponent(out DroneBomberAI bomber))
-            bomber.SetSpeedMultiplier(currentSpeedMultiplier);
     }
 
     private bool TryPickSpawnPosition(out Vector3 position)

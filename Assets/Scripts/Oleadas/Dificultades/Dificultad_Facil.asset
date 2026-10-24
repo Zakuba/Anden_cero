@@ -1,0 +1,33 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 94cd55d28c277554786ad22f77419600, type: 3}
+  m_Name: Dificultad_Facil
+  m_EditorClassIdentifier: Assembly-CSharp::SurvivalDifficultyProfile
+  level: 0
+  displayName: "F\xE1cil"
+  baseDronesPerWave: 2
+  dronesPerWaveIncrement: 1
+  maxAliveBase: 3
+  maxAlivePerPlayer: 1
+  spawnInterval: 1
+  restDuration: 12
+  shooterRatioStart: 0.25
+  shooterRatioStep: 0.02
+  shooterRatioMax: 0.4
+  healerFirstWave: 2
+  healerEveryNWaves: 2
+  droneSpeedMultiplier: 0.8
+  shooterFireRate: 1.5
+  shooterSightRange: 9
+  shooterScanInterval: 0.3
+  bomberDropInterval: 5
+  bombFuseTime: 3.5
