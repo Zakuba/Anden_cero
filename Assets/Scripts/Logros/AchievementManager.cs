@@ -75,7 +75,7 @@ public class AchievementManager : MonoBehaviour
         }
     }
 
-    private void UnlockAchievement(AchievementSO achievement)
+private void UnlockAchievement(AchievementSO achievement)
     {
         currentData.unlockedAchievements.Add(achievement.id);
         GuardarProgreso();
@@ -84,7 +84,8 @@ public class AchievementManager : MonoBehaviour
 
         if (NotificationManager.Instance != null)
         {
-            NotificationManager.Instance.ShowAchievement(achievement.title);
+            // Pasamos título y descripción
+            NotificationManager.Instance.ShowAchievement(achievement.title, achievement.description);
         }
         else
         {
@@ -92,19 +93,32 @@ public class AchievementManager : MonoBehaviour
         }
     }
 
-    private void ActualizarObjetosLogro()
+private void ActualizarObjetosLogro()
+{
+    if (currentData == null) return;
+
+    bool desbloqueado = currentData.unlockedAchievements.Contains(achievementId);
+
+    if (objetoDesbloqueado != null)
     {
-        bool desbloqueado =
-            currentData.unlockedAchievements.Contains(achievementId);
-
-        if (objetoDesbloqueado != null)
-            objetoDesbloqueado.SetActive(desbloqueado);
-            btnDesbloqueado.SetActive(desbloqueado);
-
-        if (objetoBloqueado != null)
-            objetoBloqueado.SetActive(!desbloqueado);
-            btnBloqueado.SetActive(!desbloqueado);
+        objetoDesbloqueado.SetActive(desbloqueado);
     }
+
+    if (btnDesbloqueado != null)
+    {
+        btnDesbloqueado.SetActive(desbloqueado);
+    }
+
+    if (objetoBloqueado != null)
+    {
+        objetoBloqueado.SetActive(!desbloqueado);
+    }
+
+    if (btnBloqueado != null)
+    {
+        btnBloqueado.SetActive(!desbloqueado);
+    }
+}
 
 
     private void Update()

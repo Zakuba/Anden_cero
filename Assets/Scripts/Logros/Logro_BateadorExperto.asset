@@ -14,5 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::AchievementSO
   id: bateador_experto
   title: Bateador Experto
-  description: 
-  targetGoal: 2
+  description: batea mas de 50 bombas
+  targetGoal: 50

@@ -13307,6 +13307,7 @@ GameObject:
   - component: {fileID: 809049259}
   - component: {fileID: 809049258}
   - component: {fileID: 809049257}
+  - component: {fileID: 809049261}
   m_Layer: 5
   m_Name: Button Minijuego
   m_TagString: Untagged
@@ -13397,7 +13398,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 809049259}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 0}
+        m_TargetAssemblyTypeName: 
+        m_MethodName: 
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: 
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &809049259
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -13436,6 +13449,20 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 809049255}
   m_CullTransparentMesh: 1
+--- !u!114 &809049261
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 809049255}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 357c78f63146c5c498988f9fc57f543f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MiniJuegoEscena
+  minijuegoButton: {fileID: 809049258}
+  minijuegoSceneName: MiniJuego
 --- !u!4 &809248939 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4049883305596767804, guid: 73f20a1719585ed4a8cda33713f804c6, type: 3}

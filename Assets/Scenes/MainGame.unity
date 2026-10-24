@@ -17210,6 +17210,14 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 429
       objectReference: {fileID: 0}
+    - target: {fileID: 4210397853580490690, guid: 4d4c679d21400084e87954f8d4319a26, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 1100
+      objectReference: {fileID: 0}
+    - target: {fileID: 4210397853580490690, guid: 4d4c679d21400084e87954f8d4319a26, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 50
+      objectReference: {fileID: 0}
     - target: {fileID: 4228055380809049170, guid: 4d4c679d21400084e87954f8d4319a26, type: 3}
       propertyPath: m_IsActive
       value: 0
@@ -35248,7 +35256,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6007563389296560170, guid: e1ce9045eacc92b42a9c258e2f021d47, type: 3}
       propertyPath: m_Name
-      value: NotificationManager
+      value: LogrosManager
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

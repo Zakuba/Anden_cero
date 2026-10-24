@@ -12,25 +12,42 @@ public class NotificationManager : MonoBehaviour
 
     private void Awake()
     {
-        if (Instance == null) Instance = this;
-        else Destroy(gameObject);
+        if (Instance == null)
+        {
+            Instance = this;
+        }
+        else
+        {
+            Destroy(this);
+            return;
+        }
 
-        notificationPanel.SetActive(false);
+        if (notificationPanel != null)
+        {
+            notificationPanel.SetActive(false);
+        }
     }
 
-    public void ShowAchievement(string title)
+    // Ahora recibe título y descripción
+    public void ShowAchievement(string title, string description)
     {
+        if (notificationPanel == null || achievementTitleText == null) return;
+
         StopAllCoroutines();
-        StartCoroutine(NotificationRoutine(title));
+        StartCoroutine(NotificationRoutine(title, description));
     }
 
-    private IEnumerator NotificationRoutine(string title)
+    private IEnumerator NotificationRoutine(string title, string description)
     {
-        achievementTitleText.text = "¡Logro Desbloqueado!\n" + title;
+        // Une el título y la descripción entre paréntesis
+        achievementTitleText.text = $"¡Logro Desbloqueado!\n{title} ({description})";
         notificationPanel.SetActive(true);
         
         yield return new WaitForSeconds(4f);
         
-        notificationPanel.SetActive(false);
+        if (notificationPanel != null)
+        {
+            notificationPanel.SetActive(false);
+        }
     }
 }

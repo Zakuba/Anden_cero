@@ -46,3 +46,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::AchievementManager
   achievementsCatalog:
   - {fileID: 11400000, guid: 83045faf690c81e478944c8ed161f80e, type: 2}
+  achievementId: bateador_experto
+  btnDesbloqueado: {fileID: 0}
+  objetoDesbloqueado: {fileID: 0}
+  btnBloqueado: {fileID: 0}
+  objetoBloqueado: {fileID: 0}

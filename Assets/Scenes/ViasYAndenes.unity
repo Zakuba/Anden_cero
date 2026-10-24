@@ -34841,7 +34841,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6007563389296560170, guid: e1ce9045eacc92b42a9c258e2f021d47, type: 3}
       propertyPath: m_Name
-      value: NotificationManager
+      value: LogrosManager
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
