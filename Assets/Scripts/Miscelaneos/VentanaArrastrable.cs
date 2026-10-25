@@ -30,7 +30,7 @@ public class VentanaArrastrable : MonoBehaviour, IPointerDownHandler, IDragHandl
         Vector2 pos = local + offset;
 
         // Que no se salga del escritorio
-        Vector2 mitad = contenedor.rect.size / 2f;
+        Vector2 mitad = contenedor.rect.size / 2.87f;
         pos.x = Mathf.Clamp(pos.x, -mitad.x, mitad.x);
         pos.y = Mathf.Clamp(pos.y, -mitad.y, mitad.y);
 
