@@ -61420,20 +61420,12 @@ MonoBehaviour:
   - {fileID: 1637820419}
   minSpawnDistanceToPlayers: 14
   navMeshSampleRadius: 1.5
-  baseDronesPerWave: 3
-  dronesPerWaveIncrement: 2
-  maxAliveBase: 4
-  maxAlivePerPlayer: 2
-  spawnInterval: 0.6
-  shooterRatioStart: 0.34
-  shooterRatioStep: 0.03
-  shooterRatioMax: 0.6
-  healerFirstWave: 2
-  healerEveryNWaves: 3
+  difficultyProfiles:
+  - {fileID: 11400000, guid: d271949ffd979f64cb55251975638813, type: 2}
+  - {fileID: 11400000, guid: b25656b873e95ec45880c8b7cca8e073, type: 2}
+  - {fileID: 11400000, guid: a3e6daf53ad98804abe24bfa2763babe, type: 2}
+  fallbackDifficulty: 0
   firstWaveDelay: 5
-  restDuration: 8
-  speedIncreasePerWave: 0.05
-  speedMultiplierMax: 1.6
 --- !u!4 &1183381147
 Transform:
   m_ObjectHideFlags: 0

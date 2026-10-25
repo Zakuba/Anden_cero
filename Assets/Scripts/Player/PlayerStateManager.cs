@@ -1,4 +1,3 @@
-
 using UnityEngine;
 using Unity.Netcode;
 using System.Collections;
@@ -43,6 +42,14 @@ public class PlayerStateManager : NetworkBehaviour
             NetworkVariableWritePermission.Server
         );
 
+    // Vidas máximas de este jugador, visibles para todos (el HUD las necesita para dibujar los corazones).
+    public NetworkVariable<int> maxLivesNet =
+        new NetworkVariable<int>(
+            3,
+            NetworkVariableReadPermission.Everyone,
+            NetworkVariableWritePermission.Server
+        );
+
     private void Awake()
     {
         if (characterController == null)
@@ -68,6 +75,7 @@ public class PlayerStateManager : NetworkBehaviour
         if (IsServer)
         {
             currentLives.Value = maxLives;
+            maxLivesNet.Value = maxLives;
             currentState.Value = PlayerState.Vivo;
         }
 
@@ -103,6 +111,19 @@ public class PlayerStateManager : NetworkBehaviour
 
             subscribedMatchManager = null;
         }
+    }
+
+    /// <summary>
+    /// Solo servidor. Fija las vidas máximas de este jugador y le llena la vida.
+    /// La usa WaveManager al empezar Supervivencia, según la dificultad.
+    /// </summary>
+    public void ApplyMaxLives(int value)
+    {
+        if (!IsServer) return;
+
+        maxLives = Mathf.Max(1, value);
+        maxLivesNet.Value = maxLives;
+        currentLives.Value = maxLives;
     }
 
     private void OnLivesChanged(int previousValue, int newValue)

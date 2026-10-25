@@ -11,14 +11,6 @@ public enum WavePhase
     Finished   // la partida terminó
 }
 
-/// <summary>
-/// Reglas:
-/// - La oleada avanza únicamente cuando no quedan drones vivos ni en cola.
-/// - Cantidad por oleada: base + (oleada - 1) * incremento.
-/// - Hay un tope de drones vivos a la vez; el resto espera en cola.
-/// - El Sanador es aliado: no cuenta para completar la oleada y se retira
-///   cuando esta termina.
-/// </summary>
 public class WaveManager : NetworkBehaviour
 {
     public static WaveManager Instance { get; private set; }
@@ -35,33 +27,16 @@ public class WaveManager : NetworkBehaviour
     [SerializeField] private float minSpawnDistanceToPlayers = 14f;
     [SerializeField] private float navMeshSampleRadius = 1.5f;
 
-    [Header("Cantidad por oleada")]
-    [SerializeField] private int baseDronesPerWave = 3;
-    [SerializeField] private int dronesPerWaveIncrement = 2;
-
-    [Header("Tope de drones vivos = base + porJugadorVivo * jugadoresVivos")]
-    [SerializeField] private int maxAliveBase = 4;
-    [SerializeField] private int maxAlivePerPlayer = 2;
-    [Tooltip("Segundos entre un spawn y el siguiente (también cada cuánto se reevalúa el tope).")]
-    [SerializeField] private float spawnInterval = 0.6f;
-
-    [Header("Composición (proporción de Fusileros; el resto son Bombarderos)")]
-    [SerializeField, Range(0f, 1f)] private float shooterRatioStart = 0.34f;
-    [SerializeField, Range(0f, 1f)] private float shooterRatioStep = 0.03f;
-    [SerializeField, Range(0f, 1f)] private float shooterRatioMax = 0.6f;
-
-    [Header("Dron Sanador")]
-    [Tooltip("Primera oleada con Sanador (0 = nunca).")]
-    [SerializeField] private int healerFirstWave = 2;
-    [Tooltip("Cada cuántas oleadas vuelve a aparecer (0 = nunca).")]
-    [SerializeField] private int healerEveryNWaves = 3;
+    [Header("Dificultad")]
+    [Tooltip("Los tres perfiles (Fácil, Normal y Difícil). El orden no importa: se buscan por su campo Level.")]
+    [SerializeField] private SurvivalDifficultyProfile[] difficultyProfiles;
+    [Tooltip("Dificultad que se usa si no se eligió ninguna (por ejemplo, al abrir la escena directo desde el Editor).")]
+    [SerializeField] private DifficultyLevel fallbackDifficulty = DifficultyLevel.Normal;
 
     [Header("Tiempos")]
     [SerializeField] private float firstWaveDelay = 5f;
-    [SerializeField] private float restDuration = 8f;
-
-    // La velocidad de los drones es fija: ya no aumenta con la oleada.
-    // Pasará a depender de la dificultad elegida (perfil de dificultad).
+    // Cantidad por oleada, tope, intervalos, composición, Sanador y descanso salen del perfil de dificultad.
+    // La velocidad de los drones es fija: no cambia con la oleada.
 
     // ---------- Estado replicado (escribe solo el servidor) ----------
     private readonly NetworkVariable<int> currentWave = new NetworkVariable<int>(
@@ -90,11 +65,34 @@ public class WaveManager : NetworkBehaviour
     private readonly NetworkVariable<double> runEndServerTime = new NetworkVariable<double>(
         0d, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
 
+    // Dificultad de esta partida: la fija el servidor al nacer y no vuelve a cambiar.
+    private readonly NetworkVariable<DifficultyLevel> difficulty = new NetworkVariable<DifficultyLevel>(
+        DifficultyLevel.Normal, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
+
     public int CurrentWave => currentWave.Value;
     public WavePhase Phase => phase.Value;
     public int EnemiesAlive => enemiesAlive.Value;
     public int EnemiesRemaining => enemiesRemaining.Value;
     public double PhaseEndServerTime => phaseEndServerTime.Value;
+
+    /// <summary>Dificultad de la partida (la misma en el host y en los clientes).</summary>
+    public DifficultyLevel Difficulty => difficulty.Value;
+
+    /// <summary>
+    /// Perfil de una dificultad, buscado por su campo Level. Funciona en el host y en los clientes.
+    /// Devuelve null si falta.
+    /// </summary>
+    public SurvivalDifficultyProfile GetProfile(DifficultyLevel level)
+    {
+        if (difficultyProfiles == null) return null;
+
+        foreach (SurvivalDifficultyProfile profile in difficultyProfiles)
+        {
+            if (profile != null && profile.level == level) return profile;
+        }
+
+        return null;
+    }
 
         /// <summary>Tiempo de partida en segundos (en vivo; se congela al terminar).</summary>
     public float SurvivedSeconds
@@ -118,6 +116,7 @@ public class WaveManager : NetworkBehaviour
     private readonly List<Vector3> alivePlayerPositions = new List<Vector3>();
     private readonly List<Vector3> validPoints = new List<Vector3>();
 
+    private SurvivalDifficultyProfile activeProfile; // perfil de la dificultad elegida (solo servidor)
     private float spawnTimer;
     private float restEndTime;
 
@@ -143,7 +142,25 @@ public class WaveManager : NetworkBehaviour
         {
             Debug.LogError("[WaveManager] Configuración incompleta: el spawner queda desactivado.");
             enabled = false;
+            return;
         }
+
+        SelectDifficulty();
+    }
+
+    // La dificultad la decide el servidor una sola vez, al nacer, y no se vuelve a escribir.
+    private void SelectDifficulty()
+    {
+        // La elegida en el menú del host; si no hubo elección (por ejemplo, escena abierta
+        // directo desde el Editor), el valor de respaldo del Inspector.
+        DifficultyLevel chosen = MatchSettings.HasDifficulty
+            ? MatchSettings.Difficulty
+            : fallbackDifficulty;
+
+        activeProfile = GetProfile(chosen);
+        difficulty.Value = chosen;
+
+        Debug.Log("[WaveManager] Dificultad de la partida: " + chosen);
     }
 
     public override void OnNetworkDespawn()
@@ -200,9 +217,10 @@ public class WaveManager : NetworkBehaviour
     {
         int wave = currentWave.Value;
 
-        int total = WaveCalculator.TotalEnemies(wave, baseDronesPerWave, dronesPerWaveIncrement);
+        int total = WaveCalculator.TotalEnemies(wave, activeProfile.baseDronesPerWave, activeProfile.dronesPerWaveIncrement);
         WaveCalculator.Composition(
-            total, wave, shooterRatioStart, shooterRatioStep, shooterRatioMax,
+            total, wave,
+            activeProfile.shooterRatioStart, activeProfile.shooterRatioStep, activeProfile.shooterRatioMax,
             out int shooters, out int bombers);
 
         var composition = new List<GameObject>(total);
@@ -221,7 +239,7 @@ public class WaveManager : NetworkBehaviour
 
         // El Sanador no entra en la cola ni en el tope: aparece una vez al empezar la oleada.
         if (healerPrefab != null && activeHealers.Count == 0 &&
-            WaveCalculator.HasHealer(wave, healerFirstWave, healerEveryNWaves))
+            WaveCalculator.HasHealer(wave, activeProfile.healerFirstWave, activeProfile.healerEveryNWaves))
         {
             TrySpawn(healerPrefab);
         }
@@ -235,7 +253,7 @@ public class WaveManager : NetworkBehaviour
 
         if (spawnQueue.Count > 0 && spawnTimer <= 0f)
         {
-            spawnTimer = spawnInterval; // el tope se reevalúa cada spawnInterval
+            spawnTimer = activeProfile.spawnInterval; // el tope se reevalúa cada spawnInterval
 
             if (activeEnemies.Count < CurrentCap() && TrySpawn(spawnQueue.Peek()))
             {
@@ -257,7 +275,7 @@ public class WaveManager : NetworkBehaviour
         foreach (WaveEnemy healer in healers) DespawnEnemy(healer);
 
         currentWave.Value++;
-        BeginRest(restDuration);
+        BeginRest(activeProfile.restDuration);
     }
 
     private void FinishRun()
@@ -355,7 +373,19 @@ public class WaveManager : NetworkBehaviour
         if (enemy.CountsForWave) activeEnemies.Add(enemy);
         else activeHealers.Add(enemy);
 
+        ApplyDifficulty(instance);
         return true;
+    }
+
+    // Pasa al dron los valores de la dificultad elegida. El Sanador no cambia con la dificultad.
+    private void ApplyDifficulty(GameObject instance)
+    {
+        DroneDifficultyParams parameters = activeProfile.ToDroneParams();
+
+        if (instance.TryGetComponent(out DroneShooterAI shooter))
+            shooter.ApplyDifficulty(parameters);
+        else if (instance.TryGetComponent(out DroneBomberAI bomber))
+            bomber.ApplyDifficulty(parameters);
     }
 
     private bool TryPickSpawnPosition(out Vector3 position)
@@ -414,7 +444,7 @@ public class WaveManager : NetworkBehaviour
 
     private int CurrentCap()
     {
-        return WaveCalculator.MaxAlive(maxAliveBase, maxAlivePerPlayer, RefreshAlivePlayers());
+        return WaveCalculator.MaxAlive(activeProfile.maxAliveBase, activeProfile.maxAlivePerPlayer, RefreshAlivePlayers());
     }
 
     private float MinHorizontalDistanceToPlayers(Vector3 point)
@@ -454,6 +484,15 @@ public class WaveManager : NetworkBehaviour
         {
             Debug.LogError("[WaveManager] Faltan los puntos de aparición (spawnPoints).");
             ok = false;
+        }
+
+        foreach (DifficultyLevel level in System.Enum.GetValues(typeof(DifficultyLevel)))
+        {
+            if (GetProfile(level) == null)
+            {
+                Debug.LogError("[WaveManager] Falta el perfil de dificultad " + level + " en difficultyProfiles.");
+                ok = false;
+            }
         }
 
         return ok;

@@ -38,7 +38,7 @@ public class DroneShooterAI : NetworkBehaviour
     private float fireTimer;
     private PerimeterCollapse perimeterCollapse;
     private Vector3 currentDirection = Vector3.forward;
-    private float speedMultiplier = 1f; // lo ajusta WaveManager según la oleada
+    private float speedMultiplier = 1f; // lo fija WaveManager según la dificultad
 
     private void Awake()
     {
@@ -297,11 +297,17 @@ public class DroneShooterAI : NetworkBehaviour
         return cellResolver.Resolve(pos, gridSize, heightOffset);
     }
 
-    // Lo llama WaveManager al spawnear el dron (solo servidor). 1 = velocidad base.
-    public void SetSpeedMultiplier(float multiplier)
+    // Lo llama WaveManager al spawnear el dron (solo servidor). Los drones colocados a mano
+    // (Battle Royale) nunca lo reciben y conservan los valores del Inspector.
+    public void ApplyDifficulty(DroneDifficultyParams p)
     {
         if (!IsServer) return;
-        speedMultiplier = Mathf.Max(0.1f, multiplier);
+
+        speedMultiplier = Mathf.Max(0.1f, p.SpeedMultiplier);
+        fireRate = Mathf.Max(0.1f, p.ShooterFireRate);
+        sightRange = Mathf.Max(1f, p.ShooterSightRange);
+        scanInterval = Mathf.Max(0.02f, p.ShooterScanInterval);
+
         ApplySpeed();
     }
 

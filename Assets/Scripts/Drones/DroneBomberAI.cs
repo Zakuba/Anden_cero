@@ -7,7 +7,7 @@ using System.Collections.Generic;
 public class DroneBomberAI : NetworkBehaviour
 {
     private NavMeshAgent agent;
-    private float baseSpeed; // velocidad del prefab, antes del escalado por oleada
+    private float baseSpeed; // velocidad del prefab, antes del multiplicador de dificultad
 
     [Header("Configuración de Bombas")]
     [SerializeField] private GameObject bombPrefab;
@@ -18,6 +18,7 @@ public class DroneBomberAI : NetworkBehaviour
     [SerializeField] private bool bombsDestroyCrates = false;
     
     private float bombTimer;
+    private float fuseTimeOverride = -1f; // mecha de las bombas que suelta; -1 = la del prefab de la bomba
     private PerimeterCollapse perimeterCollapse;
     private Vector3 currentDirection = Vector3.forward;
 
@@ -177,16 +178,30 @@ public class DroneBomberAI : NetworkBehaviour
 
         // Se configura antes del Spawn; la explosión se calcula en el servidor.
         if (bombInstance.TryGetComponent(out NetworkBomb bomb))
+        {
             bomb.destroysCrates = bombsDestroyCrates;
+
+            if (fuseTimeOverride > 0f)
+                bomb.bombTimer = fuseTimeOverride;
+        }
 
         bombNetObj.Spawn();
     }
 
-    // Lo llama WaveManager al spawnear el dron (solo servidor). 1 = velocidad base.
-    public void SetSpeedMultiplier(float multiplier)
+    // Lo llama WaveManager al spawnear el dron (solo servidor). Los drones colocados a mano
+    // (Battle Royale) nunca lo reciben y conservan los valores del Inspector.
+    public void ApplyDifficulty(DroneDifficultyParams p)
     {
-        if (!IsServer || agent == null || !agent.enabled) return;
-        agent.speed = baseSpeed * Mathf.Max(0.1f, multiplier);
+        if (!IsServer) return;
+
+        if (agent != null && agent.enabled)
+            agent.speed = baseSpeed * Mathf.Max(0.1f, p.SpeedMultiplier);
+
+        dropInterval = Mathf.Max(0.5f, p.BomberDropInterval);
+        fuseTimeOverride = Mathf.Max(0.5f, p.BombFuseTime);
+
+        // Se llama justo al aparecer: la primera bomba usa el intervalo nuevo.
+        bombTimer = dropInterval;
     }
 
     public void TakeDamage()
