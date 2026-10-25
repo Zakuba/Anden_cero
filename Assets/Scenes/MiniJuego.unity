@@ -2001,12 +2001,16 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8405233890614901934, guid: 4d4c679d21400084e87954f8d4319a26, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8405233890614901934, guid: 4d4c679d21400084e87954f8d4319a26, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 8405233890614901934, guid: 4d4c679d21400084e87954f8d4319a26, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 783038136}
     - target: {fileID: 8405233890614901934, guid: 4d4c679d21400084e87954f8d4319a26, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
       value: 2
@@ -2046,7 +2050,10 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 7296141391241311158, guid: 4d4c679d21400084e87954f8d4319a26, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1658887056}
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 4228055380809049170, guid: 4d4c679d21400084e87954f8d4319a26, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 783038138}
   m_SourcePrefab: {fileID: 100100000, guid: 4d4c679d21400084e87954f8d4319a26, type: 3}
 --- !u!224 &783038134 stripped
 RectTransform:
@@ -2058,6 +2065,36 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 2447156896332289926, guid: 4d4c679d21400084e87954f8d4319a26, type: 3}
   m_PrefabInstance: {fileID: 783038133}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &783038136 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4228055380809049170, guid: 4d4c679d21400084e87954f8d4319a26, type: 3}
+  m_PrefabInstance: {fileID: 783038133}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &783038137 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8405233890614901934, guid: 4d4c679d21400084e87954f8d4319a26, type: 3}
+  m_PrefabInstance: {fileID: 783038133}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Button
+--- !u!114 &783038138
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 783038136}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c00c24ba56711d540a2c8aa5fd2cf096, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::NewMonoBehaviourScript
+  stopServerButtonMenu: {fileID: 783038137}
+  lobbySceneName: Lobby
 --- !u!1 &783756761
 GameObject:
   m_ObjectHideFlags: 0
