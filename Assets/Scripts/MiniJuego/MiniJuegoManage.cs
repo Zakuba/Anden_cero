@@ -1,44 +1,51 @@
 using System.Collections;
+using System.Collections.Generic;
 using TMPro;
+using Unity.Cinemachine;
 using Unity.Netcode;
 using UnityEngine;
-using UnityEngine.UI;
 using UnityEngine.SceneManagement;
-using Unity.Cinemachine;
+using UnityEngine.UI;
 
 public class MiniJuegoManager : MonoBehaviour
 {
     public static MiniJuegoManager Instance { get; private set; }
 
     [Header("Cámaras")]
-    [Tooltip("Cámara cenital que enfoca la arena de juego.")]
     [SerializeField] private Camera mainCamera;
-    [Tooltip("Cámara que enfoca el lobby o sala de espera.")]
     [SerializeField] private Camera lobbyCamera;
 
     [Header("Sala de Espera (Pre-Juego)")]
-    [Tooltip("Objeto raíz o Canvas de la sala de espera a ocultar al empezar.")]
     [SerializeField] private GameObject lobbyUI;
-    [Tooltip("Botón para iniciar la partida (BTNempezar).")]
     [SerializeField] private Button startMatchButton;
 
     [Header("Configuración del Jugador")]
-    [Tooltip("Prefab del jugador con PlayerStateManager y NetworkObject.")]
     [SerializeField] private GameObject playerPrefab;
     [SerializeField] private Transform playerSpawnPoint;
 
-    [Header("Configuración de Cuadrícula (Arena)")]
+    [Header("Configuración del Suelo / Casillas")]
+    [Tooltip("Arrastra aquí el objeto 'Suelo' que contiene todas las casillas hijas.")]
+    [SerializeField] private Transform sueloParent;
+    [Tooltip("Tamaño de casilla para la expansión en cruz.")]
     [SerializeField] private float gridSize = 2.5f;
-    [SerializeField] private int gridDimension = 4;
-    [SerializeField] private LayerMask groundLayerMask = ~0;
 
     [Header("Mecánica de Bombas")]
     [SerializeField] private GameObject bombPrefab;
+    [Tooltip("Tiempo en segundos que espera la bomba en el piso antes de detonar.")]
+    [SerializeField] private float bombTimer = 2.5f;
+    [Tooltip("Rango de casillas en cruz que abarca la explosión.")]
+    [SerializeField] private int explosionRange = 1;
     [SerializeField] private float spawnHeightY = 10f;
-    [SerializeField] private float fallSpeed = 12f;
+    [SerializeField] private float fallSpeed = 14f;
     [SerializeField] private float initialSpawnInterval = 3f;
-    [SerializeField] private float minSpawnInterval = 0.8f;
+    [SerializeField] private float minSpawnInterval = 0.9f;
     [SerializeField] private float difficultyRate = 0.05f;
+
+    [Header("Efectos Visuales de Explosión (VFX)")]
+    [Tooltip("Prefab del fuego/explosión para el centro (el mismo que usas en PlayerBombController).")]
+    [SerializeField] private GameObject explosionVfx;
+    [Tooltip("Prefab del fuego para los brazos de la cruz.")]
+    [SerializeField] private GameObject fireVfx;
 
     [Header("Regla Anti-Camper")]
     [SerializeField] private float stationaryThreshold = 3f;
@@ -46,11 +53,13 @@ public class MiniJuegoManager : MonoBehaviour
     [Header("HUD In-Game y Resultados")]
     [SerializeField] private GameObject inGameHUD;
     [SerializeField] private TMP_Text timerText;
+    [SerializeField] private PlayerLivesUI playerLivesUI; // <--- AGREGAR ESTA LÍNEA
     [SerializeField] private GameObject gameOverPanel;
     [SerializeField] private TMP_Text gameOverText;
     [SerializeField] private Button restartButton;
 
-    // Estado interno
+    // Control interno
+    private List<Transform> casillasDisponibles = new List<Transform>();
     private PlayerStateManager localPlayer;
     private float survivalTimer = 0f;
     private bool isGameActive = false;
@@ -63,7 +72,6 @@ public class MiniJuegoManager : MonoBehaviour
         if (Instance == null) Instance = this;
         else Destroy(gameObject);
 
-        // Inicialización de UI y Cámaras
         if (gameOverPanel != null) gameOverPanel.SetActive(false);
         if (inGameHUD != null) inGameHUD.SetActive(false);
 
@@ -75,6 +83,9 @@ public class MiniJuegoManager : MonoBehaviour
 
         if (restartButton != null)
             restartButton.onClick.AddListener(RestartGame);
+
+        // Recopilar todas las casillas hijas bajo 'Suelo'
+        RecopilarCasillas();
     }
 
     private void Start()
@@ -82,26 +93,55 @@ public class MiniJuegoManager : MonoBehaviour
         currentSpawnInterval = initialSpawnInterval;
     }
 
-    private void OnStartMatchClicked()
+    private void RecopilarCasillas()
+    {
+        casillasDisponibles.Clear();
+        if (sueloParent != null)
+        {
+            foreach (Transform hijo in sueloParent)
+            {
+                // Agrega todas las casillas
+                casillasDisponibles.Add(hijo);
+            }
+        }
+
+        // Si no se asignó 'Suelo', busca casillas por nombre en la escena
+        if (casillasDisponibles.Count == 0)
+        {
+            foreach (GameObject obj in GameObject.FindObjectsByType<GameObject>(FindObjectsSortMode.None))
+            {
+                if (obj.name.ToLower().Contains("casil") && obj.transform.parent != null && obj.transform.parent.name.ToLower().Contains("suelo"))
+                {
+                    casillasDisponibles.Add(obj.transform);
+                }
+            }
+        }
+    }
+
+    public void OnStartMatchClicked()
     {
         if (isGameActive) return;
 
-        // 1. Ocultar sala de espera y cambiar a cámara principal
         if (lobbyUI != null) lobbyUI.SetActive(false);
         if (lobbyCamera != null) lobbyCamera.gameObject.SetActive(false);
         if (mainCamera != null) mainCamera.gameObject.SetActive(true);
-
         if (inGameHUD != null) inGameHUD.SetActive(true);
 
-        // 2. Spawnear o reposicionar al jugador
         StartCoroutine(SpawnPlayerAndStartGame());
     }
 
 private IEnumerator SpawnPlayerAndStartGame()
 {
+    // 1. Asegurar que el HUD del cronómetro esté encendido en pantalla
+    if (inGameHUD != null)
+    {
+        inGameHUD.SetActive(true);
+    }
+
     Vector3 spawnPos = playerSpawnPoint != null ? playerSpawnPoint.position : Vector3.up;
     Quaternion spawnRot = playerSpawnPoint != null ? playerSpawnPoint.rotation : Quaternion.identity;
 
+    // Buscar si ya existe el jugador o instanciarlo
     localPlayer = FindFirstObjectByType<PlayerStateManager>();
 
     if (localPlayer == null && playerPrefab != null)
@@ -119,22 +159,34 @@ private IEnumerator SpawnPlayerAndStartGame()
     {
         CharacterController cc = localPlayer.GetComponent<CharacterController>();
         if (cc != null) cc.enabled = false;
-
         localPlayer.transform.SetPositionAndRotation(spawnPos, spawnRot);
-
         if (cc != null) cc.enabled = true;
     }
 
+    // Configurar al jugador una vez que YA EXISTE
     if (localPlayer != null)
     {
-        // 1. Asegurar el encendido forzado del CharacterController para habilitar movimiento
-        CharacterController cc = localPlayer.GetComponent<CharacterController>();
-        if (cc != null)
+        // Desactiva el script de poner bombas para este modo de juego
+        PlayerBombController bombController = localPlayer.GetComponent<PlayerBombController>();
+        if (bombController != null)
         {
-            cc.enabled = true;
+            bombController.enabled = false;
         }
 
-        // 2. Asignar el objetivo a Cinemachine (respaldo directo)
+        // 2. FORZAR ACTUALIZACIÓN DE CORAZONES (Ahora sí es seguro porque localPlayer existe)
+        if (playerLivesUI != null)
+        {
+            playerLivesUI.UpdateHearts(localPlayer.currentLives.Value);
+        }
+        else
+        {
+            PlayerLivesUI fallbackUI = FindFirstObjectByType<PlayerLivesUI>(FindObjectsInactive.Include);
+            if (fallbackUI != null)
+            {
+                fallbackUI.UpdateHearts(localPlayer.currentLives.Value);
+            }
+        }
+
         CinemachineCamera vcam = FindFirstObjectByType<CinemachineCamera>();
         if (vcam != null)
         {
@@ -144,6 +196,13 @@ private IEnumerator SpawnPlayerAndStartGame()
 
         lastPlayerPosition = localPlayer.transform.position;
         localPlayer.currentState.OnValueChanged += OnPlayerStateChanged;
+
+        // Encender explícitamente el CharacterController para asegurar movimiento
+        CharacterController cc = localPlayer.GetComponent<CharacterController>();
+        if (cc != null)
+        {
+            cc.enabled = true;
+        }
     }
 
     yield return new WaitForSeconds(0.5f);
@@ -168,9 +227,9 @@ private IEnumerator SpawnPlayerAndStartGame()
     private void CheckPlayerMovement()
     {
         Vector3 currentPos = localPlayer.transform.position;
-        currentPos.y = 0f;
+        currentPos.y = 0;
         Vector3 previousPos = lastPlayerPosition;
-        previousPos.y = 0f;
+        previousPos.y = 0;
 
         if (Vector3.Distance(currentPos, previousPos) < 0.1f)
         {
@@ -201,14 +260,15 @@ private IEnumerator SpawnPlayerAndStartGame()
 
         Vector3 targetGridCenter;
 
+        // Si estuvo quieto >= 3s, apuntar a su casilla
         if (stationaryTimer >= stationaryThreshold)
         {
-            targetGridCenter = GetCellCenterFromPosition(localPlayer.transform.position);
+            targetGridCenter = GetClosestCellCenter(localPlayer.transform.position);
             stationaryTimer = 0f;
         }
         else
         {
-            targetGridCenter = GetRandomGridCenter();
+            targetGridCenter = GetRandomCellCenter();
         }
 
         Vector3 startSkyPos = new Vector3(targetGridCenter.x, targetGridCenter.y + spawnHeightY, targetGridCenter.z);
@@ -221,18 +281,16 @@ private IEnumerator SpawnPlayerAndStartGame()
             bombNetObj.Spawn();
         }
 
-        StartCoroutine(DropBombRoutine(bombObj.transform, targetGridCenter));
+        // Iniciar caída y luego cuenta regresiva de explosión
+        StartCoroutine(DropAndExplodeRoutine(bombNetObj, bombObj.transform, targetGridCenter));
     }
 
-    private IEnumerator DropBombRoutine(Transform bombTransform, Vector3 groundTarget)
+    private IEnumerator DropAndExplodeRoutine(NetworkObject bombNetObj, Transform bombTransform, Vector3 groundTarget)
     {
+        // 1. Caída suave hacia el centro de la casilla
         while (bombTransform != null && Vector3.Distance(bombTransform.position, groundTarget) > 0.05f)
         {
-            bombTransform.position = Vector3.MoveTowards(
-                bombTransform.position,
-                groundTarget,
-                fallSpeed * Time.deltaTime
-            );
+            bombTransform.position = Vector3.MoveTowards(bombTransform.position, groundTarget, fallSpeed * Time.deltaTime);
             yield return null;
         }
 
@@ -240,32 +298,140 @@ private IEnumerator SpawnPlayerAndStartGame()
         {
             bombTransform.position = groundTarget;
         }
+
+        // 2. Temporizador en el piso antes de detonar
+        yield return new WaitForSeconds(bombTimer);
+
+        if (bombNetObj == null || !bombNetObj.IsSpawned) yield break;
+
+        Vector3 explosionCenter = bombTransform.position;
+
+        // 3. Ejecutar explosión: daño y visuales
+        ExecuteExplosion(explosionCenter);
+
+        // 4. Despawnear bomba
+        yield return new WaitForSeconds(0.05f);
+        if (bombNetObj != null && bombNetObj.IsSpawned)
+        {
+            bombNetObj.Despawn();
+        }
     }
 
-    private Vector3 GetCellCenterFromPosition(Vector3 worldPos)
+private void ExecuteExplosion(Vector3 center)
+{
+    List<Vector3> cellsToHit = new List<Vector3> { center };
+    Vector3[] directions = { Vector3.forward, Vector3.back, Vector3.right, Vector3.left };
+
+    // 1. Escaneo físico en cruz para frenar el fuego en muros
+    foreach (Vector3 dir in directions)
     {
-        Vector3 rayOrigin = new Vector3(worldPos.x, worldPos.y + 2f, worldPos.z);
-        if (Physics.Raycast(rayOrigin, Vector3.down, out RaycastHit hit, 6f, groundLayerMask, QueryTriggerInteraction.Ignore))
+        for (int i = 1; i <= explosionRange; i++)
         {
-            Vector3 center = hit.collider.bounds.center;
-            return new Vector3(center.x, hit.point.y + 0.5f, center.z);
+            Vector3 target = center + (dir * gridSize * i);
+
+            // Escaneamos un volumen generoso en altura para interceptar el Mesh Collider del muro
+            Vector3 halfExtents = new Vector3(gridSize * 0.45f, 1.5f, gridSize * 0.45f);
+            Vector3 boxCenter = new Vector3(target.x, center.y + 0.5f, target.z);
+
+            Collider[] hits = Physics.OverlapBox(boxCenter, halfExtents, Quaternion.identity, ~0, QueryTriggerInteraction.Ignore);
+
+            bool blocked = false;
+            foreach (Collider hit in hits)
+            {
+                if (hit.CompareTag("Indestructible") || hit.gameObject.name.ToLower().Contains("wall") || hit.gameObject.name.ToLower().Contains("pared"))
+                {
+                    blocked = true;
+                    break;
+                }
+            }
+
+            // Si hay un muro en esa casilla o en el camino, frenamos la expansión en esta dirección
+            if (blocked) break;
+
+            cellsToHit.Add(target);
+        }
+    }
+
+    // 2. Instanciación visual de los efectos de fuego
+    float floorY = center.y - 0.45f; 
+
+    if (explosionVfx != null)
+    {
+        Vector3 vfxCenter = new Vector3(center.x, floorY, center.z);
+        Instantiate(explosionVfx, vfxCenter, explosionVfx.transform.rotation);
+    }
+
+    for (int i = 1; i < cellsToHit.Count; i++)
+    {
+        GameObject prefabToSpawn = fireVfx != null ? fireVfx : explosionVfx;
+        if (prefabToSpawn != null)
+        {
+            Vector3 vfxPos = new Vector3(cellsToHit[i].x, floorY, cellsToHit[i].z);
+            Instantiate(prefabToSpawn, vfxPos, prefabToSpawn.transform.rotation);
+        }
+    }
+
+    // 3. Daño al jugador local
+        if (localPlayer != null && localPlayer.currentState.Value == PlayerState.Vivo)
+        {
+            Vector2 playerPos2D = new Vector2(localPlayer.transform.position.x, localPlayer.transform.position.z);
+
+            foreach (Vector3 cell in cellsToHit)
+            {
+                Vector2 cellPos2D = new Vector2(cell.x, cell.z);
+
+                // Radio de cobertura generoso en la casilla
+                if (Vector2.Distance(playerPos2D, cellPos2D) <= (gridSize * 0.65f))
+                {
+                    ApplyMinijuegoDamage(localPlayer);
+                    break;
+                }
+            }
+        }
+}
+
+    private Vector3 GetRandomCellCenter()
+    {
+        if (casillasDisponibles.Count > 0)
+        {
+            Transform t = casillasDisponibles[Random.Range(0, casillasDisponibles.Count)];
+            return GetCenterFromTransform(t);
         }
 
-        float x = Mathf.Round(worldPos.x / gridSize) * gridSize;
-        float z = Mathf.Round(worldPos.z / gridSize) * gridSize;
-        return new Vector3(x, 0.5f, z);
+        // Fallback por si la lista estuviera vacía
+        return new Vector3(0f, 0.5f, 0f);
     }
 
-    private Vector3 GetRandomGridCenter()
+    private Vector3 GetClosestCellCenter(Vector3 pos)
     {
-        int halfDim = gridDimension / 2;
-        int randXIndex = Random.Range(-halfDim, halfDim);
-        int randZIndex = Random.Range(-halfDim, halfDim);
+        if (casillasDisponibles.Count == 0) return pos;
 
-        float worldX = (randXIndex * gridSize) + (gridSize * 0.5f);
-        float worldZ = (randZIndex * gridSize) + (gridSize * 0.5f);
+        Transform closest = casillasDisponibles[0];
+        float minDst = float.MaxValue;
 
-        return GetCellCenterFromPosition(new Vector3(worldX, 0f, worldZ));
+        foreach (Transform c in casillasDisponibles)
+        {
+            float dst = Vector2.Distance(new Vector2(pos.x, pos.z), new Vector2(c.position.x, c.position.z));
+            if (dst < minDst)
+            {
+                minDst = dst;
+                closest = c;
+            }
+        }
+
+        return GetCenterFromTransform(closest);
+    }
+
+    private Vector3 GetCenterFromTransform(Transform cellTransform)
+    {
+        Collider col = cellTransform.GetComponent<Collider>();
+        if (col != null)
+        {
+            // Apoyar la bomba sobre la cara superior de la baldosa (+0.5f de radio de la bomba)
+            return new Vector3(col.bounds.center.x, col.bounds.max.y + 0.5f, col.bounds.center.z);
+        }
+
+        return new Vector3(cellTransform.position.x, cellTransform.position.y + 0.5f, cellTransform.position.z);
     }
 
     private void OnPlayerStateChanged(PlayerState previous, PlayerState current)
@@ -290,10 +456,7 @@ private IEnumerator SpawnPlayerAndStartGame()
             PersistenceManager.SaveData(data);
         }
 
-        if (gameOverPanel != null)
-        {
-            gameOverPanel.SetActive(true);
-        }
+        if (gameOverPanel != null) gameOverPanel.SetActive(true);
 
         if (gameOverText != null)
         {
@@ -323,4 +486,59 @@ private IEnumerator SpawnPlayerAndStartGame()
             localPlayer.currentState.OnValueChanged -= OnPlayerStateChanged;
         }
     }
+
+/// <summary>
+/// Aplica el daño directamente al jugador en el minijuego evitando los bloqueos de MatchManager
+/// </summary>
+private void ApplyMinijuegoDamage(PlayerStateManager player)
+{
+    if (player == null) return;
+
+    if (player.currentState.Value == PlayerState.Muerto || 
+        player.currentState.Value == PlayerState.Aturdido)
+        return;
+
+    PlayerStats stats = player.GetComponent<PlayerStats>();
+    if (stats != null && stats.IsShielded)
+    {
+        stats.ConsumeShield();
+        return;
+    }
+
+    // 1. Descontar vida
+    player.currentLives.Value--;
+
+    // 2. Actualizar corazones en pantalla directamente
+    if (playerLivesUI != null)
+    {
+        playerLivesUI.UpdateHearts(player.currentLives.Value);
+    }
+    else
+    {
+        PlayerLivesUI fallbackUI = FindFirstObjectByType<PlayerLivesUI>();
+        if (fallbackUI != null) fallbackUI.UpdateHearts(player.currentLives.Value);
+    }
+
+    // 3. Evaluar estado
+    if (player.currentLives.Value <= 0)
+    {
+        player.currentState.Value = PlayerState.Muerto;
+    }
+    else
+    {
+        StartCoroutine(MinijuegoStunRoutine(player));
+    }
+}
+
+private IEnumerator MinijuegoStunRoutine(PlayerStateManager player)
+{
+    player.currentState.Value = PlayerState.Aturdido;
+
+    yield return new WaitForSeconds(2f);
+
+    if (player != null && player.currentState.Value != PlayerState.Muerto)
+    {
+        player.currentState.Value = PlayerState.Vivo;
+    }
+}
 }
