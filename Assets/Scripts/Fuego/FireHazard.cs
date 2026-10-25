@@ -18,7 +18,16 @@ public class FireHazard : MonoBehaviour
         // Si el jugador está vivo, le aplica el daño reglamentario (aturdimiento / pérdida de vida / escudo)
         if (player != null && player.currentState.Value == PlayerState.Vivo)
         {
-            player.TakeDamageServerRpc();
+            // SI ESTAMOS EN EL MINIJUEGO: aplicar daño directo sin el filtro de MatchManager
+            if (MiniJuegoManager.Instance != null)
+            {
+                MiniJuegoManager.Instance.ApplyMinijuegoDamageFromExternal(player);
+            }
+            else
+            {
+                // MODO COMPETITIVO / NORMAL: daño estándar
+                player.TakeDamageServerRpc();
+            }
         }
 
         // 2. Intentar detectar si lo que entró es el Dron Bombardero
