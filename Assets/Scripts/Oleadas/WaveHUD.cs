@@ -18,6 +18,8 @@ public class WaveHUD : MonoBehaviour
              "Desmarcado: solo los que están vivos en el mapa en este momento.")]
     [SerializeField] private bool includeQueuedEnemies = true;
     [SerializeField] private float combatBannerSeconds = 2f;
+    [SerializeField] private TMP_Text difficultyText; // opcional: "Dificultad: Difícil"
+    private DifficultyLevel lastDifficulty = (DifficultyLevel)255;  
 
     private int lastWave = -1;
     private int lastEnemies = -1;
@@ -49,6 +51,7 @@ public class WaveHUD : MonoBehaviour
         if (!visible) return;
 
         UpdateWave(wm.CurrentWave);
+        UpdateDifficulty(wm);
         UpdateEnemies(includeQueuedEnemies ? wm.EnemiesRemaining : wm.EnemiesAlive);
         UpdateBanner(wm, phase);
         UpdateTimer(wm);
@@ -119,5 +122,15 @@ public class WaveHUD : MonoBehaviour
     {
         if (root != null && root.activeSelf != active)
             root.SetActive(active);
+    }
+
+    private void UpdateDifficulty(WaveManager wm)
+    {
+        if (difficultyText == null || wm.Difficulty == lastDifficulty) return;
+        lastDifficulty = wm.Difficulty;
+
+        SurvivalDifficultyProfile profile = wm.GetProfile(wm.Difficulty);
+        difficultyText.text = "Dificultad: " +
+            (profile != null ? profile.displayName : wm.Difficulty.ToString());
     }
 }

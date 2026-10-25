@@ -11,6 +11,14 @@ public enum WavePhase
     Finished   // la partida terminó
 }
 
+/// <summary>
+/// Reglas:
+/// - La oleada avanza únicamente cuando no quedan drones vivos ni en cola.
+/// - Cantidad por oleada: base + (oleada - 1) * incremento.
+/// - Hay un tope de drones vivos a la vez; el resto espera en cola.
+/// - El Sanador es aliado: no cuenta para completar la oleada y se retira
+///   cuando esta termina.
+/// </summary>
 public class WaveManager : NetworkBehaviour
 {
     public static WaveManager Instance { get; private set; }
@@ -77,6 +85,9 @@ public class WaveManager : NetworkBehaviour
 
     /// <summary>Dificultad de la partida (la misma en el host y en los clientes).</summary>
     public DifficultyLevel Difficulty => difficulty.Value;
+
+    /// <summary>Vidas máximas de cada jugador según la dificultad (solo servidor).</summary>
+    public int PlayerMaxLives => activeProfile != null ? activeProfile.playerMaxLives : 3;
 
     /// <summary>
     /// Perfil de una dificultad, buscado por su campo Level. Funciona en el host y en los clientes.
@@ -201,6 +212,10 @@ public class WaveManager : NetworkBehaviour
         runEndServerTime.Value = 0d;
         currentWaveStartSeconds = 0f;
         frozenTimeToReachWave = 0f;
+        // Vidas máximas de los jugadores según la dificultad
+        foreach (PlayerStateManager player in FindObjectsByType<PlayerStateManager>(FindObjectsSortMode.None))
+            player.ApplyMaxLives(PlayerMaxLives);
+
         currentWave.Value = 1;
         BeginRest(firstWaveDelay);
     }
