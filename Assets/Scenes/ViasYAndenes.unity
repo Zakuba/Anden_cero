@@ -29576,8 +29576,16 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 21300000, guid: d281815245c9ea240834dea3ed3526f7, type: 3}
     - target: {fileID: 4400034087685668446, guid: 4d4c679d21400084e87954f8d4319a26, type: 3}
+      propertyPath: heartIcons.Array.size
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 4400034087685668446, guid: 4d4c679d21400084e87954f8d4319a26, type: 3}
+      propertyPath: 'heartIcons.Array.data[3]'
+      value: 
+      objectReference: {fileID: 1912902336}
+    - target: {fileID: 4400034087685668446, guid: 4d4c679d21400084e87954f8d4319a26, type: 3}
       propertyPath: brokenHeartIcons.Array.size
-      value: 3
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 4400034087685668446, guid: 4d4c679d21400084e87954f8d4319a26, type: 3}
       propertyPath: 'brokenHeartIcons.Array.data[0]'
@@ -29591,6 +29599,10 @@ PrefabInstance:
       propertyPath: 'brokenHeartIcons.Array.data[2]'
       value: 
       objectReference: {fileID: 599532081}
+    - target: {fileID: 4400034087685668446, guid: 4d4c679d21400084e87954f8d4319a26, type: 3}
+      propertyPath: 'brokenHeartIcons.Array.data[3]'
+      value: 
+      objectReference: {fileID: 1912902335}
     - target: {fileID: 4716037800236175204, guid: 4d4c679d21400084e87954f8d4319a26, type: 3}
       propertyPath: m_Layer
       value: 5
@@ -101395,6 +101407,16 @@ PrefabInstance:
 Transform:
   m_CorrespondingSourceObject: {fileID: 3174923170551661957, guid: defb4cdc6208f004795f0160e8fb04ed, type: 3}
   m_PrefabInstance: {fileID: 1909355388}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &1912902335 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1798532510140340460, guid: 4d4c679d21400084e87954f8d4319a26, type: 3}
+  m_PrefabInstance: {fileID: 532677399}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &1912902336 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6820059762914285165, guid: 4d4c679d21400084e87954f8d4319a26, type: 3}
+  m_PrefabInstance: {fileID: 532677399}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1913650033
 PrefabInstance:

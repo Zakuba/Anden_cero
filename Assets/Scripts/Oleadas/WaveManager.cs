@@ -213,7 +213,11 @@ public class WaveManager : NetworkBehaviour
         currentWaveStartSeconds = 0f;
         frozenTimeToReachWave = 0f;
         // Vidas máximas de los jugadores según la dificultad
-        foreach (PlayerStateManager player in FindObjectsByType<PlayerStateManager>(FindObjectsSortMode.None))
+        PlayerStateManager[] allPlayers = FindObjectsByType<PlayerStateManager>(FindObjectsSortMode.None);
+        Debug.Log("[WaveManager] Inicio de partida: vidas máximas " + PlayerMaxLives +
+                  " para " + allPlayers.Length + " jugador(es), dificultad " + difficulty.Value);
+
+        foreach (PlayerStateManager player in allPlayers)
             player.ApplyMaxLives(PlayerMaxLives);
 
         currentWave.Value = 1;
