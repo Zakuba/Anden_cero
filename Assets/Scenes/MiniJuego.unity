@@ -787,6 +787,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: CinemachineCamera
       objectReference: {fileID: 0}
+    - target: {fileID: 8571575373697758297, guid: 092faa92201d17a418f4a16e6e33df4b, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8571575373697758297, guid: 092faa92201d17a418f4a16e6e33df4b, type: 3}
+      propertyPath: BoundingVolume
+      value: 
+      objectReference: {fileID: 517185403}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -4692,23 +4700,23 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4526262321807008753, guid: a3b744c071f35dc48aafd24f50b70308, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0
+      value: 21.03822
       objectReference: {fileID: 0}
     - target: {fileID: 4526262321807008753, guid: a3b744c071f35dc48aafd24f50b70308, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 1
+      value: -0.79902
       objectReference: {fileID: 0}
     - target: {fileID: 4526262321807008753, guid: a3b744c071f35dc48aafd24f50b70308, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -10
+      value: -18.24748
       objectReference: {fileID: 0}
     - target: {fileID: 4526262321807008753, guid: a3b744c071f35dc48aafd24f50b70308, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 1
+      value: 0.8660254
       objectReference: {fileID: 0}
     - target: {fileID: 4526262321807008753, guid: a3b744c071f35dc48aafd24f50b70308, type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 4526262321807008753, guid: a3b744c071f35dc48aafd24f50b70308, type: 3}
       propertyPath: m_LocalRotation.y
@@ -4730,11 +4738,55 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5535885507391368926, guid: a3b744c071f35dc48aafd24f50b70308, type: 3}
+      propertyPath: field of view
+      value: 50
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 1904381047541616693, guid: a3b744c071f35dc48aafd24f50b70308, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 7650331388752537676}
   m_SourcePrefab: {fileID: 100100000, guid: a3b744c071f35dc48aafd24f50b70308, type: 3}
+--- !u!1 &7650331388752537675 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1904381047541616693, guid: a3b744c071f35dc48aafd24f50b70308, type: 3}
+  m_PrefabInstance: {fileID: 7650331388752537674}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &7650331388752537676
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7650331388752537675}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 72ece51f2901e7445ab60da3685d6b5f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.Cinemachine::Unity.Cinemachine.CinemachineBrain
+  ShowDebugText: 0
+  ShowCameraFrustum: 1
+  IgnoreTimeScale: 0
+  WorldUpOverride: {fileID: 0}
+  ChannelMask: -1
+  UpdateMethod: 2
+  BlendUpdateMethod: 1
+  LensModeOverride:
+    Enabled: 0
+    DefaultMode: 2
+  DefaultBlend:
+    Style: 1
+    Time: 2
+    CustomCurve:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+  CustomBlends: {fileID: 0}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

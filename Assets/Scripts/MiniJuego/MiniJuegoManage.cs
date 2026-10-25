@@ -4,6 +4,7 @@ using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using Unity.Cinemachine;
 
 public class MiniJuegoManager : MonoBehaviour
 {
@@ -96,48 +97,60 @@ public class MiniJuegoManager : MonoBehaviour
         StartCoroutine(SpawnPlayerAndStartGame());
     }
 
-    private IEnumerator SpawnPlayerAndStartGame()
+private IEnumerator SpawnPlayerAndStartGame()
+{
+    Vector3 spawnPos = playerSpawnPoint != null ? playerSpawnPoint.position : Vector3.up;
+    Quaternion spawnRot = playerSpawnPoint != null ? playerSpawnPoint.rotation : Quaternion.identity;
+
+    localPlayer = FindFirstObjectByType<PlayerStateManager>();
+
+    if (localPlayer == null && playerPrefab != null)
     {
-        Vector3 spawnPos = playerSpawnPoint != null ? playerSpawnPoint.position : Vector3.up;
-        Quaternion spawnRot = playerSpawnPoint != null ? playerSpawnPoint.rotation : Quaternion.identity;
+        GameObject playerObj = Instantiate(playerPrefab, spawnPos, spawnRot);
+        NetworkObject netObj = playerObj.GetComponent<NetworkObject>();
 
-        // Verificar si el jugador ya fue instanciado por Netcode o si lo creamos
-        localPlayer = FindFirstObjectByType<PlayerStateManager>();
-
-        if (localPlayer == null && playerPrefab != null)
+        if (netObj != null && NetworkManager.Singleton != null && NetworkManager.Singleton.IsListening)
         {
-            GameObject playerObj = Instantiate(playerPrefab, spawnPos, spawnRot);
-            NetworkObject netObj = playerObj.GetComponent<NetworkObject>();
-
-            if (netObj != null && NetworkManager.Singleton != null && NetworkManager.Singleton.IsListening)
-            {
-                netObj.SpawnWithOwnership(NetworkManager.Singleton.LocalClientId);
-            }
-            localPlayer = playerObj.GetComponent<PlayerStateManager>();
+            netObj.SpawnWithOwnership(NetworkManager.Singleton.LocalClientId);
         }
-        else if (localPlayer != null)
-        {
-            // Reposicionar el jugador existente en la arena
-            CharacterController cc = localPlayer.GetComponent<CharacterController>();
-            if (cc != null) cc.enabled = false;
-
-            localPlayer.transform.SetPositionAndRotation(spawnPos, spawnRot);
-
-            if (cc != null) cc.enabled = true;
-        }
-
-        if (localPlayer != null)
-        {
-            lastPlayerPosition = localPlayer.transform.position;
-            localPlayer.currentState.OnValueChanged += OnPlayerStateChanged;
-            localPlayer.ActualizarColisionesPartida();
-        }
-
-        yield return new WaitForSeconds(0.5f);
-
-        isGameActive = true;
-        StartCoroutine(BombSpawnLoop());
+        localPlayer = playerObj.GetComponent<PlayerStateManager>();
     }
+    else if (localPlayer != null)
+    {
+        CharacterController cc = localPlayer.GetComponent<CharacterController>();
+        if (cc != null) cc.enabled = false;
+
+        localPlayer.transform.SetPositionAndRotation(spawnPos, spawnRot);
+
+        if (cc != null) cc.enabled = true;
+    }
+
+    if (localPlayer != null)
+    {
+        // 1. Asegurar el encendido forzado del CharacterController para habilitar movimiento
+        CharacterController cc = localPlayer.GetComponent<CharacterController>();
+        if (cc != null)
+        {
+            cc.enabled = true;
+        }
+
+        // 2. Asignar el objetivo a Cinemachine (respaldo directo)
+        CinemachineCamera vcam = FindFirstObjectByType<CinemachineCamera>();
+        if (vcam != null)
+        {
+            vcam.Target.TrackingTarget = localPlayer.transform;
+            vcam.Follow = localPlayer.transform;
+        }
+
+        lastPlayerPosition = localPlayer.transform.position;
+        localPlayer.currentState.OnValueChanged += OnPlayerStateChanged;
+    }
+
+    yield return new WaitForSeconds(0.5f);
+
+    isGameActive = true;
+    StartCoroutine(BombSpawnLoop());
+}
 
     private void Update()
     {
