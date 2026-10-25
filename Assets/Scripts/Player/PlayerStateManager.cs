@@ -233,11 +233,9 @@ public class PlayerStateManager : NetworkBehaviour
         }
 
         // 3. Determinar si la partida ya comenzó.
-        bool partidaIniciada =
-            MatchManager.Instance != null &&
-            MatchManager.Instance.IsMatchRunning;
-
-        bool isDead = state == PlayerState.Muerto;
+        // Si MatchManager no existe (como en el minijuego), asumimos que la partida sí está activa (true)
+        bool partidaIniciada = MatchManager.Instance == null || MatchManager.Instance.IsMatchRunning;
+        bool isDead = (state == PlayerState.Muerto);
 
         // 4. El CharacterController solo funciona durante la partida
         // y mientras el jugador no esté muerto.
