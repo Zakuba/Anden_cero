@@ -25,7 +25,8 @@ public class PlayerStateManager : NetworkBehaviour
     [SerializeField] private Color colorMuerto = Color.gray;
 
     private MatchManager subscribedMatchManager;
-
+    // Flag interno del servidor para inmunidad breve al romper escudo
+    private bool isShieldInvulnerable = false;
     private PlayerLivesUI localLivesUI;
 
     public NetworkVariable<PlayerState> currentState =
@@ -154,11 +155,16 @@ public class PlayerStateManager : NetworkBehaviour
             currentState.Value == PlayerState.Aturdido)
             return;
 
+        // Si acaba de perder el escudo en esta misma fracción de segundo, se descarta el daño residual
+        if (isShieldInvulnerable)
+            return;
+
         PlayerStats stats = GetComponent<PlayerStats>();
 
         if (stats != null && stats.IsShielded)
         {
             stats.ConsumeShield();
+            StartCoroutine(ShieldBreakGracePeriodRoutine());
             return;
         }
 
@@ -172,6 +178,14 @@ public class PlayerStateManager : NetworkBehaviour
         {
             StartCoroutine(StunRoutine());
         }
+    }
+
+    private IEnumerator ShieldBreakGracePeriodRoutine()
+    {
+        isShieldInvulnerable = true;
+        // Otorga 0.3 segundos de protección para que no entren dobles impactos (fuego + zona o multi-hit)
+        yield return new WaitForSeconds(0.3f);
+        isShieldInvulnerable = false;
     }
 
     [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Everyone)]
