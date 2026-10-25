@@ -16,7 +16,7 @@ MonoBehaviour:
   displayName: Normal
   baseDronesPerWave: 3
   dronesPerWaveIncrement: 2
-  maxAliveBase: 4
+  maxAliveBase: 6
   maxAlivePerPlayer: 2
   spawnInterval: 0.6
   restDuration: 8

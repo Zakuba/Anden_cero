@@ -16,7 +16,7 @@ MonoBehaviour:
   displayName: "Dif\xEDcil"
   baseDronesPerWave: 4
   dronesPerWaveIncrement: 3
-  maxAliveBase: 4
+  maxAliveBase: 8
   maxAlivePerPlayer: 3
   spawnInterval: 0.4
   restDuration: 5

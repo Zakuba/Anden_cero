@@ -42,6 +42,10 @@ public class SurvivalDifficultyProfile : ScriptableObject
     public int healerFirstWave = 2;
     public int healerEveryNWaves = 3;
 
+    [Header("Jugadores")]
+    [Tooltip("Vidas máximas de cada jugador en esta dificultad (también es el tope al curarse).")]
+    public int playerMaxLives = 3;
+
     [Header("Drones: velocidad fija (1 = la del prefab)")]
     public float droneSpeedMultiplier = 1f;
 
@@ -97,13 +101,14 @@ public class SurvivalDifficultyProfile : ScriptableObject
                 shooterScanInterval = 0.3f;
                 bomberDropInterval = 5f;
                 bombFuseTime = 3.5f;
+                playerMaxLives = 4;
                 break;
 
             case DifficultyLevel.Hard:
                 displayName = "Difícil";
                 baseDronesPerWave = 4;
                 dronesPerWaveIncrement = 3;
-                maxAliveBase = 4;
+                maxAliveBase = 8;
                 maxAlivePerPlayer = 3;
                 spawnInterval = 0.4f;
                 restDuration = 5f;
@@ -118,6 +123,7 @@ public class SurvivalDifficultyProfile : ScriptableObject
                 shooterScanInterval = 0.1f;
                 bomberDropInterval = 3f;
                 bombFuseTime = 2.5f;
+                playerMaxLives = 2;
                 break;
 
             default: // Normal
@@ -125,7 +131,7 @@ public class SurvivalDifficultyProfile : ScriptableObject
                 displayName = "Normal";
                 baseDronesPerWave = 3;
                 dronesPerWaveIncrement = 2;
-                maxAliveBase = 4;
+                maxAliveBase = 6;
                 maxAlivePerPlayer = 2;
                 spawnInterval = 0.6f;
                 restDuration = 8f;
@@ -140,6 +146,7 @@ public class SurvivalDifficultyProfile : ScriptableObject
                 shooterScanInterval = 0.15f;
                 bomberDropInterval = 4f;
                 bombFuseTime = 3f;
+                playerMaxLives = 3;
                 break;
         }
 
@@ -188,5 +195,7 @@ public class SurvivalDifficultyProfile : ScriptableObject
 
         bomberDropInterval = Mathf.Max(0.5f, bomberDropInterval);
         bombFuseTime = Mathf.Max(0.5f, bombFuseTime);
+
+        playerMaxLives = Mathf.Clamp(playerMaxLives, 1, 6);
     }
 }

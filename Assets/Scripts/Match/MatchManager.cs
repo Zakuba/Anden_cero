@@ -304,6 +304,14 @@ public class MatchManager : NetworkBehaviour
             $"Tiempo en llegar: {FormatearTiempo(timeToReachWave)}\n" +
             $"Tiempo total: {FormatearTiempo(survivedSeconds)}\n" +
             lineaRecord;
+        if (WaveManager.Instance != null)
+        {
+            SurvivalDifficultyProfile profile =
+                WaveManager.Instance.GetProfile(WaveManager.Instance.Difficulty);
+
+            if (profile != null)
+                resultsText.text += "\nDificultad: " + profile.displayName;
+        }
     }
 
     private static string FormatearTiempo(float seconds)
