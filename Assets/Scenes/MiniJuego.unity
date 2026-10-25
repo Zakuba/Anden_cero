@@ -4204,8 +4204,9 @@ MonoBehaviour:
   lobbyCamera: {fileID: 1458870375}
   lobbyUI: {fileID: 1458870374}
   startMatchButton: {fileID: 1458870373}
-  playerPrefab: {fileID: 6023118608644461741, guid: 6c1c434f7b0a30e42a88bd8febbf2be7, type: 3}
   playerSpawnPoint: {fileID: 2024721565}
+  lobbySpawnPoint: {fileID: 1458870376}
+  playerPrefab: {fileID: 6023118608644461741, guid: 6c1c434f7b0a30e42a88bd8febbf2be7, type: 3}
   sueloParent: {fileID: 485155190}
   gridSize: 2.5
   bombPrefab: {fileID: 6099856826827984316, guid: a368f4f3cc921e943942c1791fea6f11, type: 3}
@@ -4442,6 +4443,11 @@ GameObject:
 --- !u!20 &1458870375 stripped
 Camera:
   m_CorrespondingSourceObject: {fileID: 4527842274753538801, guid: d293970ab05ffd44dba80939076fa9c0, type: 3}
+  m_PrefabInstance: {fileID: 1458870372}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &1458870376 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 2980894407295784956, guid: d293970ab05ffd44dba80939076fa9c0, type: 3}
   m_PrefabInstance: {fileID: 1458870372}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1468618647
