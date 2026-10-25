@@ -5,6 +5,7 @@ using System.Collections.Generic;
 public class PlayerData
 {
     public string nombreJugador;
+    public string avatarBase64 = "";
     // Contadores de estadísticas
     public int bombsBatted = 0;
     // Mejor tiempo sobrevivido en modo Supervivencia (en segundos)

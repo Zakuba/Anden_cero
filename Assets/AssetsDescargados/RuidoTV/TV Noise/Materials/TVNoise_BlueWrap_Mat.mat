@@ -21,8 +21,7 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: TVNoise_BlueWrap_Mat
-  m_Shader: {fileID: -6465566751694194690, guid: 6ab5e065b425c47738d4cf04243b00b6,
-    type: 3}
+  m_Shader: {fileID: -6465566751694194690, guid: 6ab5e065b425c47738d4cf04243b00b6, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
@@ -60,6 +59,8 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
+    - _BUILTIN_QueueControl: -1
+    - _BUILTIN_QueueOffset: 0
     - _ColorIntensity: 0.64
     - _Grain: 1
     - _GrainEnabled: 0
@@ -73,6 +74,7 @@ Material:
     - _LinesFrequency: 15
     - _LinesRotationAngle: 60
     - _LinesSpeed: 0.15
+    - _Metallic: 0
     - _Noise: 1
     - _NoiseEnabled: 0
     - _NoiseIntensity: 0.14
@@ -80,6 +82,7 @@ Material:
     - _NoiseSpeed: 0.35
     - _QueueControl: 0
     - _QueueOffset: 0
+    - _Smoothness: 0.5
     - _Speed: 0.1
     - _WarpIntence: 10
     m_Colors:
