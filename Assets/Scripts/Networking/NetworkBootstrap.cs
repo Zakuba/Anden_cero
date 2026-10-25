@@ -113,7 +113,7 @@ public class NetworkBootstrap : MonoBehaviour
             {
                 "Andén Central"   => "MainGame",
                 "Túneles y Vías"  => "ViasYAndenes",
-                "Sala de control" => "SalaDeControl",
+                "Sala de Control" => "SalaDeControl",
                 "MiniJuego"       => "MiniJuego",
                 _                 => nombre
             };

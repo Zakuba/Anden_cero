@@ -15,6 +15,9 @@ EditorBuildSettings:
     path: Assets/Scenes/ViasYAndenes.unity
     guid: ae0b4f259aa1bda4d9e2f9b21d8a8d8b
   - enabled: 1
+    path: Assets/Scenes/SalaDeControl.unity
+    guid: fd44ad427439d574aa39e2df213150a0
+  - enabled: 1
     path: Assets/Scenes/MiniJuego.unity
     guid: 526363d04baf59f41bb8ec53d7e57a16
   m_configObjects:
