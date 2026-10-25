@@ -25,6 +25,7 @@ MonoBehaviour:
   shooterRatioMax: 0.4
   healerFirstWave: 2
   healerEveryNWaves: 2
+  playerMaxLives: 4
   droneSpeedMultiplier: 0.8
   shooterFireRate: 1.5
   shooterSightRange: 9

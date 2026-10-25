@@ -65,8 +65,7 @@ public class PlayerStateManager : NetworkBehaviour
         {
             localLivesUI = FindObjectOfType<PlayerLivesUI>(true);
 
-            if (localLivesUI != null)
-                localLivesUI.UpdateHearts(currentLives.Value);
+            RefreshLivesUI();
         }
     }
 
@@ -81,13 +80,13 @@ public class PlayerStateManager : NetworkBehaviour
 
         currentState.OnValueChanged += OnStateChanged;
         currentLives.OnValueChanged += OnLivesChanged;
+        maxLivesNet.OnValueChanged += OnMaxLivesChanged;
 
         if (IsOwner)
         {
             localLivesUI = FindObjectOfType<PlayerLivesUI>(true);
 
-            if (localLivesUI != null)
-                localLivesUI.UpdateHearts(currentLives.Value);
+            RefreshLivesUI();
         }
 
         ApplyStateProperties(currentState.Value);
@@ -103,6 +102,7 @@ public class PlayerStateManager : NetworkBehaviour
     {
         currentState.OnValueChanged -= OnStateChanged;
         currentLives.OnValueChanged -= OnLivesChanged;
+        maxLivesNet.OnValueChanged -= OnMaxLivesChanged;
 
         if (subscribedMatchManager != null)
         {
@@ -128,8 +128,19 @@ public class PlayerStateManager : NetworkBehaviour
 
     private void OnLivesChanged(int previousValue, int newValue)
     {
-        if (IsOwner && localLivesUI != null)
-            localLivesUI.UpdateHearts(newValue);
+        RefreshLivesUI();
+    }
+
+    private void OnMaxLivesChanged(int previousValue, int newValue)
+    {
+        RefreshLivesUI();
+    }
+
+    // Corazones del HUD del jugador local: vidas actuales y máximas.
+    private void RefreshLivesUI()
+    {
+        if (!IsOwner || localLivesUI == null) return;
+        localLivesUI.UpdateHearts(currentLives.Value, maxLivesNet.Value);
     }
 
     [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Everyone)]
