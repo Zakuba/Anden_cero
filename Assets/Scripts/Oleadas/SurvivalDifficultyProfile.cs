@@ -26,7 +26,7 @@ public class SurvivalDifficultyProfile : ScriptableObject
     [Tooltip("Drones que se suman en cada oleada.")]
     public int dronesPerWaveIncrement = 2;
     [Tooltip("Tope de drones vivos a la vez = base + porJugadorVivo * jugadoresVivos.")]
-    public int maxAliveBase = 4;
+    public int maxAliveBase = 6;
     public int maxAlivePerPlayer = 2;
     [Tooltip("Segundos entre una aparición y la siguiente.")]
     public float spawnInterval = 0.6f;

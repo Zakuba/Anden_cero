@@ -128,7 +128,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.NetworkObject
-  GlobalObjectIdHash: 3401752827
+  GlobalObjectIdHash: 3099188230
   InScenePlacedSourceGlobalObjectIdHash: 0
   m_InScenePlacedDisabledByDefault: 0
   DeferredDespawnTick: 0
@@ -162,7 +162,7 @@ MonoBehaviour:
   checkInterval: 0.1
   fxDespawnPoweUp: {fileID: 4236040960748325243}
   duracionFX: 2
-  ObjetoBomba: {fileID: 1951663538077073462}
+  ObjetoPU: {fileID: 0}
   renderPowerUp: {fileID: 5088464555777417821}
 --- !u!1 &5088464555777417821
 GameObject:
@@ -191,7 +191,7 @@ Transform:
   m_GameObject: {fileID: 5088464555777417821}
   serializedVersion: 2
   m_LocalRotation: {x: -0.6087608, y: -0.000004693866, z: 0.000001721084, w: -0.7933539}
-  m_LocalPosition: {x: 0.016000032, y: 0.16700006, z: 0.004000187}
+  m_LocalPosition: {x: 0.016000032, y: 0.5, z: 0.004000187}
   m_LocalScale: {x: 0.34155115, y: 0.34155115, z: 0.34155115}
   m_ConstrainProportionsScale: 0
   m_Children: []

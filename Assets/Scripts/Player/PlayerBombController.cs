@@ -30,6 +30,8 @@ public class PlayerBombController : NetworkBehaviour
     [SerializeField] private GameObject[] powerUpPrefabs; // orden: Expansor, Bomba Extra, Botas, Guante, Escudo
     [SerializeField] private float powerUpDropChance = 0.5f;
     [SerializeField] private float powerUpSpawnHeight = -1f;
+    [SerializeField] private float powerUpHeightAboveGround = 1.8f;
+    [SerializeField] private float dropChance = 0.75f;
 
     [Header("Efectos Visuales (VFX)")]
     [SerializeField] private GameObject explosionVfx;
@@ -400,14 +402,17 @@ private Vector3 GetGroundPosition(Vector3 pos)
 
 private void TrySpawnPowerUpDrop(Vector3 boxPosition)
 {
-    if (Random.value > powerUpDropChance) return;
+    if (Random.value > powerUpDropChance) return;   // TEMPORAL: dejalo comentado mientras probás
     if (powerUpPrefabs == null || powerUpPrefabs.Length == 0) return;
 
     int index = Random.Range(0, powerUpPrefabs.Length);
     GameObject prefab = powerUpPrefabs[index];
     if (prefab == null) return;
 
-    Vector3 spawnPos = new Vector3(boxPosition.x, powerUpSpawnHeight, boxPosition.z);
+    Vector3 ground = GetGroundPosition(boxPosition);
+    Vector3 spawnPos = new Vector3(boxPosition.x, ground.y + powerUpHeightAboveGround, boxPosition.z);
+    Debug.Log($"[PowerUp] {prefab.name} en Y={spawnPos.y} (piso Y={ground.y})");
+
     GameObject dropInstance = Instantiate(prefab, spawnPos, Quaternion.identity);
     dropInstance.GetComponent<NetworkObject>().Spawn();
 }

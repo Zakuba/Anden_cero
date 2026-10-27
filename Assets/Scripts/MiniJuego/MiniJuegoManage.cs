@@ -426,7 +426,7 @@ public class MiniJuegoManager : MonoBehaviour
         }
     }
 
-    private void ApplyMinijuegoDamage(PlayerStateManager player)
+    public void ApplyMinijuegoDamage(PlayerStateManager player)
     {
         if (player == null) return;
 
@@ -471,6 +471,11 @@ public class MiniJuegoManager : MonoBehaviour
             player.currentState.Value = PlayerState.Vivo;
         }
     }
+
+    public void ApplyMinijuegoDamageFromExternal(PlayerStateManager player)
+{
+    ApplyMinijuegoDamage(player);
+}
 
     private Vector3 GetRandomCellCenter()
     {
