@@ -345,12 +345,17 @@ private Vector3 GetGroundPosition(Vector3 pos)
             }
 
             // 3. Obstáculos destructibles
-            if (!hitDestructible && hit.CompareTag("Destructible"))
-            {
-                hitDestructible = true;
-                DestroyObjectAtPositionClientRpc(hit.transform.position);
-                TrySpawnPowerUpDrop(hit.transform.position);
-            }
+          // 3. Obstáculos destructibles
+if (hit.CompareTag("Destructible"))
+{
+    DestroyObjectAtPositionClientRpc(hit.transform.position);
+
+    if (!hitDestructible)
+    {
+        hitDestructible = true;
+        TrySpawnPowerUpDrop(hit.transform.position);
+    }
+}
 
             // 4. Drones
             if (hit.CompareTag("Drone"))
