@@ -13,7 +13,7 @@ public class NetTrainSpawner : NetworkBehaviour
 
     [Header("Configuración")]
     [SerializeField] private float spawnInterval = 30f;
-    [SerializeField] private float trainSpeed = 10f;
+    [SerializeField] private float trainSpeed = 30f;
 
     public override void OnNetworkSpawn()
     {

@@ -13,7 +13,7 @@ public class PerimeterCollapse : NetworkBehaviour
     [SerializeField] private float tileHeight = -1.95f;
 
     [Header("Tiempos (segundos)")]
-    [SerializeField] private float startDelay = 60f;
+    [SerializeField] private float startDelay = 10f;
     [SerializeField] private float ringInterval = 30f;
     [SerializeField] private float warningTime = 5f;
     [SerializeField] private int maxCollapsedRings = 3;
