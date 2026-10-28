@@ -6226,6 +6226,26 @@ PrefabInstance:
       propertyPath: waitingForHostText
       value: 
       objectReference: {fileID: 1168123470}
+    - target: {fileID: 6030919849349125509, guid: 4f6ea2c54a86e7a48b158c12f51502ea, type: 3}
+      propertyPath: lobbySpawnPoints.Array.size
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 6030919849349125509, guid: 4f6ea2c54a86e7a48b158c12f51502ea, type: 3}
+      propertyPath: 'lobbySpawnPoints.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2002985435}
+    - target: {fileID: 6030919849349125509, guid: 4f6ea2c54a86e7a48b158c12f51502ea, type: 3}
+      propertyPath: 'lobbySpawnPoints.Array.data[1]'
+      value: 
+      objectReference: {fileID: 1600988030}
+    - target: {fileID: 6030919849349125509, guid: 4f6ea2c54a86e7a48b158c12f51502ea, type: 3}
+      propertyPath: 'lobbySpawnPoints.Array.data[2]'
+      value: 
+      objectReference: {fileID: 164350845}
+    - target: {fileID: 6030919849349125509, guid: 4f6ea2c54a86e7a48b158c12f51502ea, type: 3}
+      propertyPath: 'lobbySpawnPoints.Array.data[3]'
+      value: 
+      objectReference: {fileID: 1353833228}
     - target: {fileID: 8150079117177405863, guid: 4f6ea2c54a86e7a48b158c12f51502ea, type: 3}
       propertyPath: m_InScenePlaced
       value: 1
