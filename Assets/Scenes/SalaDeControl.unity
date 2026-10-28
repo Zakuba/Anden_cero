@@ -6211,13 +6211,21 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 777591414}
     - target: {fileID: 6030919849349125509, guid: 4f6ea2c54a86e7a48b158c12f51502ea, type: 3}
+      propertyPath: resultsText
+      value: 
+      objectReference: {fileID: 506076349}
+    - target: {fileID: 6030919849349125509, guid: 4f6ea2c54a86e7a48b158c12f51502ea, type: 3}
       propertyPath: waitingText
       value: 
-      objectReference: {fileID: 1168123471}
+      objectReference: {fileID: 440813956}
     - target: {fileID: 6030919849349125509, guid: 4f6ea2c54a86e7a48b158c12f51502ea, type: 3}
       propertyPath: resultsPanel
       value: 
       objectReference: {fileID: 1168123469}
+    - target: {fileID: 6030919849349125509, guid: 4f6ea2c54a86e7a48b158c12f51502ea, type: 3}
+      propertyPath: roomCodeText
+      value: 
+      objectReference: {fileID: 1284386773}
     - target: {fileID: 6030919849349125509, guid: 4f6ea2c54a86e7a48b158c12f51502ea, type: 3}
       propertyPath: startMatchButton
       value: 
@@ -6225,7 +6233,7 @@ PrefabInstance:
     - target: {fileID: 6030919849349125509, guid: 4f6ea2c54a86e7a48b158c12f51502ea, type: 3}
       propertyPath: waitingForHostText
       value: 
-      objectReference: {fileID: 1168123470}
+      objectReference: {fileID: 651189398}
     - target: {fileID: 6030919849349125509, guid: 4f6ea2c54a86e7a48b158c12f51502ea, type: 3}
       propertyPath: spawnPoints.Array.size
       value: 4
@@ -16126,6 +16134,17 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 505701205}
   m_Mesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &506076349 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4847587230589880963, guid: 4d4c679d21400084e87954f8d4319a26, type: 3}
+  m_PrefabInstance: {fileID: 1168123466}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshProUGUI
 --- !u!4 &507058506 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 9043187907512715333, guid: b9dd581be99d7b84ab71e4e9b6acda89, type: 3}
@@ -39671,7 +39690,9 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
-    m_RemovedGameObjects: []
+    m_RemovedGameObjects:
+    - {fileID: 477992205303050069, guid: 4d4c679d21400084e87954f8d4319a26, type: 3}
+    - {fileID: 1399714655529712265, guid: 4d4c679d21400084e87954f8d4319a26, type: 3}
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4d4c679d21400084e87954f8d4319a26, type: 3}
@@ -39700,16 +39721,6 @@ MonoBehaviour:
 --- !u!1 &1168123469 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 8825872478504095694, guid: 4d4c679d21400084e87954f8d4319a26, type: 3}
-  m_PrefabInstance: {fileID: 1168123466}
-  m_PrefabAsset: {fileID: 0}
---- !u!1 &1168123470 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 1399714655529712265, guid: 4d4c679d21400084e87954f8d4319a26, type: 3}
-  m_PrefabInstance: {fileID: 1168123466}
-  m_PrefabAsset: {fileID: 0}
---- !u!1 &1168123471 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 477992205303050069, guid: 4d4c679d21400084e87954f8d4319a26, type: 3}
   m_PrefabInstance: {fileID: 1168123466}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1169215531
