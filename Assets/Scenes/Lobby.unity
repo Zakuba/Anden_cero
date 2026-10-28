@@ -45290,6 +45290,42 @@ PrefabInstance:
       propertyPath: m_Enabled
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 3056820642730376856, guid: 36c152553dff99b41a0286357d4d7b6a, type: 3}
+      propertyPath: colorUp2.b
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3056820642730376856, guid: 36c152553dff99b41a0286357d4d7b6a, type: 3}
+      propertyPath: colorUp2.g
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3056820642730376856, guid: 36c152553dff99b41a0286357d4d7b6a, type: 3}
+      propertyPath: colorUp2.r
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3056820642730376856, guid: 36c152553dff99b41a0286357d4d7b6a, type: 3}
+      propertyPath: colorShoes2.b
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3056820642730376856, guid: 36c152553dff99b41a0286357d4d7b6a, type: 3}
+      propertyPath: colorShoes2.g
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3056820642730376856, guid: 36c152553dff99b41a0286357d4d7b6a, type: 3}
+      propertyPath: colorShoes2.r
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3056820642730376856, guid: 36c152553dff99b41a0286357d4d7b6a, type: 3}
+      propertyPath: colorBottom2.b
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3056820642730376856, guid: 36c152553dff99b41a0286357d4d7b6a, type: 3}
+      propertyPath: colorBottom2.g
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3056820642730376856, guid: 36c152553dff99b41a0286357d4d7b6a, type: 3}
+      propertyPath: colorBottom2.r
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4643726891080018450, guid: 36c152553dff99b41a0286357d4d7b6a, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.8569139

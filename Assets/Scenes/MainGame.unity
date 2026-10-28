@@ -56621,7 +56621,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4745515675836130122, guid: 73f20a1719585ed4a8cda33713f804c6, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4772031365656950126, guid: 73f20a1719585ed4a8cda33713f804c6, type: 3}
       propertyPath: m_LocalPosition.x
@@ -140374,7 +140374,7 @@ MonoBehaviour:
   spawnPoint: {fileID: 1049098656}
   endPoint: {fileID: 1143169589}
   spawnInterval: 10
-  trainSpeed: 30
+  trainSpeed: 100
 --- !u!114 &1980060371
 MonoBehaviour:
   m_ObjectHideFlags: 0
