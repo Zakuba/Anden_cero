@@ -324,7 +324,6 @@ GameObject:
   - component: {fileID: 4316177774294595508}
   - component: {fileID: 2486152637706300743}
   - component: {fileID: 4531900843993939143}
-  - component: {fileID: 6437104564062453946}
   m_Layer: 0
   m_Name: PlayerAvatar
   m_TagString: Player
@@ -345,7 +344,6 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 6938019045645066515}
   - {fileID: 6269293031726295079}
   - {fileID: 2044078145322525870}
   - {fileID: 5597818450216826481}
@@ -444,7 +442,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.NetworkObject
-  GlobalObjectIdHash: 1902537740
+  GlobalObjectIdHash: 751227136
   InScenePlacedSourceGlobalObjectIdHash: 0
   m_InScenePlacedDisabledByDefault: 0
   DeferredDespawnTick: 0
@@ -560,6 +558,8 @@ MonoBehaviour:
   - {fileID: 3445791680956674612, guid: 8591591fcd04e5a4bb0ad4c1150d1ab4, type: 3}
   powerUpDropChance: 0.5
   powerUpSpawnHeight: -1
+  powerUpHeightAboveGround: 1.8
+  dropChance: 0.75
   explosionVfx: {fileID: 1737463432510393942, guid: 93dc88073b38e464d8d8b5af1ad25c72, type: 3}
   fireVfx: {fileID: 1737463432510393942, guid: c6e879bb9ad505341aa895aae1ef89f8, type: 3}
 --- !u!114 &5769002067245888163
@@ -788,28 +788,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::LuzInterruptor
   luz: {fileID: 2155352614542290802}
   empiezaEncendida: 0
---- !u!114 &6437104564062453946
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6023118608644461741}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 26208f6512898c74db731a81d9813deb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Agacharse
-  ShowTopMostFoldoutHeaderGroup: 1
-  alturaAgachado: 1
-  velocidadTransicion: 10
-  alternar: 0
-  visual: {fileID: 0}
-  capasTecho:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  camara: {fileID: 2044078145322525870}
-  factorCamara: 1
 --- !u!1 &6512647537936408538
 GameObject:
   m_ObjectHideFlags: 0
@@ -840,7 +818,8 @@ RectTransform:
   m_LocalPosition: {x: 0, y: 0, z: -0}
   m_LocalScale: {x: 0.053231265, y: 0.053231265, z: 0.053231265}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 6938019045645066515}
   m_Father: {fileID: 2524906840355348132}
   m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
@@ -951,7 +930,7 @@ MonoBehaviour:
   m_fontSizeMin: 18
   m_fontSizeMax: 72
   m_fontStyle: 0
-  m_HorizontalAlignment: 2
+  m_HorizontalAlignment: 1
   m_VerticalAlignment: 256
   m_textAlignment: 65535
   m_characterSpacing: 0
@@ -1033,16 +1012,16 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6712508448699446590}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -0.01}
-  m_LocalScale: {x: 0.0029745526, y: 0.0029745526, z: 0.0029745526}
+  m_LocalRotation: {x: -0, y: -1, z: -0, w: 0.00000058114523}
+  m_LocalPosition: {x: 0, y: 0, z: 0.19}
+  m_LocalScale: {x: 0.0558798, y: 0.0558798, z: 0.0558798}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 2524906840355348132}
+  m_Father: {fileID: 6269293031726295079}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0.482, y: 1.345}
+  m_AnchoredPosition: {x: -12.95, y: -0.31}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &4905157286061450677

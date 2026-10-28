@@ -34,9 +34,20 @@ public class ClothingEquipper : MonoBehaviour
     public GameObject startShoes;
 
     [Header("Colores de ropa")]
+    [Tooltip("Color aplicado al primer material de la prenda superior.")]
     public Color colorUp = Color.white;
+    [Tooltip("Color aplicado al segundo material de la prenda superior.")]
+    public Color colorUp2 = Color.white;
+
+    [Tooltip("Color aplicado al primer material del pantalón.")]
     public Color colorBottom = Color.white;
+    [Tooltip("Color aplicado al segundo material del pantalón.")]
+    public Color colorBottom2 = Color.white;
+
+    [Tooltip("Color aplicado al primer material del calzado.")]
     public Color colorShoes = Color.white;
+    [Tooltip("Color aplicado al segundo material del calzado.")]
+    public Color colorShoes2 = Color.white;
 
     [Header("Ajuste de ropa")]
     [Tooltip("Separación mínima entre la ropa y la piel, como fracción del tamaño del cuerpo " +
@@ -498,7 +509,7 @@ public class ClothingEquipper : MonoBehaviour
                     ? bodyRenderer.rootBone
                     : rootBone;
 
-                AplicarColor(smr, ObtenerColor(slot));
+                AplicarColor(smr, slot);
                 transferredCount++;
                 continue;
             }
@@ -627,10 +638,7 @@ public class ClothingEquipper : MonoBehaviour
             smr.rootBone =
                 newRoot;
 
-            AplicarColor(
-                smr,
-                ObtenerColor(slot)
-            );
+            AplicarColor(smr, slot);
         }
 
         Destroy(temp);
@@ -1123,47 +1131,68 @@ public class ClothingEquipper : MonoBehaviour
 
     // ------------------------------------------------------------------
 
-    Color ObtenerColor(Slot slot)
+    void ObtenerColores(Slot slot, out Color color1, out Color color2)
     {
         switch (slot)
         {
             case Slot.Up:
-                return colorUp;
+                color1 = colorUp;
+                color2 = colorUp2;
+                break;
 
             case Slot.Bottom:
-                return colorBottom;
+                color1 = colorBottom;
+                color2 = colorBottom2;
+                break;
 
             case Slot.Shoes:
-                return colorShoes;
+                color1 = colorShoes;
+                color2 = colorShoes2;
+                break;
 
             default:
-                return Color.white;
+                color1 = Color.white;
+                color2 = Color.white;
+                break;
         }
     }
 
-    void AplicarColor(
-        SkinnedMeshRenderer smr,
-        Color color
-    )
+    // Aplica cada color al slot de material correspondiente del renderer.
+    // Material 0 usa el primer color, material 1 el segundo; si hay más,
+    // se alternan ambos colores. Se usa un bloque por material para no
+    // modificar los materiales compartidos ni afectar otras prendas.
+    void AplicarColor(SkinnedMeshRenderer smr, Slot slot)
     {
-        MaterialPropertyBlock block =
-            new MaterialPropertyBlock();
+        if (smr == null)
+            return;
 
-        smr.GetPropertyBlock(block);
+        ObtenerColores(slot, out Color color1, out Color color2);
+        Material[] materials = smr.sharedMaterials;
 
-        // URP / Standard
-        block.SetColor(
-            "_BaseColor",
-            color
-        );
+        if (materials == null || materials.Length == 0)
+        {
+            MaterialPropertyBlock fallbackBlock = new MaterialPropertyBlock();
+            smr.GetPropertyBlock(fallbackBlock);
+            fallbackBlock.SetColor("_BaseColor", color1);
+            fallbackBlock.SetColor("_Color", color1);
+            smr.SetPropertyBlock(fallbackBlock);
+            return;
+        }
 
-        // Por compatibilidad con shaders
-        // que utilizan "_Color"
-        block.SetColor(
-            "_Color",
-            color
-        );
+        for (int i = 0; i < materials.Length; i++)
+        {
+            Color color = (i % 2 == 0) ? color1 : color2;
+            MaterialPropertyBlock block = new MaterialPropertyBlock();
+            smr.GetPropertyBlock(block, i);
 
-        smr.SetPropertyBlock(block);
+            // URP / Standard
+            block.SetColor("_BaseColor", color);
+
+            // Compatibilidad con shaders que usan _Color
+            block.SetColor("_Color", color);
+
+            smr.SetPropertyBlock(block, i);
+        }
     }
+
 }

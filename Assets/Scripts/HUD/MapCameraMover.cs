@@ -40,6 +40,12 @@ public class MapCameraMover : MonoBehaviour
     [Header("Debug")]
     [SerializeField] private bool drawPathGizmo = true;
 
+    [Header("Objeto a activar")]
+    [SerializeField] private GameObject laboratorio;
+
+    [Header("Objeto a desactivar")]
+    [SerializeField] private GameObject Collapser;
+
     private Camera cam;
     private AudioListener listener;
     private Behaviour brain; // CinemachineBrain
@@ -175,6 +181,9 @@ public class MapCameraMover : MonoBehaviour
     private IEnumerator MoveItemsRoutine(WaypointEvent ev)
     {
         if (ev.items == null || ev.items.Length == 0) yield break;
+
+        Collapser.SetActive(false);
+        laboratorio.SetActive(true);
 
         // Poses de partida
         Vector3[] startPos = new Vector3[ev.items.Length];
