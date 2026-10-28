@@ -22,6 +22,10 @@ public class DroneBomberAI : NetworkBehaviour
     private PerimeterCollapse perimeterCollapse;
     private Vector3 currentDirection = Vector3.forward;
 
+    bool PartidaLista => MatchManager.Instance != null
+                         && MatchManager.Instance.IsMatchRunning;
+
+
     private void Awake()
     {
         agent = GetComponent<NavMeshAgent>();
@@ -38,6 +42,7 @@ public class DroneBomberAI : NetworkBehaviour
             agent.enabled = false;
             return;
         }
+
         // Buscamos la referencia al sistema de perímetro de la escena
         perimeterCollapse = Object.FindFirstObjectByType<PerimeterCollapse>();
 
@@ -50,6 +55,14 @@ public class DroneBomberAI : NetworkBehaviour
     private void Update()
     {
         if (!IsServer) return;
+
+        if (!PartidaLista)
+        {
+            if (agent != null && agent.enabled) agent.isStopped = true;
+            return; // quieto hasta que empiece la partida
+        }
+
+        if (agent != null && agent.enabled) agent.isStopped = false;
 
         HandleMovement();
         HandleBombDropping();
