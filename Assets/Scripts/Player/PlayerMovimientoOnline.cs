@@ -101,7 +101,9 @@ public class PlayerMovimientoOnline : NetworkBehaviour
 
         if (stateManager != null && stateManager.currentState.Value != PlayerState.Vivo) return;
 
-        if (matchRunning) GatherCustomInput();
+        bool easterEggActivo = swap != null && swap.IsSwapped;
+
+        if (matchRunning || easterEggActivo) GatherCustomInput();
         else movementInput = Vector3.zero;
 
         MoveAndRotate();

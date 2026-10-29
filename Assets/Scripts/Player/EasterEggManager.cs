@@ -4,9 +4,7 @@ using UnityEngine;
 
 public class EasterEggManager : NetworkBehaviour
 {
-    [Header("Input")]
-    [SerializeField] private KeyCode teleportKey = KeyCode.T;
-
+    
     [Header("Destino")]
     [Tooltip("Tag de un objeto de la escena que marca el punto de destino")]
     [SerializeField] private string teleportPointTag = "TeleportPoint";
@@ -60,41 +58,37 @@ public class EasterEggManager : NetworkBehaviour
         swapped.OnValueChanged -= OnSwappedChanged;
     }
 
-    private void Update()
+   // Lo llama el servidor (MatchManager) cuando gana alguien sin haber puesto bombas
+public void TriggerFromServer()
+{
+    if (!IsServer || swapped.Value) return;
+    swapped.Value = true;      // activa los visuales para todos
+    TriggerOwnerRpc();         // el teletransporte lo ejecuta el dueño (ClientNetworkTransform)
+}
+
+[Rpc(SendTo.Owner)]
+private void TriggerOwnerRpc()
+{
+    GameObject point = GameObject.FindWithTag(teleportPointTag);
+    if (point == null)
     {
-        if (!IsOwner) return;
-
-        if (Input.GetKeyDown(teleportKey))
-        {
-            GameObject point = GameObject.FindWithTag(teleportPointTag);
-            if (point == null)
-            {
-                Debug.LogWarning($"No hay ningún objeto con el tag '{teleportPointTag}' en la escena.");
-                return;
-            }
-
-            Vector3 target = point.transform.position;
-
-            // Cliente con autoridad (ClientNetworkTransform): teletransporta él mismo.
-            // NetworkTransform server-authoritative: se lo pide al servidor.
-            if (netTransform == null || netTransform.CanCommitToTransform)
-                DoTeleport(target);
-            else
-                TeleportServerRpc(target);
-
-            // El cambio de cámara ocurre una sola vez
-            if (!cameraSwitched)
-            {
-                cameraSwitched = true;
-                if (MapCameraMover.Instance != null && playerCamera != null)
-                    MapCameraMover.Instance.SwitchTo(playerCamera, ActivatePlayerCamera);
-                else
-                    ActivatePlayerCamera();
-            }
-
-            ToggleSwapServerRpc();
-        }
+        Debug.LogWarning("[EasterEgg] No hay objeto con tag " + teleportPointTag);
+        return;
     }
+
+    Vector3 target = point.transform.position;
+    if (netTransform == null || netTransform.CanCommitToTransform) DoTeleport(target);
+    else TeleportServerRpc(target);
+
+    if (!cameraSwitched)
+    {
+        cameraSwitched = true;
+        if (MapCameraMover.Instance != null && playerCamera != null)
+            MapCameraMover.Instance.SwitchTo(playerCamera, ActivatePlayerCamera);
+        else
+            ActivatePlayerCamera();
+    }
+}
 
     // ---------- Teletransporte ----------
 
@@ -142,12 +136,6 @@ public class EasterEggManager : NetworkBehaviour
     }
 
     // ---------- Cambio de objetos ----------
-
-    [ServerRpc]
-    private void ToggleSwapServerRpc()
-    {
-        swapped.Value = true; // un solo sentido
-    }
 
     private void OnSwappedChanged(bool oldValue, bool newValue)
     {

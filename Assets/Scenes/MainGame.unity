@@ -2513,7 +2513,7 @@ GameObject:
   - component: {fileID: 30313054}
   m_Layer: 0
   m_Name: WP9
-  m_TagString: TeleportPoint
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -54210,6 +54210,37 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 63eacef9c3387fe4c9ebad1feb66f7e5, type: 3}
+--- !u!1 &779505944
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 779505945}
+  m_Layer: 0
+  m_Name: EasterEggPoint
+  m_TagString: TeleportPoint
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &779505945
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 779505944}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0.17410316, y: -0.70322424, z: 0.12370902, w: 0.67812973}
+  m_LocalPosition: {x: -18.222, y: -4.472, z: -6.671}
+  m_LocalScale: {x: 0.31941006, y: 0.31941012, z: 0.31941006}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &779700740
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -55935,7 +55966,7 @@ GameObject:
   - component: {fileID: 800992440}
   m_Layer: 0
   m_Name: WP8
-  m_TagString: TeleportPoint
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -60640,7 +60671,7 @@ GameObject:
   - component: {fileID: 862285994}
   m_Layer: 0
   m_Name: WP6
-  m_TagString: TeleportPoint
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -63428,7 +63459,7 @@ GameObject:
   - component: {fileID: 911370689}
   m_Layer: 0
   m_Name: WP7
-  m_TagString: TeleportPoint
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -85988,7 +86019,7 @@ GameObject:
   - component: {fileID: 1185534042}
   m_Layer: 0
   m_Name: WP3
-  m_TagString: TeleportPoint
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -87546,7 +87577,7 @@ GameObject:
   - component: {fileID: 1216304593}
   m_Layer: 0
   m_Name: WP5
-  m_TagString: TeleportPoint
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -113410,7 +113441,7 @@ GameObject:
   - component: {fileID: 1555394531}
   m_Layer: 0
   m_Name: WP4
-  m_TagString: TeleportPoint
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -127021,7 +127052,7 @@ GameObject:
   - component: {fileID: 1771292814}
   m_Layer: 0
   m_Name: WP2
-  m_TagString: TeleportPoint
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -133648,7 +133679,7 @@ GameObject:
   - component: {fileID: 1868800888}
   m_Layer: 0
   m_Name: WP1
-  m_TagString: TeleportPoint
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -154331,6 +154362,7 @@ SceneRoots:
   - {fileID: 1887547179}
   - {fileID: 1319947065}
   - {fileID: 1364818450}
+  - {fileID: 779505945}
   - {fileID: 455084413}
   - {fileID: 1444290208}
   - {fileID: 34687233}
