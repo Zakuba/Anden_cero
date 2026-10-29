@@ -262,6 +262,7 @@ public class MatchManager : NetworkBehaviour
         {
             matchEnded = true;
             AnnounceResultClientRpc(alive[0].OwnerClientId, alive[0].NetworkObject, false);
+            TryTriggerEasterEgg(alive[0]);
         }
         else if (alive.Count == 0)
         {
@@ -269,6 +270,20 @@ public class MatchManager : NetworkBehaviour
             AnnounceResultClientRpc(0, default, true);
         }
     }
+
+    private void TryTriggerEasterEgg(PlayerStateManager winner)
+{
+    if (!IsServer || winner == null) return;
+    if (mode != MatchMode.BattleRoyale) return;
+    if (MapCameraMover.Instance == null) return; // solo en mapas que tienen el Easter Egg (MainGame)
+
+    var bombs = winner.GetComponent<PlayerBombController>();
+    var egg = winner.GetComponent<EasterEggManager>();
+    if (bombs == null || egg == null) return;
+    if (bombs.BombsPlacedThisMatch > 0) return;
+
+    egg.TriggerFromServer();
+}
 
       [Rpc(SendTo.ClientsAndHost)]
     private void AnnounceSurvivalResultClientRpc(int waveReached, float survivedSeconds, float timeToReachWave)
