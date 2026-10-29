@@ -14710,6 +14710,10 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 2563392057035156470, guid: d293970ab05ffd44dba80939076fa9c0, type: 3}
+      propertyPath: lobbyAnimation
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 4197287094720626657, guid: d293970ab05ffd44dba80939076fa9c0, type: 3}
       propertyPath: m_LocalPosition.x
       value: 21.03822
@@ -14765,6 +14769,10 @@ PrefabInstance:
     - target: {fileID: 4199356091485835385, guid: d293970ab05ffd44dba80939076fa9c0, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
       value: MiniJuegoManager, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 6231043756942620375, guid: d293970ab05ffd44dba80939076fa9c0, type: 3}
+      propertyPath: lobbyAnimation
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7225039181714142605, guid: d293970ab05ffd44dba80939076fa9c0, type: 3}
       propertyPath: m_IsActive
