@@ -40,9 +40,11 @@ public class PlayerBombController : NetworkBehaviour
        
     private int activeBombs = 0;
     private int maxBombs = 1;
+    public int BombsPlacedThisMatch { get; private set; }
     private PlayerStats playerStats;
     private PlayerStateManager stateManager;
     private BombCooldownUI localBombUI;
+    
 
     private EasterEggManager swap;
 
@@ -164,6 +166,7 @@ private Vector3 GetGridCenter(Vector3 playerPos)
         if (activeBombs >= EffectiveMaxBombs) return;
 
         activeBombs++;
+        BombsPlacedThisMatch++;
         UpdateBombCountClientRpc(activeBombs);
 
         GameObject bombInstance = Instantiate(bombPrefab, spawnPosition, Quaternion.identity);
