@@ -16,6 +16,9 @@ public class VideoSettingsUI : MonoBehaviour
     [SerializeField] private Slider brightnessSlider;
     [SerializeField] private Slider contrastSlider;
 
+    [Header("Referencias de UI - Audio")]
+    [SerializeField] private Slider masterVolumeSlider;
+
     [Header("Post-Processing (URP)")]
     [SerializeField] private Volume globalVolume;
     private ColorAdjustments colorAdjustments;
@@ -24,18 +27,19 @@ public class VideoSettingsUI : MonoBehaviour
     [SerializeField] private Toggle fpsToggle;
     [SerializeField] private Toggle pingToggle;
 
-
     private Resolution[] availableResolutions;
     private List<Resolution> filteredResolutions;
     private int currentResolutionIndex = 0;
 
-    // --- Respaldo para el botón Volver ---
-    private bool dataSave = false;
-    private int originalResolutionIndex;
-    private bool originalFullscreen;
-    private int originalQualityIndex;
-    private float originalBrightness;
-    private float originalContrast;
+    // --- Respaldo: ÚLTIMO ESTADO GUARDADO (es lo que restaura el botón Volver) ---
+    private int savedResolutionIndex;
+    private bool savedFullscreen;
+    private int savedQualityIndex;
+    private float savedBrightness;
+    private float savedContrast;
+    private float savedMasterVolume;
+    private bool savedShowFPS;
+    private bool savedShowPing;
 
     private void Awake()
     {
@@ -44,37 +48,113 @@ public class VideoSettingsUI : MonoBehaviour
         SetupQualityDropdown();
         SetupPostProcessingSliders();
         SetupPerformanceToggles();
+        SetupAudioSlider();
+
+        // Respaldo inicial: lo que hay al arrancar cuenta como "último estado guardado".
+        CaptureSavedState();
     }
 
-    private void OnEnable()
-    {
-        CaptureOriginalSettings();
-    }
+    // ------------------------------------------------------------------
+    //  GUARDAR / VOLVER
+    // ------------------------------------------------------------------
 
-    private void CaptureOriginalSettings()
+    /// <summary>Se conecta al botón Guardar.</summary>
+    public void saveData()
     {
-        originalFullscreen = Screen.fullScreen;
-        originalQualityIndex = QualitySettings.GetQualityLevel();
-        originalResolutionIndex = currentResolutionIndex;
+        // Lo que se ve ahora pasa a ser el nuevo "último estado guardado".
+        CaptureSavedState();
 
-        if (colorAdjustments != null)
+        if (SettingsManager.Instance != null)
         {
-            originalBrightness = colorAdjustments.postExposure.value;
-            originalContrast = colorAdjustments.contrast.value;
+            SettingsManager.Instance.SaveSettings();
         }
     }
+
+    /// <summary>Se conecta al botón Volver. Descarta todo lo no guardado.</summary>
+    public void volverAlMenuSinGuardar()
+    {
+        RestoreSavedState();
+    }
+
+    // Se lee de los CONTROLES de la UI (no de Screen.fullScreen / QualitySettings),
+    // porque el estado del motor puede aplicarse con retraso o directamente no
+    // cambiar en el Editor.
+    private void CaptureSavedState()
+    {
+        savedFullscreen = fullscreenToggle.isOn;
+        savedResolutionIndex = resolutionDropdown.value;
+        savedQualityIndex = qualityDropdown.value;
+        savedBrightness = brightnessSlider.value;
+        savedContrast = contrastSlider.value;
+        savedMasterVolume = masterVolumeSlider.value;
+        savedShowFPS = fpsToggle.isOn;
+        savedShowPing = pingToggle.isOn;
+    }
+
+    private void RestoreSavedState()
+    {
+        SettingsManager settings = SettingsManager.Instance;
+
+        // 1. Recargar el JSON primero (cubre campos que este script no maneja,
+        //    como inputRebinds). Los Set... de abajo reescriben después en
+        //    currentSettings los valores del respaldo, así queda todo coherente.
+        if (settings != null)
+        {
+            settings.LoadSettings();
+        }
+
+        // 2. Calidad
+        qualityDropdown.SetValueWithoutNotify(savedQualityIndex);
+        qualityDropdown.RefreshShownValue();
+        SetQuality(savedQualityIndex);
+
+        // 3. Pantalla completa y resolución
+        fullscreenToggle.SetIsOnWithoutNotify(savedFullscreen);
+        resolutionDropdown.SetValueWithoutNotify(savedResolutionIndex);
+        resolutionDropdown.RefreshShownValue();
+
+        currentResolutionIndex = savedResolutionIndex;
+        Resolution res = filteredResolutions[savedResolutionIndex];
+        Screen.SetResolution(res.width, res.height, savedFullscreen);
+
+        if (settings != null)
+        {
+            settings.currentSettings.fullScreen = savedFullscreen;
+            settings.currentSettings.resolutionIndex = savedResolutionIndex;
+        }
+
+        // 4. Atmósfera (brillo y contraste)
+        brightnessSlider.SetValueWithoutNotify(savedBrightness);
+        contrastSlider.SetValueWithoutNotify(savedContrast);
+        SetBrightness(savedBrightness);
+        SetContrast(savedContrast);
+
+        // 5. Volumen
+        masterVolumeSlider.SetValueWithoutNotify(savedMasterVolume);
+        SetMasterVolume(savedMasterVolume);
+
+        // 6. Rendimiento y red
+        fpsToggle.SetIsOnWithoutNotify(savedShowFPS);
+        pingToggle.SetIsOnWithoutNotify(savedShowPing);
+        SetShowFPS(savedShowFPS);
+        SetShowPing(savedShowPing);
+    }
+
+    // ------------------------------------------------------------------
+    //  ATMÓSFERA (brillo / contraste)
+    // ------------------------------------------------------------------
 
     private void SetupPostProcessingSliders()
     {
         if (globalVolume != null && globalVolume.profile.TryGet(out colorAdjustments))
         {
             // Cargar valor guardado o valor actual del profile
-            float initialBrightness = (SettingsManager.Instance != null) 
-                ? SettingsManager.Instance.currentSettings.brightness 
+            float initialBrightness = (SettingsManager.Instance != null)
+                ? SettingsManager.Instance.currentSettings.brightness
                 : colorAdjustments.postExposure.value;
 
-            float initialContrast = (SettingsManager.Instance != null) 
-                ? SettingsManager.Instance.currentSettings.contrast 
+            float initialContrast = (SettingsManager.Instance != null)
+                ? SettingsManager.Instance.currentSettings.contrast
                 : colorAdjustments.contrast.value;
 
             brightnessSlider.value = initialBrightness;
@@ -114,50 +194,37 @@ public class VideoSettingsUI : MonoBehaviour
         }
     }
 
-    public void saveData(){
-        this.dataSave = true;
-    }
+    // ------------------------------------------------------------------
+    //  AUDIO
+    // ------------------------------------------------------------------
 
-    public void volverAlMenuSinGuardar(){
-        if(!this.dataSave){
-            Debug.Log("asodasd" + this.dataSave);
-            VolverSinGuardar();
-        } else{
-            this.dataSave = false;
-        }
-    }
-
-    private void VolverSinGuardar()
+    private void SetupAudioSlider()
     {
-        // 1. Restaurar Gráficos y Pantalla
-        SetQuality(originalQualityIndex);
-        qualityDropdown.value = originalQualityIndex;
-        qualityDropdown.RefreshShownValue();
+        float initialVolume = (SettingsManager.Instance != null)
+            ? SettingsManager.Instance.currentSettings.masterVolume
+            : AudioListener.volume;
 
-        fullscreenToggle.isOn = originalFullscreen;
-        resolutionDropdown.value = originalResolutionIndex;
-        resolutionDropdown.RefreshShownValue();
-        
-        Resolution originalRes = filteredResolutions[originalResolutionIndex];
-        Screen.SetResolution(originalRes.width, originalRes.height, originalFullscreen);
+        masterVolumeSlider.minValue = 0f;
+        masterVolumeSlider.maxValue = 1f;
+        masterVolumeSlider.value = initialVolume;
 
-        // 2. Restaurar Atmósfera (Brillo y Contraste)
-        if (colorAdjustments != null)
-        {
-            brightnessSlider.value = originalBrightness;
-            contrastSlider.value = originalContrast;
-            SetBrightness(originalBrightness);
-            SetContrast(originalContrast);
-        }
+        masterVolumeSlider.onValueChanged.AddListener(SetMasterVolume);
+    }
 
-        // 3. Recargar JSON en memoria
+    public void SetMasterVolume(float value)
+    {
+        AudioListener.volume = value;
+
         if (SettingsManager.Instance != null)
         {
-            SettingsManager.Instance.LoadSettings();
+            SettingsManager.Instance.currentSettings.masterVolume = value;
         }
     }
 
-    // --- Métodos de resolución y calidad ya existentes ---
+    // ------------------------------------------------------------------
+    //  CALIDAD
+    // ------------------------------------------------------------------
+
     private void SetupQualityDropdown()
     {
         qualityDropdown.ClearOptions();
@@ -185,6 +252,10 @@ public class VideoSettingsUI : MonoBehaviour
             SettingsManager.Instance.currentSettings.qualityLevel = qualityIndex;
         }
     }
+
+    // ------------------------------------------------------------------
+    //  PANTALLA COMPLETA Y RESOLUCIÓN
+    // ------------------------------------------------------------------
 
     private void SetupFullscreenToggle()
     {
@@ -249,6 +320,9 @@ public class VideoSettingsUI : MonoBehaviour
         }
     }
 
+    // ------------------------------------------------------------------
+    //  RENDIMIENTO Y RED
+    // ------------------------------------------------------------------
 
     private void SetupPerformanceToggles()
     {

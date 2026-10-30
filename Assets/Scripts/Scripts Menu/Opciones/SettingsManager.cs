@@ -37,6 +37,8 @@ public class SettingsManager : MonoBehaviour
             currentSettings = new GameSettings();
             Debug.Log("No se encontraron opciones. Cargando valores por defecto.");
         }
+
+            AudioListener.volume = currentSettings.masterVolume; 
     }
 
     public void SaveSettings()
