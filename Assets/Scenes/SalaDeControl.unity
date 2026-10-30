@@ -6217,7 +6217,7 @@ PrefabInstance:
     - target: {fileID: 6030919849349125509, guid: 4f6ea2c54a86e7a48b158c12f51502ea, type: 3}
       propertyPath: waitingText
       value: 
-      objectReference: {fileID: 1168123471}
+      objectReference: {fileID: 0}
     - target: {fileID: 6030919849349125509, guid: 4f6ea2c54a86e7a48b158c12f51502ea, type: 3}
       propertyPath: resultsPanel
       value: 
@@ -6229,7 +6229,7 @@ PrefabInstance:
     - target: {fileID: 6030919849349125509, guid: 4f6ea2c54a86e7a48b158c12f51502ea, type: 3}
       propertyPath: waitingForHostText
       value: 
-      objectReference: {fileID: 1168123470}
+      objectReference: {fileID: 0}
     - target: {fileID: 6030919849349125509, guid: 4f6ea2c54a86e7a48b158c12f51502ea, type: 3}
       propertyPath: spawnPoints.Array.size
       value: 4
@@ -41365,12 +41365,20 @@ PrefabInstance:
       propertyPath: 'brokenHeartIcons.Array.data[2]'
       value: 
       objectReference: {fileID: 1577345400}
+    - target: {fileID: 4891665941861383964, guid: 4d4c679d21400084e87954f8d4319a26, type: 3}
+      propertyPath: m_text
+      value: Sala de Control
+      objectReference: {fileID: 0}
     - target: {fileID: 4998947333371545049, guid: 4d4c679d21400084e87954f8d4319a26, type: 3}
       propertyPath: m_Sprite
       value: 
       objectReference: {fileID: 21300000, guid: 0b3a15b475c4c1f45b26ce15c0ffa71c, type: 3}
     - target: {fileID: 5831200863195956216, guid: 4d4c679d21400084e87954f8d4319a26, type: 3}
       propertyPath: m_UiScaleMode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5831200863195956216, guid: 4d4c679d21400084e87954f8d4319a26, type: 3}
+      propertyPath: m_ScreenMatchMode
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5831200863195956216, guid: 4d4c679d21400084e87954f8d4319a26, type: 3}
@@ -41495,6 +41503,22 @@ PrefabInstance:
       propertyPath: m_Sprite
       value: 
       objectReference: {fileID: 21300000, guid: f6111004d1312df4ebf135e029c68f6a, type: 3}
+    - target: {fileID: 8448841585960942331, guid: 4d4c679d21400084e87954f8d4319a26, type: 3}
+      propertyPath: m_Camera
+      value: 
+      objectReference: {fileID: 241765556}
+    - target: {fileID: 8448841585960942331, guid: 4d4c679d21400084e87954f8d4319a26, type: 3}
+      propertyPath: m_RenderMode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8448841585960942331, guid: 4d4c679d21400084e87954f8d4319a26, type: 3}
+      propertyPath: m_SortingOrder
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 8448841585960942331, guid: 4d4c679d21400084e87954f8d4319a26, type: 3}
+      propertyPath: m_PlaneDistance
+      value: 0.35
+      objectReference: {fileID: 0}
     - target: {fileID: 8908326655890359570, guid: 4d4c679d21400084e87954f8d4319a26, type: 3}
       propertyPath: m_Sprite
       value: 
@@ -41555,16 +41579,6 @@ MonoBehaviour:
 --- !u!1 &1168123469 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 8825872478504095694, guid: 4d4c679d21400084e87954f8d4319a26, type: 3}
-  m_PrefabInstance: {fileID: 1168123466}
-  m_PrefabAsset: {fileID: 0}
---- !u!1 &1168123470 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 1399714655529712265, guid: 4d4c679d21400084e87954f8d4319a26, type: 3}
-  m_PrefabInstance: {fileID: 1168123466}
-  m_PrefabAsset: {fileID: 0}
---- !u!1 &1168123471 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 477992205303050069, guid: 4d4c679d21400084e87954f8d4319a26, type: 3}
   m_PrefabInstance: {fileID: 1168123466}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1169215531
