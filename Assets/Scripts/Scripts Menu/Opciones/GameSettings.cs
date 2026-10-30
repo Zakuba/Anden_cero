@@ -17,4 +17,7 @@ public class GameSettings
     // --- Controles ---
     public string inputRebinds = ""; // Aquí se guardarán los overrides del Input System en JSON
 
+    // --- Audio ---
+    public float masterVolume = 1.0f;
+
 }
