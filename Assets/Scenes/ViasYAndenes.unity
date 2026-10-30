@@ -36234,6 +36234,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1426094077147250011, guid: e1ce9045eacc92b42a9c258e2f021d47, type: 3}
+      propertyPath: achievementsCatalog.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1426094077147250011, guid: e1ce9045eacc92b42a9c258e2f021d47, type: 3}
+      propertyPath: 'achievementsCatalog.Array.data[1]'
+      value: 
+      objectReference: {fileID: 11400000, guid: cad5acd004b2e5d41a47b25dad8631c9, type: 2}
     - target: {fileID: 2839463584135352133, guid: e1ce9045eacc92b42a9c258e2f021d47, type: 3}
       propertyPath: m_LocalPosition.x
       value: 5.97286

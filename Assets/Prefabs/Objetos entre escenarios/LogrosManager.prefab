@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 2839463584135352133}
   - component: {fileID: 1426094077147250011}
   m_Layer: 0
-  m_Name: NotificationManager
+  m_Name: LogrosManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -46,6 +46,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::AchievementManager
   achievementsCatalog:
   - {fileID: 11400000, guid: 83045faf690c81e478944c8ed161f80e, type: 2}
+  - {fileID: 11400000, guid: cad5acd004b2e5d41a47b25dad8631c9, type: 2}
   achievementId: bateador_experto
   btnDesbloqueado: {fileID: 0}
   objetoDesbloqueado: {fileID: 0}
