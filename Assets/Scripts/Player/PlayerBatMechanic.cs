@@ -168,7 +168,13 @@ private void RequestBatBombServerRpc(NetworkObjectReference bombRef, Vector3 dir
 
     if (finalDestination != currentBombPos)
     {
+        // 1. Deslizar hacia la casilla libre calculada
         bomb.SlideTo(finalDestination);
+
+        // 2. Transferir la autoría de la bomba al jugador que la acaba de batear
+        bomb.SetNewHitter(OwnerClientId);
+
+        // 3. Notificar el logro de bateo exitoso
         NotifySuccessfulBatClientRpc();
     }
 }

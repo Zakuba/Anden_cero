@@ -173,6 +173,13 @@ private Vector3 GetGridCenter(Vector3 playerPos)
         NetworkObject bombNetObj = bombInstance.GetComponent<NetworkObject>();
         bombNetObj.Spawn();
 
+        //Asignar al creador original de la bomba
+        BombInteractable bombLogic = bombInstance.GetComponent<BombInteractable>();
+        if (bombLogic != null)
+        {
+            bombLogic.SetInitialOwner(OwnerClientId);
+        }
+
         // Llamada con un solo parámetro
         StartCoroutine(BombExplosionRoutine(bombNetObj));
     }
@@ -205,7 +212,11 @@ private IEnumerator BombExplosionRoutine(NetworkObject bombNetObj)
             if (bombNetObj != null && bombNetObj.IsSpawned)
             {
                 Vector3 finalPos = bombNetObj.transform.position;
-                List<Vector3> affectedCells = CalculateExplosionCells(finalPos);
+
+                // Obtenemos el atacante responsable actual (quien plantó o quien la bateó por última vez)
+                ulong attackerId = (bombLogic != null) ? bombLogic.currentOwnerClientId.Value : OwnerClientId;
+
+                List<Vector3> affectedCells = CalculateExplosionCells(finalPos, attackerId);
                 SpawnVfxClientRpc(affectedCells.ToArray());
 
                 yield return new WaitForSeconds(0.05f);
@@ -226,7 +237,7 @@ private IEnumerator BombExplosionRoutine(NetworkObject bombNetObj)
 }
 
 /// Cálculo autoritativo en el Servidor: determina daños y obstáculos proyectando a cada desnivel
-    private List<Vector3> CalculateExplosionCells(Vector3 center)
+    private List<Vector3> CalculateExplosionCells(Vector3 center, ulong attackerId)
     {
         List<Vector3> cells = new List<Vector3>();
         HashSet<ulong> playersHitThisExplosion = new HashSet<ulong>();
@@ -234,8 +245,7 @@ private IEnumerator BombExplosionRoutine(NetworkObject bombNetObj)
         // Casilla central proyectada al suelo
         Vector3 groundCenter = GetGroundPosition(center);
         cells.Add(groundCenter);
-        CheckAndDestroyCell(groundCenter, playersHitThisExplosion);
-
+        CheckCell(groundCenter, playersHitThisExplosion, attackerId, out _, out _);
         // Direcciones cardinales
         Vector3[] directions = { Vector3.forward, Vector3.back, Vector3.right, Vector3.left };
 
@@ -252,7 +262,7 @@ private IEnumerator BombExplosionRoutine(NetworkObject bombNetObj)
                 bool hitIndestructible;
                 bool hitDestructible;
 
-                CheckCell(targetCell, playersHitThisExplosion, out hitIndestructible, out hitDestructible);
+                CheckCell(targetCell, playersHitThisExplosion, attackerId, out hitIndestructible, out hitDestructible);
 
                 if (hitIndestructible) break;
 
@@ -306,11 +316,14 @@ private Vector3 GetGroundPosition(Vector3 pos)
     return pos;
 }
 
+/*
     private void CheckAndDestroyCell(Vector3 cell, HashSet<ulong> playersHitThisExplosion)
     {
         CheckCell(cell, playersHitThisExplosion, out _, out _);
     }
+*/
 
+/*
     private void CheckCell(Vector3 cell, HashSet<ulong> playersHitThisExplosion, out bool hitIndestructible, out bool hitDestructible)
     {
         hitIndestructible = false;
@@ -361,6 +374,71 @@ if (hit.CompareTag("Destructible"))
 }
 
             // 4. Drones
+            if (hit.CompareTag("Drone"))
+            {
+                GameObject droneRoot = hit.transform.root.gameObject;
+                if (dronesHitThisCell.Add(droneRoot))
+                {
+                    DroneBomberAI bombardero = hit.GetComponentInParent<DroneBomberAI>();
+                    if (bombardero != null) bombardero.TakeDamage();
+
+                    DroneShooterAI fusilero = hit.GetComponentInParent<DroneShooterAI>();
+                    if (fusilero != null) fusilero.TakeDamage();
+
+                    DroneHealerAI sanador = hit.GetComponentInParent<DroneHealerAI>();
+                    if (sanador != null) sanador.TakeDamage();
+                }
+
+                hitDestructible = true;
+            }
+        }
+    }
+*/
+
+    private void CheckCell(Vector3 cell, HashSet<ulong> playersHitThisExplosion, ulong attackerId, out bool hitIndestructible, out bool hitDestructible)
+    {
+        hitIndestructible = false;
+        hitDestructible = false;
+        HashSet<GameObject> dronesHitThisCell = new HashSet<GameObject>();
+
+        Vector3 boxCenter = new Vector3(cell.x, cell.y + 1.0f, cell.z);
+        Vector3 halfExtents = new Vector3(gridSize * 0.45f, 1.0f, gridSize * 0.45f);
+        Collider[] hits = Physics.OverlapBox(boxCenter, halfExtents, Quaternion.identity, explosionLayerMask, QueryTriggerInteraction.Collide);
+
+        foreach (Collider hit in hits)
+        {
+            if (hit.GetComponentInParent<BombInteractable>() != null) continue;
+
+            // 1. Detección de daño enviando el atacante responsable
+            PlayerStateManager player = hit.GetComponent<PlayerStateManager>();
+            if (player == null) player = hit.GetComponentInParent<PlayerStateManager>();
+
+            if (player != null)
+            {
+                ulong playerId = player.NetworkObjectId;
+                if (!playersHitThisExplosion.Contains(playerId))
+                {
+                    playersHitThisExplosion.Add(playerId);
+                    player.TakeDamageServerRpc(attackerId);
+                }
+            }
+
+            if (!hitIndestructible && hit.CompareTag("Indestructible"))
+            {
+                hitIndestructible = true;
+            }
+
+            if (hit.CompareTag("Destructible"))
+            {
+                DestroyObjectAtPositionClientRpc(hit.transform.position);
+
+                if (!hitDestructible)
+                {
+                    hitDestructible = true;
+                    TrySpawnPowerUpDrop(hit.transform.position);
+                }
+            }
+
             if (hit.CompareTag("Drone"))
             {
                 GameObject droneRoot = hit.transform.root.gameObject;

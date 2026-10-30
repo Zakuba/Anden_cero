@@ -93,6 +93,32 @@ private void UnlockAchievement(AchievementSO achievement)
         }
     }
 
+/// <summary>
+/// Método público para desbloquear logros usando directamente su ID (ej: "primera_baja").
+/// </summary>
+    public void UnlockAchievement(string targetId)
+    {
+        if (currentData == null)
+            currentData = PersistenceManager.LoadData();
+
+        // Si ya está desbloqueado, lo descartamos
+        if (currentData.unlockedAchievements.Contains(targetId))
+            return;
+
+        // Busca el ScriptableObject en la lista que tenés en el Inspector
+        AchievementSO achievement = achievementsCatalog.Find(a => a.id == targetId);
+
+        if (achievement != null)
+        {
+            // Llama a tu método privado pasando el ScriptableObject
+            UnlockAchievement(achievement);
+        }
+        else
+        {
+            Debug.LogWarning($"[AchievementManager] No se encontró ningún logro en el catálogo con el id: {targetId}");
+        }
+    }
+
 private void ActualizarObjetosLogro()
 {
     if (currentData == null) return;

@@ -144,18 +144,15 @@ public class PlayerStateManager : NetworkBehaviour
         localLivesUI.UpdateHearts(currentLives.Value, maxLivesNet.Value);
     }
 
-    [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Everyone)]
-    public void TakeDamageServerRpc()
+[Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Everyone)]
+    public void TakeDamageServerRpc(ulong attackerClientId = 999999)
     {
-        if (MatchManager.Instance != null &&
-            !MatchManager.Instance.IsMatchRunning)
+        if (MatchManager.Instance != null && !MatchManager.Instance.IsMatchRunning)
             return;
 
-        if (currentState.Value == PlayerState.Muerto ||
-            currentState.Value == PlayerState.Aturdido)
+        if (currentState.Value == PlayerState.Muerto || currentState.Value == PlayerState.Aturdido)
             return;
 
-        // Si acaba de perder el escudo en esta misma fracción de segundo, se descarta el daño residual
         if (isShieldInvulnerable)
             return;
 
@@ -173,10 +170,32 @@ public class PlayerStateManager : NetworkBehaviour
         if (currentLives.Value <= 0)
         {
             currentState.Value = PlayerState.Muerto;
+
+            // VALIDACIÓN DEL LOGRO "PRIMERA BAJA":
+            // 1. Debe haber un atacante válido
+            // 2. No debe ser suicidio (attackerClientId no puede ser el mismo que recibe el daño)
+            if (attackerClientId != 999999 && attackerClientId != OwnerClientId)
+            {
+                // Avisamos a todos los clientes quién fue el atacante que logró la baja
+                AwardFirstKillAchievementClientRpc(attackerClientId);
+            }
         }
         else
         {
             StartCoroutine(StunRoutine());
+        }
+    }
+
+    [ClientRpc]
+    private void AwardFirstKillAchievementClientRpc(ulong killerClientId)
+    {
+        // Se ejecuta únicamente en la máquina del jugador que realizó la eliminación
+        if (NetworkManager.Singleton != null && NetworkManager.Singleton.LocalClientId == killerClientId)
+        {
+            if (AchievementManager.Instance != null)
+            {
+                AchievementManager.Instance.UnlockAchievement("primera_baja");
+            }
         }
     }
 
