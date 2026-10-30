@@ -4244,6 +4244,17 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 74ff17e80f5460f41a7bee02e717d23b, type: 3}
+--- !u!114 &420186775 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3152194828735039664, guid: 74ff17e80f5460f41a7bee02e717d23b, type: 3}
+  m_PrefabInstance: {fileID: 420186774}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 172515602e62fb746b5d573b38a5fe58, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.RenderPipelines.Core.Runtime::UnityEngine.Rendering.Volume
 --- !u!1001 &420878764
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -8129,6 +8140,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 45690912551193646, guid: 4d4c679d21400084e87954f8d4319a26, type: 3}
+      propertyPath: globalVolume
+      value: 
+      objectReference: {fileID: 420186775}
     - target: {fileID: 477992205303050069, guid: 4d4c679d21400084e87954f8d4319a26, type: 3}
       propertyPath: m_IsActive
       value: 0
