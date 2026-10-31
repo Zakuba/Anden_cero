@@ -637,6 +637,16 @@ public class MatchManager : NetworkBehaviour
             return;
         }
 
+        // En resultados los jugadores ya no necesitan moverse.
+        // Lo desactivamos también en el servidor y luego en todos los clientes.
+        CharacterController serverController =
+            player.GetComponent<CharacterController>();
+
+        if (serverController != null)
+            serverController.enabled = false;
+
+        DisableCharacterControllerClientRpc(player.NetworkObject);
+
         // Reutilizamos el sistema de animaciones del lobby.
         AssignCharacterAnimation(player, point);
 
@@ -644,6 +654,8 @@ public class MatchManager : NetworkBehaviour
             $"Teletransportando a {player.name} hacia {point.name}"
         );
 
+        // La coroutine espera un frame para dar tiempo a que los clientes
+        // desactiven el CharacterController antes de recibir el teletransporte.
         StartCoroutine(
             SendSpawnNextFrame(handler, point.position, point.rotation)
         );
@@ -707,6 +719,33 @@ public class MatchManager : NetworkBehaviour
         StartCoroutine(
             SendSpawnNextFrame(handler, point.position, point.rotation)
         );
+    }
+
+    [Rpc(SendTo.ClientsAndHost)]
+    private void DisableCharacterControllerClientRpc(
+        NetworkObjectReference playerReference)
+    {
+        if (!playerReference.TryGet(out NetworkObject playerObject))
+            return;
+
+        CharacterController controller =
+            playerObject.GetComponent<CharacterController>();
+
+        if (controller != null)
+        {
+            controller.enabled = false;
+
+            Debug.Log(
+                $"CharacterController desactivado para {playerObject.name} " +
+                "durante la pantalla de resultados."
+            );
+        }
+        else
+        {
+            Debug.LogWarning(
+                $"El jugador {playerObject.name} no tiene CharacterController."
+            );
+        }
     }
 
     private IEnumerator SendSpawnNextFrame(
