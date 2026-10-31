@@ -52,7 +52,7 @@ public class PauseManager : MonoBehaviour
         wasMatchRunning = matchRunning;
 
         // Si todavía estamos en el lobby (la partida no arrancó), ignoramos la tecla Escape por completo
-        if (!matchRunning) return;
+        //if (!matchRunning) return;
 
         // 2. Detectar la tecla Escape solo cuando ya empezó la partida
         if (Input.GetKeyDown(KeyCode.Escape))
