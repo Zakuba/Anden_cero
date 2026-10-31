@@ -1,3 +1,4 @@
+
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -15,10 +16,11 @@ public class MatchManager : NetworkBehaviour
 {
     public static MatchManager Instance { get; private set; }
 
-    // Se pone en true cuando arranca la partida: lo usa el ConnectionApproval para rechazar late joiners
+    // Se pone en true cuando arranca la partida:
+    // lo usa ConnectionApproval para rechazar late joiners.
     public static bool JoinsClosed { get; private set; }
 
-    public const int MaxPlayers = 6;
+    public const int MaxPlayers = 4;
     private const int MinPlayersToStart = 1;
 
     [Header("Modo de juego")]
@@ -31,27 +33,52 @@ public class MatchManager : NetworkBehaviour
 
     [Header("Inicio de partida (solo host)")]
     [SerializeField] private Button startMatchButton;
-    [SerializeField] private GameObject waitingText;   // "Esperando jugadores..."
-    [SerializeField] private GameObject waitingForHostText; // Texto para clientes: "Esperando al host..."
-    [SerializeField] private TMP_Text roomCodeText; // NUEVO: "Código de sala: XXXXXX" (solo host)
+    [SerializeField] private GameObject waitingText;
+    [SerializeField] private GameObject waitingForHostText;
+    [SerializeField] private TMP_Text roomCodeText;
 
     [Header("Cámaras")]
     [SerializeField] private Camera lobbyCamera;
     [SerializeField] private Camera mainCamera;
+    [SerializeField] private Camera resultsCamera;
 
     [Header("Spawns")]
     [SerializeField] private Transform[] spawnPoints;
     private int nextSpawnIndex;
 
+    [Header("Spawns de resultados (Battle Royale)")]
+    [SerializeField] private Transform puntoVictoria;
+    [SerializeField] private Transform puntoDerrota1;
+    [SerializeField] private Transform puntoDerrota2;
+    [SerializeField] private Transform puntoDerrota3;
+
+    [Header("Spawns de resultados (Empate)")]
+    [SerializeField] private Transform puntoEmpate1;
+    [SerializeField] private Transform puntoEmpate2;
+    [SerializeField] private Transform puntoEmpate3;
+    [SerializeField] private Transform puntoEmpate4;
+
+    // Orden de eliminación:
+    // el primero que muere ocupa puntoDerrota1, etc.
+    private readonly List<PlayerStateManager> eliminatedPlayers =
+        new List<PlayerStateManager>();
+
     [Header("Posiciones del lobby")]
     [SerializeField] private Transform[] lobbySpawnPoints;
     private int nextLobbySpawnIndex;
 
-    private readonly NetworkVariable<bool> matchStarted = new NetworkVariable<bool>(
-        false, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
+    private readonly NetworkVariable<bool> matchStarted =
+        new NetworkVariable<bool>(
+            false,
+            NetworkVariableReadPermission.Everyone,
+            NetworkVariableWritePermission.Server
+        );
+
     public event System.Action<bool, bool> MatchStartedChanged;
 
-    private readonly List<PlayerStateManager> registeredPlayers = new List<PlayerStateManager>();
+    private readonly List<PlayerStateManager> registeredPlayers =
+        new List<PlayerStateManager>();
+
     private bool matchEnded;
     private bool checkScheduled;
 
@@ -70,7 +97,6 @@ public class MatchManager : NetworkBehaviour
         if (waitingForHostText != null)
             waitingForHostText.SetActive(false);
 
-        // NUEVO
         if (roomCodeText != null)
             roomCodeText.gameObject.SetActive(false);
 
@@ -80,20 +106,28 @@ public class MatchManager : NetworkBehaviour
     public override void OnNetworkSpawn()
     {
         JoinsClosed = false;
-        if (resultsPanel != null) resultsPanel.SetActive(false);
+
+        if (resultsPanel != null)
+            resultsPanel.SetActive(false);
 
         matchStarted.OnValueChanged += OnMatchStartedChanged;
 
-              if (startMatchButton != null)
+        if (startMatchButton != null)
         {
             startMatchButton.onClick.AddListener(OnStartButtonClicked);
-            startMatchButton.gameObject.SetActive(IsHost && !matchStarted.Value);
+            startMatchButton.gameObject.SetActive(
+                IsHost && !matchStarted.Value
+            );
             startMatchButton.interactable = false;
         }
-        if (waitingText != null) waitingText.SetActive(IsHost && !matchStarted.Value);
-        if (waitingForHostText != null) waitingForHostText.SetActive(!IsHost && !matchStarted.Value);
 
-        // NUEVO: el host ve el código de sala mientras espera (solo si hay código de Relay)
+        if (waitingText != null)
+            waitingText.SetActive(IsHost && !matchStarted.Value);
+
+        if (waitingForHostText != null)
+            waitingForHostText.SetActive(!IsHost && !matchStarted.Value);
+
+        // El host ve el código de sala mientras espera.
         if (roomCodeText != null)
         {
             bool mostrarCodigo = IsHost
@@ -103,16 +137,20 @@ public class MatchManager : NetworkBehaviour
             roomCodeText.gameObject.SetActive(mostrarCodigo);
 
             if (mostrarCodigo)
-                roomCodeText.text = "Código de sala: " + RelayManager.JoinCodeActual;
+                roomCodeText.text =
+                    "Código de sala: " + RelayManager.JoinCodeActual;
         }
 
         if (IsServer)
         {
-            foreach (var p in FindObjectsByType<PlayerStateManager>(FindObjectsSortMode.None))
+            foreach (var p in FindObjectsByType<PlayerStateManager>(
+                         FindObjectsSortMode.None))
+            {
                 RegisterPlayer(p);
+            }
         }
 
-        // Pruebita para conectar los jugadores existentes en cada cliente a ver si funca
+        // Conectar los jugadores existentes en cada cliente.
         foreach (PlayerStateManager player in
                  FindObjectsByType<PlayerStateManager>(
                      FindObjectsSortMode.None))
@@ -125,14 +163,18 @@ public class MatchManager : NetworkBehaviour
     public override void OnNetworkDespawn()
     {
         matchStarted.OnValueChanged -= OnMatchStartedChanged;
-        if (startMatchButton != null) startMatchButton.onClick.RemoveListener(OnStartButtonClicked);
+
+        if (startMatchButton != null)
+            startMatchButton.onClick.RemoveListener(OnStartButtonClicked);
+
         JoinsClosed = false;
-        if (Instance == this) Instance = null;
+
+        if (Instance == this)
+            Instance = null;
     }
 
     private void OnMatchStartedChanged(bool oldValue, bool newValue)
     {
-        // Avisar a los PlayerStateManager de este clienteeee
         MatchStartedChanged?.Invoke(oldValue, newValue);
 
         if (!newValue)
@@ -152,19 +194,23 @@ public class MatchManager : NetworkBehaviour
         if (waitingForHostText != null)
             waitingForHostText.SetActive(false);
 
-        // NUEVO
         if (roomCodeText != null)
             roomCodeText.gameObject.SetActive(false);
     }
 
     // ---------- Registro de jugadores (solo servidor) ----------
+
     public void RegisterPlayer(PlayerStateManager player)
     {
-        if (!IsServer || player == null || registeredPlayers.Contains(player)) return;
+        if (!IsServer || player == null || registeredPlayers.Contains(player))
+            return;
 
         registeredPlayers.Add(player);
         AssignLobbySpawn(player);
-        player.currentState.OnValueChanged += (_, newState) => OnPlayerStateChanged(newState);
+
+        player.currentState.OnValueChanged += (_, newState) =>
+            OnPlayerStateChanged(player, newState);
+
         RefreshStartButton();
     }
 
@@ -176,14 +222,20 @@ public class MatchManager : NetworkBehaviour
 
     private void RefreshStartButton()
     {
-        if (startMatchButton == null || matchStarted.Value) return;
-        startMatchButton.interactable = ConnectedPlayersCount() >= MinPlayersToStart;
+        if (startMatchButton == null || matchStarted.Value)
+            return;
+
+        startMatchButton.interactable =
+            ConnectedPlayersCount() >= MinPlayersToStart;
     }
 
     // ---------- Inicio de partida ----------
+
     private void OnStartButtonClicked()
     {
-        if (!IsServer) return; // el host es el servidor
+        if (!IsServer)
+            return;
+
         StartMatch();
     }
 
@@ -194,6 +246,10 @@ public class MatchManager : NetworkBehaviour
             return;
 
         JoinsClosed = true;
+        eliminatedPlayers.Clear();
+
+        matchEnded = false;
+        checkScheduled = false;
 
         // Primero marcamos la partida como iniciada.
         matchStarted.Value = true;
@@ -203,26 +259,36 @@ public class MatchManager : NetworkBehaviour
             if (player == null)
                 continue;
 
-            // Restaurar el idle normal.
             PlayerCharacterVisual visual =
                 player.GetComponent<PlayerCharacterVisual>();
 
             if (visual != null)
                 visual.ResetLobbyAnimation();
 
-            // Asignar la posición de partida.
             AssignSpawn(player);
-
-            // Reactivar las colisiones.
             player.ActualizarColisionesPartida();
         }
     }
 
-    // ---------- Victoria ----------
-    private void OnPlayerStateChanged(PlayerState newState)
+    // ---------- Victoria y eliminación ----------
+
+    private void OnPlayerStateChanged(
+        PlayerStateManager player,
+        PlayerState newState)
     {
-        if (!matchStarted.Value || matchEnded || checkScheduled) return;
-        if (newState != PlayerState.Muerto) return;
+        if (!matchStarted.Value || matchEnded)
+            return;
+
+        if (newState != PlayerState.Muerto || player == null)
+            return;
+
+        // Registramos el orden real de eliminación y evitamos duplicados.
+        if (!eliminatedPlayers.Contains(player))
+            eliminatedPlayers.Add(player);
+
+        if (checkScheduled)
+            return;
+
         checkScheduled = true;
         StartCoroutine(CheckVictoryNextFrame());
     }
@@ -230,13 +296,20 @@ public class MatchManager : NetworkBehaviour
     private IEnumerator CheckVictoryNextFrame()
     {
         yield return null;
+
         checkScheduled = false;
-        if (matchEnded) yield break;
+
+        if (matchEnded)
+            yield break;
 
         registeredPlayers.RemoveAll(p => p == null);
-        var alive = registeredPlayers.FindAll(p => p.currentState.Value != PlayerState.Muerto);
 
-        // Supervivencia: la partida sigue mientras quede al menos un jugador vivo.
+        var alive = registeredPlayers.FindAll(
+            p => p.currentState.Value != PlayerState.Muerto
+        );
+
+        // ---------- Modo Supervivencia ----------
+
         if (mode == MatchMode.Survival)
         {
             if (alive.Count == 0)
@@ -246,68 +319,133 @@ public class MatchManager : NetworkBehaviour
                 int waveReached = 0;
                 float survivedSeconds = 0f;
                 float timeToReachWave = 0f;
+
                 if (WaveManager.Instance != null)
                 {
-                    WaveManager.Instance.EndRun(out waveReached, out survivedSeconds);
-                    timeToReachWave = WaveManager.Instance.TimeToReachWaveSeconds;
+                    WaveManager.Instance.EndRun(
+                        out waveReached,
+                        out survivedSeconds
+                    );
+
+                    timeToReachWave =
+                        WaveManager.Instance.TimeToReachWaveSeconds;
                 }
 
-                AnnounceSurvivalResultClientRpc(waveReached, survivedSeconds, timeToReachWave);
+                AnnounceSurvivalResultClientRpc(
+                    waveReached,
+                    survivedSeconds,
+                    timeToReachWave
+                );
             }
 
             yield break;
         }
 
+        // ---------- Modo Battle Royale ----------
+
         if (alive.Count == 1)
         {
             matchEnded = true;
-            AnnounceResultClientRpc(alive[0].OwnerClientId, alive[0].NetworkObject, false);
-            TryTriggerEasterEgg(alive[0]);
+
+            PlayerStateManager winner = alive[0];
+
+            Debug.Log("Se van a teletransportar los jugadores.");
+
+            TeleportPlayersToResultPositions(winner);
+
+            // Comprobamos y activamos el easter egg antes de anunciar
+            // los resultados. El resultado indica al cliente ganador
+            // si debe omitir la pantalla de resultados.
+            bool winnerHasEasterEgg = TryTriggerEasterEgg(winner);
+
+            AnnounceResultClientRpc(
+                winner.OwnerClientId,
+                winner.NetworkObject,
+                false,
+                winnerHasEasterEgg
+            );
         }
         else if (alive.Count == 0)
         {
             matchEnded = true;
-            AnnounceResultClientRpc(0, default, true);
+
+            Debug.Log("La partida terminó en empate.");
+
+            TeleportPlayersToDrawPositions(registeredPlayers);
+
+            AnnounceResultClientRpc(0, default, true, false);
         }
     }
 
-    private void TryTriggerEasterEgg(PlayerStateManager winner)
-{
-    if (!IsServer || winner == null) return;
-    if (mode != MatchMode.BattleRoyale) return;
-    if (MapCameraMover.Instance == null) return; // solo en mapas que tienen el Easter Egg (MainGame)
+    // ---------- Easter Egg ----------
 
-    var bombs = winner.GetComponent<PlayerBombController>();
-    var egg = winner.GetComponent<EasterEggManager>();
-    if (bombs == null || egg == null) return;
-    if (bombs.BombsPlacedThisMatch > 0) return;
-
-    egg.TriggerFromServer();
-}
-
-      [Rpc(SendTo.ClientsAndHost)]
-    private void AnnounceSurvivalResultClientRpc(int waveReached, float survivedSeconds, float timeToReachWave)
+    private bool TryTriggerEasterEgg(PlayerStateManager winner)
     {
-        matchEnded = true; // para que IsMatchRunning sea false también en los clientes
-        if (resultsPanel != null) resultsPanel.SetActive(true);
+        if (!IsServer || winner == null)
+            return false;
 
-        // Récord personal: cada jugador lo guarda en su propia máquina.
-        // Manda la oleada; a igual oleada, gana el que llegó en menos tiempo.
+        if (mode != MatchMode.BattleRoyale)
+            return false;
+
+        if (MapCameraMover.Instance == null)
+            return false;
+
+        PlayerBombController bombs =
+            winner.GetComponent<PlayerBombController>();
+
+        EasterEggManager egg =
+            winner.GetComponent<EasterEggManager>();
+
+        if (bombs == null || egg == null)
+            return false;
+
+        // El easter egg solamente se activa si el ganador
+        // no colocó ninguna bomba durante la partida.
+        if (bombs.BombsPlacedThisMatch > 0)
+            return false;
+
+        Debug.Log(
+            $"El jugador {winner.OwnerClientId} ganó sin colocar bombas. " +
+            "Se activa el easter egg y se omitirá su pantalla de resultados."
+        );
+
+        egg.TriggerFromServer();
+        return true;
+    }
+
+    // ---------- Resultados de Supervivencia ----------
+
+    [Rpc(SendTo.ClientsAndHost)]
+    private void AnnounceSurvivalResultClientRpc(
+        int waveReached,
+        float survivedSeconds,
+        float timeToReachWave)
+    {
+        matchEnded = true;
+
+        ActivarResultsCamera();
+
+        if (resultsPanel != null)
+            resultsPanel.SetActive(true);
+
         PlayerData data = PersistenceManager.LoadData();
 
         bool nuevoRecord = waveReached > 0 && (
             waveReached > data.mejorOleadaSupervivencia ||
             (waveReached == data.mejorOleadaSupervivencia &&
-             timeToReachWave < data.mejorTiempoParaOleada));
+             timeToReachWave < data.mejorTiempoParaOleada)
+        );
 
         if (nuevoRecord)
         {
             data.mejorOleadaSupervivencia = waveReached;
             data.mejorTiempoParaOleada = timeToReachWave;
+
             PersistenceManager.SaveData(data);
         }
 
-        if (resultsText == null) return;
+        if (resultsText == null)
+            return;
 
         string lineaRecord = nuevoRecord
             ? "¡Nuevo récord!"
@@ -319,10 +457,13 @@ public class MatchManager : NetworkBehaviour
             $"Tiempo en llegar: {FormatearTiempo(timeToReachWave)}\n" +
             $"Tiempo total: {FormatearTiempo(survivedSeconds)}\n" +
             lineaRecord;
+
         if (WaveManager.Instance != null)
         {
             SurvivalDifficultyProfile profile =
-                WaveManager.Instance.GetProfile(WaveManager.Instance.Difficulty);
+                WaveManager.Instance.GetProfile(
+                    WaveManager.Instance.Difficulty
+                );
 
             if (profile != null)
                 resultsText.text += "\nDificultad: " + profile.displayName;
@@ -335,42 +476,251 @@ public class MatchManager : NetworkBehaviour
         return $"{total / 60:00}:{total % 60:00}";
     }
 
-    [Rpc(SendTo.ClientsAndHost)]
-    private void AnnounceResultClientRpc(ulong winnerClientId, NetworkObjectReference winnerRef, bool isDraw)
-    {
-        matchEnded = true; // para que IsMatchRunning sea false también en los clientes
-        if (resultsPanel != null) resultsPanel.SetActive(true);
-        if (resultsText == null) return;
+    // ---------- Resultados de Battle Royale ----------
 
-        if (isDraw) resultsText.text = "¡Empate!";
-        else if (NetworkManager.Singleton.LocalClientId == winnerClientId) resultsText.text = "¡Ganaste!";
-        else resultsText.text = $"Perdiste. Jugador {winnerClientId} gana la partida.";
+    [Rpc(SendTo.ClientsAndHost)]
+    private void AnnounceResultClientRpc(
+        ulong winnerClientId,
+        NetworkObjectReference winnerRef,
+        bool isDraw,
+        bool winnerHasEasterEgg)
+    {
+        matchEnded = true;
+
+        // Si el ganador activó el easter egg, su cliente no debe
+        // cambiar a la cámara ni mostrar el panel de resultados.
+        // Los demás jugadores sí ven los resultados normalmente.
+        bool localPlayerIsEasterEggWinner =
+            !isDraw &&
+            winnerHasEasterEgg &&
+            NetworkManager.Singleton != null &&
+            NetworkManager.Singleton.LocalClientId == winnerClientId;
+
+        if (localPlayerIsEasterEggWinner)
+        {
+            Debug.Log(
+                "Ganador del easter egg: se omite la cámara y el panel de resultados."
+            );
+            return;
+        }
+
+        ActivarResultsCamera();
+
+        if (resultsPanel != null)
+            resultsPanel.SetActive(true);
+
+        if (resultsText == null)
+            return;
+
+        if (isDraw)
+            resultsText.text = "¡Empate!";
+        else if (NetworkManager.Singleton.LocalClientId == winnerClientId)
+            resultsText.text = "¡Ganaste!";
+        else
+            resultsText.text =
+                $"Perdiste. Jugador {winnerClientId} gana la partida.";
 
         if (!isDraw && winnerRef.TryGet(out NetworkObject winnerObj))
         {
-            // Hook para la animación de celebración de tus compañeros
+            // Aquí se pueden agregar futuras acciones de celebración.
         }
     }
 
-        private void AssignSpawn(PlayerStateManager player)
+    // ---------- Posiciones de resultados ----------
+
+    private void TeleportPlayersToResultPositions(
+        PlayerStateManager winner)
     {
-        if (spawnPoints == null || spawnPoints.Length == 0) return;
+        if (!IsServer || winner == null)
+            return;
 
-        var handler = player.GetComponent<PlayerSpawnHandler>();
-        if (handler == null) return;
+        Debug.Log("Intentando teletransportar jugadores a resultados.");
 
-        Transform point = spawnPoints[nextSpawnIndex % spawnPoints.Length];
-        nextSpawnIndex++;
+        // El ganador siempre va al punto de victoria.
+        TeleportPlayerToPoint(winner, puntoVictoria);
 
-        StartCoroutine(SendSpawnNextFrame(handler, point.position, point.rotation));
+        // Los perdedores se ordenan según el momento en que fueron eliminados.
+        Transform[] defeatPoints =
+        {
+            puntoDerrota1,
+            puntoDerrota2,
+            puntoDerrota3
+        };
+
+        int pointCount = Mathf.Min(
+            eliminatedPlayers.Count,
+            defeatPoints.Length
+        );
+
+        for (int i = 0; i < pointCount; i++)
+        {
+            PlayerStateManager loser = eliminatedPlayers[i];
+
+            if (loser == null || loser == winner)
+                continue;
+
+            TeleportPlayerToPoint(loser, defeatPoints[i]);
+        }
     }
 
-    private IEnumerator SendSpawnNextFrame(PlayerSpawnHandler handler, Vector3 pos, Quaternion rot)
+    private void TeleportPlayersToDrawPositions(
+        List<PlayerStateManager> players)
     {
-        yield return null; // espera un frame a que el avatar esté listo en red
+        if (!IsServer || players == null)
+            return;
+
+        Transform[] drawPoints =
+        {
+            puntoEmpate1,
+            puntoEmpate2,
+            puntoEmpate3,
+            puntoEmpate4
+        };
+
+        int assignedCount = 0;
+
+        foreach (PlayerStateManager player in players)
+        {
+            if (player == null)
+                continue;
+
+            // En un empate todos los participantes terminaron muertos.
+            if (player.currentState.Value != PlayerState.Muerto)
+                continue;
+
+            if (assignedCount >= drawPoints.Length)
+            {
+                Debug.LogWarning(
+                    "Hay más jugadores empatados que puntos configurados."
+                );
+                break;
+            }
+
+            Transform point = drawPoints[assignedCount];
+
+            if (point == null)
+            {
+                Debug.LogWarning(
+                    $"Falta asignar el punto de empate {assignedCount + 1}."
+                );
+
+                assignedCount++;
+                continue;
+            }
+
+            TeleportPlayerToPoint(player, point);
+            assignedCount++;
+        }
+
+        Debug.Log(
+            $"Jugadores asignados a posiciones de empate: {assignedCount}"
+        );
+    }
+
+    private void TeleportPlayerToPoint(
+        PlayerStateManager player,
+        Transform point)
+    {
+        if (player == null || point == null)
+            return;
+
+        PlayerSpawnHandler handler =
+            player.GetComponent<PlayerSpawnHandler>();
+
+        if (handler == null || !handler.IsSpawned)
+        {
+            Debug.LogWarning(
+                $"No se pudo teletransportar a {player.name}: " +
+                "PlayerSpawnHandler inexistente o no está spawneado."
+            );
+
+            return;
+        }
+
+        // Reutilizamos el sistema de animaciones del lobby.
+        AssignCharacterAnimation(player, point);
+
+        Debug.Log(
+            $"Teletransportando a {player.name} hacia {point.name}"
+        );
+
+        StartCoroutine(
+            SendSpawnNextFrame(handler, point.position, point.rotation)
+        );
+    }
+
+    // ---------- Asignación de animaciones ----------
+
+    private void AssignCharacterAnimation(
+        PlayerStateManager player,
+        Transform point)
+    {
+        if (player == null || point == null)
+            return;
+
+        LobbySpawnPoint spawnPoint =
+            point.GetComponent<LobbySpawnPoint>();
+
+        if (spawnPoint == null)
+        {
+            Debug.LogWarning(
+                $"El punto {point.name} no tiene el componente LobbySpawnPoint."
+            );
+            return;
+        }
+
+        PlayerCharacterVisual visual =
+            player.GetComponent<PlayerCharacterVisual>();
+
+        if (visual == null)
+        {
+            Debug.LogWarning(
+                $"El jugador {player.name} no tiene PlayerCharacterVisual."
+            );
+            return;
+        }
+
+        visual.SetLobbyAnimation(spawnPoint.LobbyAnimation);
+
+        Debug.Log(
+            $"Animación {spawnPoint.LobbyAnimation} asignada a {player.name}"
+        );
+    }
+
+    // ---------- Spawns normales ----------
+
+    private void AssignSpawn(PlayerStateManager player)
+    {
+        if (spawnPoints == null || spawnPoints.Length == 0)
+            return;
+
+        var handler = player.GetComponent<PlayerSpawnHandler>();
+
+        if (handler == null)
+            return;
+
+        Transform point =
+            spawnPoints[nextSpawnIndex % spawnPoints.Length];
+
+        nextSpawnIndex++;
+
+        StartCoroutine(
+            SendSpawnNextFrame(handler, point.position, point.rotation)
+        );
+    }
+
+    private IEnumerator SendSpawnNextFrame(
+        PlayerSpawnHandler handler,
+        Vector3 pos,
+        Quaternion rot)
+    {
+        yield return null;
+
         if (handler != null && handler.IsSpawned)
             handler.TeleportToSpawnRpc(pos, rot);
     }
+
+    // ---------- Cámaras ----------
 
     private void ActivarLobbyCamera()
     {
@@ -379,6 +729,9 @@ public class MatchManager : NetworkBehaviour
 
         if (mainCamera != null)
             mainCamera.gameObject.SetActive(false);
+
+        if (resultsCamera != null)
+            resultsCamera.gameObject.SetActive(false);
     }
 
     private void ActivarMainCamera()
@@ -388,16 +741,30 @@ public class MatchManager : NetworkBehaviour
 
         if (mainCamera != null)
             mainCamera.gameObject.SetActive(true);
+
+        if (resultsCamera != null)
+            resultsCamera.gameObject.SetActive(false);
     }
+
+    private void ActivarResultsCamera()
+    {
+        Debug.Log("Se activó la cámara de resultados.");
+
+        if (lobbyCamera != null)
+            lobbyCamera.gameObject.SetActive(false);
+
+        if (mainCamera != null)
+            mainCamera.gameObject.SetActive(false);
+
+        if (resultsCamera != null)
+            resultsCamera.gameObject.SetActive(true);
+    }
+
+    // ---------- Spawns del lobby ----------
 
     private void AssignLobbySpawn(PlayerStateManager player)
     {
         if (lobbySpawnPoints == null || lobbySpawnPoints.Length == 0)
-            return;
-
-        PlayerSpawnHandler handler = player.GetComponent<PlayerSpawnHandler>();
-
-        if (handler == null)
             return;
 
         Transform point = lobbySpawnPoints[
@@ -406,21 +773,15 @@ public class MatchManager : NetworkBehaviour
 
         nextLobbySpawnIndex++;
 
-        // Obtener la animación configurada para este punto.
-        LobbySpawnPoint lobbyPoint = point.GetComponent<LobbySpawnPoint>();
+        // El lobby también utiliza el método compartido.
+        AssignCharacterAnimation(player, point);
 
-        if (lobbyPoint != null)
-        {
-            PlayerCharacterVisual visual =
-                player.GetComponent<PlayerCharacterVisual>();
+        PlayerSpawnHandler handler =
+            player.GetComponent<PlayerSpawnHandler>();
 
-            if (visual != null)
-            {
-                visual.SetLobbyAnimation(lobbyPoint.LobbyAnimation);
-            }
-        }
+        if (handler == null)
+            return;
 
-        // Teletransportar al jugador a su posición de espera.
         StartCoroutine(
             SendSpawnNextFrame(handler, point.position, point.rotation)
         );

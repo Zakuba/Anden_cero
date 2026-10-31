@@ -124,6 +124,10 @@ public class PlayerMovimientoOnline : NetworkBehaviour
 
     private void MoveAndRotate()
     {
+
+        if (controller == null || !controller.enabled || !gameObject.activeInHierarchy)
+            return;
+
         if (controller.isGrounded)
         {
             if (verticalVelocity < 0f) verticalVelocity = -2f;
