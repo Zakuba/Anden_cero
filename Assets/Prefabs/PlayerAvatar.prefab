@@ -443,7 +443,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.NetworkObject
-  GlobalObjectIdHash: 751227136
+  GlobalObjectIdHash: 1902537740
   InScenePlacedSourceGlobalObjectIdHash: 0
   m_InScenePlacedDisabledByDefault: 0
   DeferredDespawnTick: 0
@@ -563,6 +563,11 @@ MonoBehaviour:
   dropChance: 0.75
   explosionVfx: {fileID: 1737463432510393942, guid: 93dc88073b38e464d8d8b5af1ad25c72, type: 3}
   fireVfx: {fileID: 1737463432510393942, guid: c6e879bb9ad505341aa895aae1ef89f8, type: 3}
+  destructionRagdoll: {fileID: 8925474665926355229, guid: eb9f9be878122be43aeb3458f0f92a37, type: 3}
+  ragdollLifetime: 4
+  ragdollForce: 1
+  ragdollUpForce: 2
+  destructionDuration: 0.3
 --- !u!114 &5769002067245888163
 MonoBehaviour:
   m_ObjectHideFlags: 0
