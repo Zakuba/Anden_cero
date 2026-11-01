@@ -51,6 +51,10 @@ public class PlayerStateManager : NetworkBehaviour
             NetworkVariableWritePermission.Server
         );
 
+    // Flag del servidor para controlar si el jugador recibió daño durante la partida
+    private bool hasTakenDamageThisMatch = false;
+    public bool HasTakenDamageThisMatch => hasTakenDamageThisMatch;
+
     private void Awake()
     {
         if (characterController == null)
@@ -165,6 +169,9 @@ public class PlayerStateManager : NetworkBehaviour
             return;
         }
 
+        // REGISTRO DE DAÑO PARA LOGRO:
+        hasTakenDamageThisMatch = true;
+
         currentLives.Value--;
 
         if (currentLives.Value <= 0)
@@ -212,7 +219,7 @@ public class PlayerStateManager : NetworkBehaviour
     {
         if (currentState.Value == PlayerState.Muerto)
             return;
-
+        hasTakenDamageThisMatch = true;
         currentLives.Value = 0;
         currentState.Value = PlayerState.Muerto;
     }
@@ -358,5 +365,24 @@ public class PlayerStateManager : NetworkBehaviour
         }
 
         return false; // Ya tiene la vida al máximo, no se aplicó la curación
+    }
+
+    /// <summary>
+    /// Reinicia el contador de daño al comenzar una partida (solo servidor).
+    /// </summary>
+    public void ResetMatchDamageTracker()
+    {
+        if (!IsServer) return;
+        hasTakenDamageThisMatch = false;
+    }
+
+    [ClientRpc]
+    public void AwardInvincibleSurvivorAchievementClientRpc()
+    {
+        // Se ejecuta únicamente en la máquina del jugador ganador
+        if (IsOwner && AchievementManager.Instance != null)
+        {
+            AchievementManager.Instance.UnlockAchievement("superviviente_invencible");
+        }
     }
 }

@@ -259,6 +259,9 @@ public class MatchManager : NetworkBehaviour
             if (player == null)
                 continue;
 
+            // Reiniciamos el rastreador de daño para la nueva partida
+            player.ResetMatchDamageTracker();    
+
             PlayerCharacterVisual visual =
                 player.GetComponent<PlayerCharacterVisual>();
 
@@ -350,6 +353,13 @@ public class MatchManager : NetworkBehaviour
             PlayerStateManager winner = alive[0];
 
             Debug.Log("Se van a teletransportar los jugadores.");
+
+            // VALIDACIÓN DEL LOGRO "SUPERVIVIENTE INVENCIBLE":
+            // Si el ganador no recibió daño en toda la partida, se le otorga el logro
+            if (!winner.HasTakenDamageThisMatch)
+            {
+                winner.AwardInvincibleSurvivorAchievementClientRpc();
+            }
 
             TeleportPlayersToResultPositions(winner);
 
