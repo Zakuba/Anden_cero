@@ -52522,6 +52522,10 @@ PrefabInstance:
       propertyPath: m_AnchorMin.x
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7281937023411076351, guid: e69b7f0d04a0fe943b96f5a2debe5d2e, type: 3}
+      propertyPath: globalVolume
+      value: 
+      objectReference: {fileID: 1563663653}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
