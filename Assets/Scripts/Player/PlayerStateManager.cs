@@ -1,6 +1,7 @@
 using UnityEngine;
 using Unity.Netcode;
 using System.Collections;
+using System.Collections.Generic; // <--- Agrega esta línea
 
 public enum PlayerState
 {
@@ -54,6 +55,10 @@ public class PlayerStateManager : NetworkBehaviour
     // Flag del servidor para controlar si el jugador recibió daño durante la partida
     private bool hasTakenDamageThisMatch = false;
     public bool HasTakenDamageThisMatch => hasTakenDamageThisMatch;
+
+    // --- RASTREO EN SERVIDOR PARA DOBLE ELIMINACIÓN ---
+    private static readonly Dictionary<ulong, (int kills, float lastKillTime)> killsWindowByAttacker 
+        = new Dictionary<ulong, (int kills, float lastKillTime)>();
 
     private void Awake()
     {
@@ -152,7 +157,10 @@ public class PlayerStateManager : NetworkBehaviour
     public void TakeDamageServerRpc(ulong attackerClientId = 999999)
     {
         if (MatchManager.Instance != null && !MatchManager.Instance.IsMatchRunning)
+        {
+            Debug.LogWarning($"[DobleKill-Debug] Daño rechazado en {gameObject.name}: MatchManager indica que la partida no está en ejecución.");
             return;
+        }
 
         if (currentState.Value == PlayerState.Muerto || currentState.Value == PlayerState.Aturdido)
             return;
@@ -174,17 +182,50 @@ public class PlayerStateManager : NetworkBehaviour
 
         currentLives.Value--;
 
+        Debug.Log($"[DobleKill-Debug] {gameObject.name} recibió daño de ClientId: {attackerClientId}. Vidas restantes: {currentLives.Value}");
+
         if (currentLives.Value <= 0)
         {
             currentState.Value = PlayerState.Muerto;
 
-            // VALIDACIÓN DEL LOGRO "PRIMERA BAJA":
-            // 1. Debe haber un atacante válido
-            // 2. No debe ser suicidio (attackerClientId no puede ser el mismo que recibe el daño)
+            // VALIDACIONES DE ELIMINACIÓN
             if (attackerClientId != 999999 && attackerClientId != OwnerClientId)
             {
-                // Avisamos a todos los clientes quién fue el atacante que logró la baja
+                // 1. Logro "Primera Baja"
                 AwardFirstKillAchievementClientRpc(attackerClientId);
+
+                // 2. Rastreo para "Doble Eliminación"
+                float currentTime = Time.time;
+                if (killsWindowByAttacker.TryGetValue(attackerClientId, out var tracker))
+                {
+                    float timeDiff = currentTime - tracker.lastKillTime;
+                    Debug.Log($"[DobleKill-Debug] Atacante {attackerClientId} sumó otra baja. Diferencia de tiempo: {timeDiff:F4}s (Límite: 0.35s).");
+
+                    // Ventana de 0.35 s para absorber discrepancias de frames en la física de la explosión
+                    if (timeDiff <= 0.35f)
+                    {
+                        int totalKills = tracker.kills + 1;
+                        killsWindowByAttacker[attackerClientId] = (totalKills, currentTime);
+                        Debug.Log($"[DobleKill-Debug] ¡CONDICIÓN CUMPLIDA! Atacante {attackerClientId} alcanzó {totalKills} bajas simultáneas.");
+
+                        AwardDoubleKillAchievementClientRpc(attackerClientId);
+                        killsWindowByAttacker.Remove(attackerClientId);
+                    }
+                    else
+                    {
+                        Debug.LogWarning($"[DobleKill-Debug] Baja fuera de tiempo ({timeDiff:F4}s > 0.35s). Se reinicia contador a 1.");
+                        killsWindowByAttacker[attackerClientId] = (1, currentTime);
+                    }
+                }
+                else
+                {
+                    Debug.Log($"[DobleKill-Debug] Primera baja registrada en la ventana para el atacante {attackerClientId}.");
+                    killsWindowByAttacker[attackerClientId] = (1, currentTime);
+                }
+            }
+            else
+            {
+                Debug.LogWarning($"[DobleKill-Debug] Baja descartada: suicidio o atacante por defecto ({attackerClientId}).");
             }
         }
         else
@@ -383,6 +424,25 @@ public class PlayerStateManager : NetworkBehaviour
         if (IsOwner && AchievementManager.Instance != null)
         {
             AchievementManager.Instance.UnlockAchievement("superviviente_invencible");
+        }
+    }
+
+    [ClientRpc]
+    private void AwardDoubleKillAchievementClientRpc(ulong killerClientId)
+    {
+        Debug.Log($"[DobleKill-Debug] AwardDoubleKillAchievementClientRpc recibido en cliente local ({NetworkManager.Singleton.LocalClientId}). Esperado: {killerClientId}");
+
+        if (NetworkManager.Singleton != null && NetworkManager.Singleton.LocalClientId == killerClientId)
+        {
+            Debug.Log("[DobleKill-Debug] Soy el dueño de la doble baja. Invocando AchievementManager...");
+            if (AchievementManager.Instance != null)
+            {
+                AchievementManager.Instance.UnlockAchievement("doble_kill");
+            }
+            else
+            {
+                Debug.LogError("[DobleKill-Debug] Error: AchievementManager.Instance es null en el cliente.");
+            }
         }
     }
 }

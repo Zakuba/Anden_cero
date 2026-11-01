@@ -43314,7 +43314,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1426094077147250011, guid: e1ce9045eacc92b42a9c258e2f021d47, type: 3}
       propertyPath: achievementsCatalog.Array.size
-      value: 3
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 1426094077147250011, guid: e1ce9045eacc92b42a9c258e2f021d47, type: 3}
       propertyPath: 'achievementsCatalog.Array.data[1]'
@@ -43324,6 +43324,10 @@ PrefabInstance:
       propertyPath: 'achievementsCatalog.Array.data[2]'
       value: 
       objectReference: {fileID: 11400000, guid: d112a3cb5971c9e468a1ababffe28727, type: 2}
+    - target: {fileID: 1426094077147250011, guid: e1ce9045eacc92b42a9c258e2f021d47, type: 3}
+      propertyPath: 'achievementsCatalog.Array.data[3]'
+      value: 
+      objectReference: {fileID: 11400000, guid: 499473d8b575cd54c9e2c5b52da0ec8c, type: 2}
     - target: {fileID: 2839463584135352133, guid: e1ce9045eacc92b42a9c258e2f021d47, type: 3}
       propertyPath: m_LocalPosition.x
       value: -0.86696
