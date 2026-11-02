@@ -282,6 +282,18 @@ public List<ulong> ClientesDeEquipo(int equipo)
     return lista;
 }
 
+// Devuelve true si los dos jugadores están en el mismo equipo (incluye comparar a un jugador consigo mismo).
+// Solo tiene efecto en el modo equipos; en los demás mapas siempre devuelve false.
+public bool EsMismoEquipo(ulong clientA, ulong clientB)
+{
+    if (!modoEquipos) return false;
+
+    int a = GetEquipo(clientA);
+    int b = GetEquipo(clientB);
+
+    return a != -1 && a == b;
+}
+
 // Solo servidor: escribe el estado completo y avisa a la interfaz.
 private void PublicarEquipos()
 {

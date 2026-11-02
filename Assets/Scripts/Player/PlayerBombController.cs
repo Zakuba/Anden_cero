@@ -238,7 +238,7 @@ public class PlayerBombController : NetworkBehaviour
                 List<Vector3> affectedCells =
                     CalculateExplosionCells(finalPos, attackerId);
 
-                SpawnVfxClientRpc(affectedCells.ToArray());
+                SpawnVfxClientRpc(affectedCells.ToArray(), attackerId);
 
                 yield return new WaitForSeconds(0.05f);
 
@@ -477,47 +477,62 @@ private Vector3 SnapToGridCenter(Vector3 pos)
         }
     }
 
-    [ClientRpc]
-    private void SpawnVfxClientRpc(Vector3[] firePositions)
+[ClientRpc]
+private void SpawnVfxClientRpc(Vector3[] firePositions, ulong attackerId)
+{
+    if (firePositions == null || firePositions.Length == 0)
+        return;
+
+    float groundOffset = 0.02f;
+
+    if (explosionVfx != null)
     {
-        if (firePositions == null || firePositions.Length == 0)
-            return;
+        Vector3 centerPos = new Vector3(
+            firePositions[0].x,
+            firePositions[0].y + groundOffset,
+            firePositions[0].z
+        );
 
-        float groundOffset = 0.02f;
+        GameObject explosion = Instantiate(
+            explosionVfx,
+            centerPos,
+            Quaternion.identity
+        );
 
-        if (explosionVfx != null)
+        AsignarAtacanteAlFuego(explosion, attackerId);
+    }
+
+    for (int i = 1; i < firePositions.Length; i++)
+    {
+        if (fireVfx != null)
         {
-            Vector3 centerPos = new Vector3(
-                firePositions[0].x,
-                firePositions[0].y + groundOffset,
-                firePositions[0].z
+            Vector3 firePos = new Vector3(
+                firePositions[i].x,
+                firePositions[i].y + groundOffset,
+                firePositions[i].z
             );
 
-            Instantiate(
-                explosionVfx,
-                centerPos,
+            GameObject fire = Instantiate(
+                fireVfx,
+                firePos,
                 Quaternion.identity
             );
-        }
 
-        for (int i = 1; i < firePositions.Length; i++)
-        {
-            if (fireVfx != null)
-            {
-                Vector3 firePos = new Vector3(
-                    firePositions[i].x,
-                    firePositions[i].y + groundOffset,
-                    firePositions[i].z
-                );
-
-                Instantiate(
-                    fireVfx,
-                    firePos,
-                    Quaternion.identity
-                );
-            }
+            AsignarAtacanteAlFuego(fire, attackerId);
         }
     }
+}
+
+// En el modo equipos, el fuego recuerda quién puso la bomba para poder aplicar la regla de equipos.
+// En los demás mapas no se asigna y el fuego funciona como siempre.
+private void AsignarAtacanteAlFuego(GameObject vfx, ulong attackerId)
+{
+    if (vfx == null) return;
+    if (MatchManager.Instance == null || !MatchManager.Instance.ModoEquipos) return;
+
+    foreach (FireHazard hazard in vfx.GetComponentsInChildren<FireHazard>(true))
+        hazard.attackerClientId = attackerId;
+}
 
 private void TrySpawnPowerUpDrop(Vector3 boxPosition)
 {

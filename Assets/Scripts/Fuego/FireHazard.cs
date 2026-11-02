@@ -2,7 +2,10 @@ using UnityEngine;
 using Unity.Netcode;
 
 public class FireHazard : MonoBehaviour
+
 {
+    // Quién puso la bomba que generó este fuego (999999 = desconocido). Lo asigna PlayerBombController.
+    [HideInInspector] public ulong attackerClientId = 999999;
     private void OnTriggerEnter(Collider other)
     {
         // Solo el Host/Servidor autoriza y aplica el daño para evitar inconsistencias de red
@@ -25,8 +28,7 @@ public class FireHazard : MonoBehaviour
             }
             else
             {
-                // MODO COMPETITIVO / NORMAL: daño estándar
-                player.TakeDamageServerRpc();
+                player.TakeDamageServerRpc(attackerClientId);
             }
         }
 

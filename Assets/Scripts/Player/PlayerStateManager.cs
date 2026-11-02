@@ -167,6 +167,15 @@ public class PlayerStateManager : NetworkBehaviour
 
         if (isShieldInvulnerable)
             return;
+        
+        // Modo 2 vs 2: las bombas del propio equipo (incluida la propia) no hacen daño
+if (attackerClientId != 999999 &&
+    MatchManager.Instance != null &&
+    MatchManager.Instance.EsMismoEquipo(attackerClientId, OwnerClientId))
+{
+    Debug.Log($"[Equipos] Daño ignorado: el atacante {attackerClientId} y la víctima {OwnerClientId} son del mismo equipo.");
+    return;
+}
 
         PlayerStats stats = GetComponent<PlayerStats>();
 
