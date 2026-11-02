@@ -368,6 +368,19 @@ private Vector3 SnapToGridCenter(Vector3 pos)
     float z = Mathf.Round(pos.z / gridSize) * gridSize;
     return new Vector3(x, pos.y, z);
 }
+// Devuelve true si el objeto o alguno de sus padres tiene el tag Destructible
+private static bool EsDestructible(Transform t)
+{
+    while (t != null)
+    {
+        if (t.CompareTag("Destructible"))
+            return true;
+
+        t = t.parent;
+    }
+
+    return false;
+}
 
     private void CheckCell(
         Vector3 cell,
