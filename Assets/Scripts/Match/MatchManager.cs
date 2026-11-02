@@ -79,6 +79,12 @@ public class MatchManager : NetworkBehaviour
     private readonly List<PlayerStateManager> registeredPlayers =
         new List<PlayerStateManager>();
 
+    public const int MaxPorEquipo = 2;
+
+    [Header("Equipos (2 vs 2)")]
+    [SerializeField] private bool modoEquipos = false;
+    public bool ModoEquipos => modoEquipos;
+
     private bool matchEnded;
     private bool checkScheduled;
 
@@ -103,75 +109,86 @@ public class MatchManager : NetworkBehaviour
         ActivarLobbyCamera();
     }
 
-    public override void OnNetworkSpawn()
+   public override void OnNetworkSpawn()
+{
+    JoinsClosed = false;
+
+    if (resultsPanel != null)
+        resultsPanel.SetActive(false);
+
+    matchStarted.OnValueChanged += OnMatchStartedChanged;
+
+    if (startMatchButton != null)
     {
-        JoinsClosed = false;
+        startMatchButton.onClick.AddListener(OnStartButtonClicked);
+        startMatchButton.gameObject.SetActive(
+            IsHost && !matchStarted.Value
+        );
+        startMatchButton.interactable = false;
+    }
 
-        if (resultsPanel != null)
-            resultsPanel.SetActive(false);
+    if (waitingText != null)
+        waitingText.SetActive(IsHost && !matchStarted.Value);
 
-        matchStarted.OnValueChanged += OnMatchStartedChanged;
+    if (waitingForHostText != null)
+        waitingForHostText.SetActive(!IsHost && !matchStarted.Value);
 
-        if (startMatchButton != null)
-        {
-            startMatchButton.onClick.AddListener(OnStartButtonClicked);
-            startMatchButton.gameObject.SetActive(
-                IsHost && !matchStarted.Value
-            );
-            startMatchButton.interactable = false;
-        }
+    // El host ve el código de sala mientras espera.
+    if (roomCodeText != null)
+    {
+        bool mostrarCodigo = IsHost
+            && !matchStarted.Value
+            && !string.IsNullOrEmpty(RelayManager.JoinCodeActual);
 
-        if (waitingText != null)
-            waitingText.SetActive(IsHost && !matchStarted.Value);
+        roomCodeText.gameObject.SetActive(mostrarCodigo);
 
-        if (waitingForHostText != null)
-            waitingForHostText.SetActive(!IsHost && !matchStarted.Value);
+        if (mostrarCodigo)
+            roomCodeText.text =
+                "Código de sala: " + RelayManager.JoinCodeActual;
+    }
 
-        // El host ve el código de sala mientras espera.
-        if (roomCodeText != null)
-        {
-            bool mostrarCodigo = IsHost
-                && !matchStarted.Value
-                && !string.IsNullOrEmpty(RelayManager.JoinCodeActual);
+    // Equipos: escuchar cambios y limpiar al desconectarse un cliente.
+    equiposTexto.OnValueChanged += OnEquiposTextoChanged;
+if (!IsServer)
+    ReconstruirEquipos(equiposTexto.Value.ToString()); // para quien entra con el estado ya armado
+    if (IsServer)
+        NetworkManager.OnClientDisconnectCallback += OnClientDisconnectedEquipos;
 
-            roomCodeText.gameObject.SetActive(mostrarCodigo);
-
-            if (mostrarCodigo)
-                roomCodeText.text =
-                    "Código de sala: " + RelayManager.JoinCodeActual;
-        }
-
-        if (IsServer)
-        {
-            foreach (var p in FindObjectsByType<PlayerStateManager>(
-                         FindObjectsSortMode.None))
-            {
-                RegisterPlayer(p);
-            }
-        }
-
-        // Conectar los jugadores existentes en cada cliente.
-        foreach (PlayerStateManager player in
-                 FindObjectsByType<PlayerStateManager>(
+    if (IsServer)
+    {
+        foreach (var p in FindObjectsByType<PlayerStateManager>(
                      FindObjectsSortMode.None))
         {
-            if (player != null)
-                player.ConectarMatchManager(this);
+            RegisterPlayer(p);
         }
     }
 
-    public override void OnNetworkDespawn()
+    // Conectar los jugadores existentes en cada cliente.
+    foreach (PlayerStateManager player in
+             FindObjectsByType<PlayerStateManager>(
+                 FindObjectsSortMode.None))
     {
-        matchStarted.OnValueChanged -= OnMatchStartedChanged;
-
-        if (startMatchButton != null)
-            startMatchButton.onClick.RemoveListener(OnStartButtonClicked);
-
-        JoinsClosed = false;
-
-        if (Instance == this)
-            Instance = null;
+        if (player != null)
+            player.ConectarMatchManager(this);
     }
+}
+
+ public override void OnNetworkDespawn()
+{
+    matchStarted.OnValueChanged -= OnMatchStartedChanged;
+
+    equiposTexto.OnValueChanged -= OnEquiposTextoChanged;
+    if (NetworkManager.Singleton != null)
+        NetworkManager.Singleton.OnClientDisconnectCallback -= OnClientDisconnectedEquipos;
+
+    if (startMatchButton != null)
+        startMatchButton.onClick.RemoveListener(OnStartButtonClicked);
+
+    JoinsClosed = false;
+
+    if (Instance == this)
+        Instance = null;
+}
 
     private void OnMatchStartedChanged(bool oldValue, bool newValue)
     {
@@ -206,6 +223,7 @@ public class MatchManager : NetworkBehaviour
             return;
 
         registeredPlayers.Add(player);
+        AsignarEquipoInicial(player.OwnerClientId);
         AssignLobbySpawn(player);
 
         player.currentState.OnValueChanged += (_, newState) =>
@@ -228,6 +246,118 @@ public class MatchManager : NetworkBehaviour
         startMatchButton.interactable =
             ConnectedPlayersCount() >= MinPlayersToStart;
     }
+
+// ---------- Equipos ----------
+
+// Fuente de verdad en el servidor; en los clientes es una copia reconstruida.
+private readonly Dictionary<ulong, int> equipos = new Dictionary<ulong, int>();
+
+// El servidor publica todo el estado como un solo texto: "clientId:equipo,clientId:equipo"
+private readonly NetworkVariable<Unity.Collections.FixedString128Bytes> equiposTexto =
+    new NetworkVariable<Unity.Collections.FixedString128Bytes>(
+        default,
+        NetworkVariableReadPermission.Everyone,
+        NetworkVariableWritePermission.Server);
+
+public event System.Action EquiposChanged;
+
+public int GetEquipo(ulong clientId)
+{
+    return equipos.TryGetValue(clientId, out int e) ? e : -1;
+}
+
+public int ContarEquipo(int equipo)
+{
+    int n = 0;
+    foreach (var kv in equipos)
+        if (kv.Value == equipo) n++;
+    return n;
+}
+
+public List<ulong> ClientesDeEquipo(int equipo)
+{
+    var lista = new List<ulong>();
+    foreach (var kv in equipos)
+        if (kv.Value == equipo) lista.Add(kv.Key);
+    return lista;
+}
+
+// Solo servidor: escribe el estado completo y avisa a la interfaz.
+private void PublicarEquipos()
+{
+    var sb = new System.Text.StringBuilder();
+    foreach (var kv in equipos)
+    {
+        if (sb.Length > 0) sb.Append(',');
+        sb.Append(kv.Key).Append(':').Append(kv.Value);
+    }
+    equiposTexto.Value = sb.ToString();
+    EquiposChanged?.Invoke();
+}
+
+// En los clientes: reconstruye la copia local desde el texto.
+private void ReconstruirEquipos(string texto)
+{
+    equipos.Clear();
+    if (!string.IsNullOrEmpty(texto))
+    {
+        foreach (string par in texto.Split(','))
+        {
+            string[] p = par.Split(':');
+            if (p.Length == 2 && ulong.TryParse(p[0], out ulong id) && int.TryParse(p[1], out int eq))
+                equipos[id] = eq;
+        }
+    }
+    EquiposChanged?.Invoke();
+}
+
+private void OnEquiposTextoChanged(Unity.Collections.FixedString128Bytes anterior,
+                                   Unity.Collections.FixedString128Bytes nuevo)
+{
+    if (IsServer) return; // el servidor ya tiene el estado correcto
+    ReconstruirEquipos(nuevo.ToString());
+}
+
+// Solo servidor: al entrar, va al equipo con menos jugadores.
+private void AsignarEquipoInicial(ulong clientId)
+{
+    if (!IsServer || !modoEquipos || equipos.ContainsKey(clientId)) return;
+
+    int equipo = ContarEquipo(0) <= ContarEquipo(1) ? 0 : 1;
+    equipos[clientId] = equipo;
+    PublicarEquipos();
+    Debug.Log($"[Equipos] Cliente {clientId} -> {(Equipo)equipo}");
+}
+
+// El jugador pide cambiar de equipo; el servidor valida.
+[Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Everyone)]
+public void CambiarEquipoRpc(int equipo, RpcParams rpcParams = default)
+{
+    if (!modoEquipos) return;
+
+    ulong clientId = rpcParams.Receive.SenderClientId;
+
+    if (matchStarted.Value) return;                  // ya empezó
+    if (equipo < 0 || equipo > 1) return;            // valor inválido
+    if (!equipos.ContainsKey(clientId)) return;      // jugador sin equipo
+    if (equipos[clientId] == equipo) return;         // ya está ahí
+    if (ContarEquipo(equipo) >= MaxPorEquipo)        // equipo lleno
+    {
+        Debug.Log($"[Equipos] {(Equipo)equipo} está lleno, rechazado el cambio de {clientId}");
+        return;
+    }
+
+    equipos[clientId] = equipo;
+    PublicarEquipos();
+    Debug.Log($"[Equipos] Cliente {clientId} cambió a {(Equipo)equipo}");
+}
+
+private void OnClientDisconnectedEquipos(ulong clientId)
+{
+    if (equipos.Remove(clientId))
+        PublicarEquipos();
+}
+
 
     // ---------- Inicio de partida ----------
 
