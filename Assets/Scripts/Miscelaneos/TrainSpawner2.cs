@@ -60,14 +60,27 @@ public class TrainSpawnerNivel2 : NetworkBehaviour
             IniciarSpawner();
         }
     }
+    public override void OnNetworkDespawn()
+{
+    spawnerActivo = false;
+    base.OnNetworkDespawn();
+}
 
     private void Update()
-    {
-        // Solo el Servidor ejecuta el movimiento físico, el temporizador y la toma de decisiones
-        if (!IsServer || !spawnerActivo)
-            return;
+{
+    // Solo el Servidor ejecuta el movimiento físico, el temporizador y la toma de decisiones
+    if (!IsServer || !spawnerActivo)
+        return;
 
-        MoverTrenes();
+    // Si la red se cerró (o aún no arrancó), no se puede spawnear ni mandar RPCs
+    if (NetworkManager.Singleton == null || !NetworkManager.Singleton.IsListening)
+    {
+        spawnerActivo = false;
+        return;
+    }
+
+    MoverTrenes();
+    
 
         temporizador -= Time.deltaTime;
 

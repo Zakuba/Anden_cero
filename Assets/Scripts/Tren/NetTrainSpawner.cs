@@ -26,11 +26,20 @@ public class NetTrainSpawner : NetworkBehaviour
         }
     }
 
+    public override void OnNetworkDespawn()
+{
+    // Si la red se cierra, se detienen las corrutinas para no seguir creando trenes
+    StopAllCoroutines();
+    base.OnNetworkDespawn();
+}
+
     private IEnumerator TrainRoutine()
     {
         while (true)
         {
             yield return new WaitForSeconds(spawnInterval);
+            if (NetworkManager.Singleton == null || !NetworkManager.Singleton.IsListening)
+             yield break;
 
             // 1. Instanciar en el servidor
             GameObject train = Instantiate(
@@ -57,6 +66,8 @@ private IEnumerator MoveTrain(GameObject train, NetworkObject netObj)
 
     while (train != null)
     {
+        if (NetworkManager.Singleton == null || !NetworkManager.Singleton.IsListening)
+            yield break;
         Vector3 nextPos = Vector3.MoveTowards(
             train.transform.position,
             endPoint.position,

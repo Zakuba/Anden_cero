@@ -16,7 +16,7 @@ public enum ResultadoUnirse
 public static class RelayManager
 {
     // Tipo de conexión: "dtls" cifra los datos (opciones válidas: udp, dtls, wss)
-    private const string ConnectionType = "dtls";
+    private const string ConnectionType = "udp";
 
     // Código de la sala actual (solo el host lo tiene). Es estático para que
     // sobreviva al cambio de escena y la sala de espera pueda mostrarlo.
