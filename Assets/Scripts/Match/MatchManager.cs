@@ -46,6 +46,12 @@ public class MatchManager : NetworkBehaviour
     [SerializeField] private Transform[] spawnPoints;
     private int nextSpawnIndex;
 
+    [Header("Spawns por equipo (2 vs 2)")]
+    [SerializeField] private Transform[] spawnPointsAlfa;
+    [SerializeField] private Transform[] spawnPointsBeta;
+    private int nextSpawnAlfa;
+    private int nextSpawnBeta;
+
     [Header("Spawns de resultados (Battle Royale)")]
     [SerializeField] private Transform puntoVictoria;
     [SerializeField] private Transform puntoVictoria2; // segundo lugar del podio para el equipo ganador (2 vs 2)
@@ -407,6 +413,8 @@ private void OnClientDisconnectedEquipos(ulong clientId)
 
         JoinsClosed = true;
         eliminatedPlayers.Clear();
+        nextSpawnAlfa = 0;
+        nextSpawnBeta = 0;
 
         matchEnded = false;
         checkScheduled = false;
@@ -969,25 +977,53 @@ private void AnnounceTeamResultClientRpc(int equipoGanador)
 
     // ---------- Spawns normales ----------
 
-    private void AssignSpawn(PlayerStateManager player)
+private void AssignSpawn(PlayerStateManager player)
+{
+    var handler = player.GetComponent<PlayerSpawnHandler>();
+
+    if (handler == null)
+        return;
+
+    Transform point = null;
+
+    // Modo equipos: cada equipo aparece en su lado del mapa
+    if (modoEquipos)
+    {
+        int equipo = GetEquipo(player.OwnerClientId);
+        Transform[] puntos =
+            equipo == 0 ? spawnPointsAlfa :
+            equipo == 1 ? spawnPointsBeta :
+            null;
+
+        if (puntos != null && puntos.Length > 0)
+        {
+            if (equipo == 0)
+            {
+                point = puntos[nextSpawnAlfa % puntos.Length];
+                nextSpawnAlfa++;
+            }
+            else
+            {
+                point = puntos[nextSpawnBeta % puntos.Length];
+                nextSpawnBeta++;
+            }
+        }
+    }
+
+    // Resto de mapas (o si no hay puntos de equipo configurados): reparto por orden
+    if (point == null)
     {
         if (spawnPoints == null || spawnPoints.Length == 0)
             return;
 
-        var handler = player.GetComponent<PlayerSpawnHandler>();
-
-        if (handler == null)
-            return;
-
-        Transform point =
-            spawnPoints[nextSpawnIndex % spawnPoints.Length];
-
+        point = spawnPoints[nextSpawnIndex % spawnPoints.Length];
         nextSpawnIndex++;
-
-        StartCoroutine(
-            SendSpawnNextFrame(handler, point.position, point.rotation)
-        );
     }
+
+    StartCoroutine(
+        SendSpawnNextFrame(handler, point.position, point.rotation)
+    );
+}
 
     [Rpc(SendTo.ClientsAndHost)]
     private void DisableCharacterControllerClientRpc(
