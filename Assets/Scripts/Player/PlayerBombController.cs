@@ -320,7 +320,7 @@ public class PlayerBombController : NetworkBehaviour
     {
         Vector3 rayOrigin = new Vector3(
             pos.x,
-            pos.y + 2.5f,
+            pos.y + 0.1f,
             pos.z
         );
 
@@ -359,6 +359,15 @@ public class PlayerBombController : NetworkBehaviour
 
         return pos;
     }
+
+
+    // Centra la posición en la celda de la cuadrícula
+private Vector3 SnapToGridCenter(Vector3 pos)
+{
+    float x = Mathf.Round(pos.x / gridSize) * gridSize;
+    float z = Mathf.Round(pos.z / gridSize) * gridSize;
+    return new Vector3(x, pos.y, z);
+}
 
     private void CheckCell(
         Vector3 cell,
@@ -510,41 +519,41 @@ public class PlayerBombController : NetworkBehaviour
         }
     }
 
-    private void TrySpawnPowerUpDrop(Vector3 boxPosition)
-    {
-        if (Random.value > powerUpDropChance)
-            return;
+private void TrySpawnPowerUpDrop(Vector3 boxPosition)
+{
+    if (Random.value > powerUpDropChance)
+        return;
 
-        if (powerUpPrefabs == null || powerUpPrefabs.Length == 0)
-            return;
+    if (powerUpPrefabs == null || powerUpPrefabs.Length == 0)
+        return;
 
-        int index = Random.Range(0, powerUpPrefabs.Length);
+    int index = Random.Range(0, powerUpPrefabs.Length);
 
-        GameObject prefab = powerUpPrefabs[index];
+    GameObject prefab = powerUpPrefabs[index];
 
-        if (prefab == null)
-            return;
+    if (prefab == null)
+        return;
 
-        Vector3 ground = GetGroundPosition(boxPosition);
+    Vector3 cell = SnapToGridCenter(boxPosition);
 
-        Vector3 spawnPos = new Vector3(
-            boxPosition.x,
-            ground.y + powerUpHeightAboveGround,
-            boxPosition.z
-        );
+    Vector3 ground = GetGroundPosition(
+        new Vector3(cell.x, boxPosition.y, cell.z)
+    );
 
-        Debug.Log(
-            $"[PowerUp] {prefab.name} en Y={spawnPos.y} (piso Y={ground.y})"
-        );
+    Vector3 spawnPos = new Vector3(
+        cell.x,
+        ground.y + powerUpHeightAboveGround,
+        cell.z
+    );
 
-        GameObject dropInstance = Instantiate(
-            prefab,
-            spawnPos,
-            Quaternion.identity
-        );
+    GameObject dropInstance = Instantiate(
+        prefab,
+        spawnPos,
+        Quaternion.identity
+    );
 
-        dropInstance.GetComponent<NetworkObject>().Spawn();
-    }
+    dropInstance.GetComponent<NetworkObject>().Spawn();
+}
 
     /// <summary>
     /// Destruye localmente el objeto y genera su ragdoll visual.
