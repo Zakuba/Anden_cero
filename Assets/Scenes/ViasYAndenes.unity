@@ -1461,6 +1461,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SM_Generic_Small_Rocks_02 (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 1816386761248272, guid: a76742b3f592d834ca1e03ad08301998, type: 3}
+      propertyPath: m_TagString
+      value: Destructible
+      objectReference: {fileID: 0}
     - target: {fileID: 4124369588495422, guid: a76742b3f592d834ca1e03ad08301998, type: 3}
       propertyPath: m_LocalPosition.x
       value: 4.8173256
@@ -38767,6 +38771,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SM_Gen_Env_Grass_03
       objectReference: {fileID: 0}
+    - target: {fileID: 8918684442425528394, guid: 22036d00393bb6746ac5e41d671e6289, type: 3}
+      propertyPath: m_TagString
+      value: Destructible
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -47043,6 +47051,10 @@ PrefabInstance:
     - target: {fileID: 6873938577213127126, guid: a9a82dc7a09f37741916c33cc3483e7c, type: 3}
       propertyPath: m_Name
       value: SM_Gen_Env_Rock_Pebbles_02
+      objectReference: {fileID: 0}
+    - target: {fileID: 6873938577213127126, guid: a9a82dc7a09f37741916c33cc3483e7c, type: 3}
+      propertyPath: m_TagString
+      value: Destructible
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -68856,6 +68868,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SM_Gen_Env_Fern_02
       objectReference: {fileID: 0}
+    - target: {fileID: 1290837552235159865, guid: 3354b9dcbee056449bf9844dc3ba2bc1, type: 3}
+      propertyPath: m_TagString
+      value: Destructible
+      objectReference: {fileID: 0}
     - target: {fileID: 1919141774941911939, guid: 3354b9dcbee056449bf9844dc3ba2bc1, type: 3}
       propertyPath: m_LocalScale.x
       value: 0.54038
@@ -69139,6 +69155,10 @@ PrefabInstance:
     - target: {fileID: 315675889818940899, guid: 256212dab9cb9d040bdae30d4f256a44, type: 3}
       propertyPath: m_Name
       value: SM_Gen_Env_Rock_Pebbles_05
+      objectReference: {fileID: 0}
+    - target: {fileID: 315675889818940899, guid: 256212dab9cb9d040bdae30d4f256a44, type: 3}
+      propertyPath: m_TagString
+      value: Destructible
       objectReference: {fileID: 0}
     - target: {fileID: 1092775057578553177, guid: 256212dab9cb9d040bdae30d4f256a44, type: 3}
       propertyPath: m_LocalPosition.x
@@ -73487,6 +73507,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SM_Gen_Env_Grass_Tall_01
       objectReference: {fileID: 0}
+    - target: {fileID: 2166530208138196212, guid: 37c2994d3a827184593e4bf8f8e836b5, type: 3}
+      propertyPath: m_TagString
+      value: Destructible
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -75712,6 +75736,10 @@ PrefabInstance:
     - target: {fileID: 5683839640340379510, guid: 4c646a6f13af9e9498efa5c0d3b549f3, type: 3}
       propertyPath: m_Name
       value: SM_Gen_Prop_Papers_06
+      objectReference: {fileID: 0}
+    - target: {fileID: 5683839640340379510, guid: 4c646a6f13af9e9498efa5c0d3b549f3, type: 3}
+      propertyPath: m_TagString
+      value: Destructible
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -99566,6 +99594,10 @@ PrefabInstance:
     - target: {fileID: 1816386761248272, guid: a76742b3f592d834ca1e03ad08301998, type: 3}
       propertyPath: m_Name
       value: SM_Generic_Small_Rocks_02
+      objectReference: {fileID: 0}
+    - target: {fileID: 1816386761248272, guid: a76742b3f592d834ca1e03ad08301998, type: 3}
+      propertyPath: m_TagString
+      value: Destructible
       objectReference: {fileID: 0}
     - target: {fileID: 4124369588495422, guid: a76742b3f592d834ca1e03ad08301998, type: 3}
       propertyPath: m_LocalPosition.x

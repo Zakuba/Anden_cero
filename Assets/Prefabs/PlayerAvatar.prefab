@@ -443,7 +443,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.NetworkObject
-  GlobalObjectIdHash: 1902537740
+  GlobalObjectIdHash: 751227136
   InScenePlacedSourceGlobalObjectIdHash: 0
   m_InScenePlacedDisabledByDefault: 0
   DeferredDespawnTick: 0
@@ -567,6 +567,7 @@ MonoBehaviour:
   ragdollLifetime: 4
   ragdollForce: 1
   ragdollUpForce: 2
+  ragdollFadeDuration: 1.5
   destructionDuration: 0.3
 --- !u!114 &5769002067245888163
 MonoBehaviour:
@@ -936,7 +937,7 @@ MonoBehaviour:
   m_fontSizeMin: 18
   m_fontSizeMax: 72
   m_fontStyle: 0
-  m_HorizontalAlignment: 1
+  m_HorizontalAlignment: 2
   m_VerticalAlignment: 256
   m_textAlignment: 65535
   m_characterSpacing: 0

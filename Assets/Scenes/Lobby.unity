@@ -38408,6 +38408,64 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1eb47ee7fb4e0224482d77ed61559671, type: 3}
+--- !u!1001 &1794439996
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: -8679921383154817045, guid: ba86548472b757b47b39ec26a370dbc8, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 2.597391
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: ba86548472b757b47b39ec26a370dbc8, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.00000008992998
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: ba86548472b757b47b39ec26a370dbc8, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -19.909546
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: ba86548472b757b47b39ec26a370dbc8, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: ba86548472b757b47b39ec26a370dbc8, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: ba86548472b757b47b39ec26a370dbc8, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: ba86548472b757b47b39ec26a370dbc8, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: ba86548472b757b47b39ec26a370dbc8, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: ba86548472b757b47b39ec26a370dbc8, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: ba86548472b757b47b39ec26a370dbc8, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: ba86548472b757b47b39ec26a370dbc8, type: 3}
+      propertyPath: m_Name
+      value: Accessories_DoubleHolster
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects:
+    - {fileID: 2026169234444275029, guid: ba86548472b757b47b39ec26a370dbc8, type: 3}
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: ba86548472b757b47b39ec26a370dbc8, type: 3}
 --- !u!1001 &1808159015
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -48081,6 +48139,18 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 712798502}
     m_Modifications:
+    - target: {fileID: 394684419581875645, guid: a218e67f86cdf1b4faf217dc2f20a44a, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3041303607488342033, guid: a218e67f86cdf1b4faf217dc2f20a44a, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5768288638330665504, guid: a218e67f86cdf1b4faf217dc2f20a44a, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 8380893208262258890, guid: a218e67f86cdf1b4faf217dc2f20a44a, type: 3}
       propertyPath: m_LocalPosition.x
       value: -1.945
@@ -48119,6 +48189,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8380893208262258890, guid: a218e67f86cdf1b4faf217dc2f20a44a, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8677336077827479963, guid: a218e67f86cdf1b4faf217dc2f20a44a, type: 3}
+      propertyPath: m_Enabled
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 9152784852926655088, guid: a218e67f86cdf1b4faf217dc2f20a44a, type: 3}
@@ -50508,3 +50582,4 @@ SceneRoots:
   - {fileID: 712798502}
   - {fileID: 232784260}
   - {fileID: 1904286856}
+  - {fileID: 1794439996}
