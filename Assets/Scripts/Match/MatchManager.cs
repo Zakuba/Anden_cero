@@ -239,14 +239,15 @@ if (!IsServer)
         return registeredPlayers.Count;
     }
 
-    private void RefreshStartButton()
-    {
-        if (startMatchButton == null || matchStarted.Value)
-            return;
+private void RefreshStartButton()
+{
+    if (startMatchButton == null || matchStarted.Value)
+        return;
 
-        startMatchButton.interactable =
-            ConnectedPlayersCount() >= MinPlayersToStart;
-    }
+    startMatchButton.interactable =
+        ConnectedPlayersCount() >= MinPlayersToStart &&
+        EquiposListosParaIniciar();
+}
 
 // ---------- Equipos ----------
 
@@ -295,6 +296,15 @@ public bool EsMismoEquipo(ulong clientA, ulong clientB)
     return a != -1 && a == b;
 }
 
+// En el modo equipos hace falta al menos un jugador en cada equipo para iniciar.
+// En los demás mapas siempre devuelve true, así que nada cambia ahí.
+private bool EquiposListosParaIniciar()
+{
+    if (!modoEquipos) return true;
+
+    return ContarEquipo(0) >= 1 && ContarEquipo(1) >= 1;
+}
+
 // Solo servidor: escribe el estado completo y avisa a la interfaz.
 private void PublicarEquipos()
 {
@@ -306,6 +316,7 @@ private void PublicarEquipos()
     }
     equiposTexto.Value = sb.ToString();
     EquiposChanged?.Invoke();
+    RefreshStartButton(); // <-- nueva
 }
 
 // En los clientes: reconstruye la copia local desde el texto.
@@ -383,10 +394,16 @@ private void OnClientDisconnectedEquipos(ulong clientId)
     }
 
     private void StartMatch()
+{
+    if (matchStarted.Value ||
+        ConnectedPlayersCount() < MinPlayersToStart)
+        return;
+
+    if (!EquiposListosParaIniciar())
     {
-        if (matchStarted.Value ||
-            ConnectedPlayersCount() < MinPlayersToStart)
-            return;
+        Debug.Log("[Equipos] No se puede iniciar: falta al menos un jugador en cada equipo.");
+        return;
+    }
 
         JoinsClosed = true;
         eliminatedPlayers.Clear();
