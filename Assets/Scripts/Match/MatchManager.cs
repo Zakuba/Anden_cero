@@ -48,6 +48,7 @@ public class MatchManager : NetworkBehaviour
 
     [Header("Spawns de resultados (Battle Royale)")]
     [SerializeField] private Transform puntoVictoria;
+    [SerializeField] private Transform puntoVictoria2; // segundo lugar del podio para el equipo ganador (2 vs 2)
     [SerializeField] private Transform puntoDerrota1;
     [SerializeField] private Transform puntoDerrota2;
     [SerializeField] private Transform puntoDerrota3;
@@ -487,6 +488,46 @@ private void OnClientDisconnectedEquipos(ulong clientId)
         }
 
         // ---------- Modo Battle Royale ----------
+        // ---------- Modo 2 vs 2 (por equipos) ----------
+
+if (modoEquipos)
+{
+    bool hayAlfa = false;
+    bool hayBeta = false;
+
+    foreach (PlayerStateManager p in alive)
+    {
+        int e = GetEquipo(p.OwnerClientId);
+        if (e == 0) hayAlfa = true;
+        else if (e == 1) hayBeta = true;
+    }
+
+    // Siguen vivos jugadores de los dos equipos: la partida continúa
+    if (hayAlfa && hayBeta)
+        yield break;
+
+    // Quedan vivos de un solo equipo: ese equipo gana
+    if (hayAlfa || hayBeta)
+    {
+        matchEnded = true;
+
+        int equipoGanador = hayAlfa ? 0 : 1;
+        Debug.Log($"[Equipos] Gana el equipo {(Equipo)equipoGanador}");
+
+        // Logro "Superviviente invencible" para los ganadores vivos que no recibieron daño
+        foreach (PlayerStateManager p in alive)
+        {
+            if (!p.HasTakenDamageThisMatch)
+                p.AwardInvincibleSurvivorAchievementClientRpc();
+        }
+
+        TeleportPlayersToTeamResultPositions(equipoGanador);
+        AnnounceTeamResultClientRpc(equipoGanador);
+        yield break;
+    }
+
+    // Si no quedó nadie vivo, sigue el código de empate de abajo
+}
 
         if (alive.Count == 1)
         {
@@ -678,6 +719,27 @@ private void OnClientDisconnectedEquipos(ulong clientId)
         }
     }
 
+    [Rpc(SendTo.ClientsAndHost)]
+private void AnnounceTeamResultClientRpc(int equipoGanador)
+{
+    matchEnded = true;
+
+    ActivarResultsCamera();
+
+    if (resultsPanel != null)
+        resultsPanel.SetActive(true);
+
+    if (resultsText == null)
+        return;
+
+    string nombreGanador = ((Equipo)equipoGanador).ToString();
+    int miEquipo = GetEquipo(NetworkManager.Singleton.LocalClientId);
+
+    resultsText.text = miEquipo == equipoGanador
+        ? $"¡Ganó tu equipo!\nEquipo {nombreGanador}"
+        : $"Perdió tu equipo.\nGana el equipo {nombreGanador}";
+}
+
     // ---------- Posiciones de resultados ----------
 
     private void TeleportPlayersToResultPositions(
@@ -714,6 +776,43 @@ private void OnClientDisconnectedEquipos(ulong clientId)
             TeleportPlayerToPoint(loser, defeatPoints[i]);
         }
     }
+
+    private void TeleportPlayersToTeamResultPositions(int equipoGanador)
+{
+    if (!IsServer) return;
+
+    // Los dos del equipo ganador (vivos o caídos) van al podio de victoria
+    Transform[] winnerPoints =
+    {
+        puntoVictoria,
+        puntoVictoria2 != null ? puntoVictoria2 : puntoVictoria
+    };
+
+    int w = 0;
+    foreach (PlayerStateManager p in registeredPlayers)
+    {
+        if (p == null || GetEquipo(p.OwnerClientId) != equipoGanador)
+            continue;
+
+        TeleportPlayerToPoint(p, winnerPoints[Mathf.Min(w, winnerPoints.Length - 1)]);
+        w++;
+    }
+
+    // El equipo perdedor va a los puntos de derrota, en orden de eliminación
+    Transform[] defeatPoints = { puntoDerrota1, puntoDerrota2, puntoDerrota3 };
+
+    int l = 0;
+    foreach (PlayerStateManager p in eliminatedPlayers)
+    {
+        if (p == null || GetEquipo(p.OwnerClientId) == equipoGanador)
+            continue;
+
+        if (l >= defeatPoints.Length) break;
+
+        TeleportPlayerToPoint(p, defeatPoints[l]);
+        l++;
+    }
+}
 
     private void TeleportPlayersToDrawPositions(
         List<PlayerStateManager> players)
