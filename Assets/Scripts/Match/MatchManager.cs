@@ -52,6 +52,7 @@ public class MatchManager : NetworkBehaviour
     private int nextSpawnAlfa;
     private int nextSpawnBeta;
 
+   
     // Copias mezcladas de los puntos de spawn (se rehacen en cada partida)
     private List<Transform> spawnsMezclados = new List<Transform>();
     private List<Transform> alfaMezclados = new List<Transform>();
@@ -72,6 +73,36 @@ public class MatchManager : NetworkBehaviour
         (lista[i], lista[j]) = (lista[j], lista[i]);
     }
     return lista;
+}
+
+
+    [Header("Layouts de cajas")]
+[SerializeField] private GameObject[] layoutsCajas;
+
+private readonly NetworkVariable<int> layoutCajasIndex =
+    new NetworkVariable<int>(
+        -1,
+        NetworkVariableReadPermission.Everyone,
+        NetworkVariableWritePermission.Server
+    );
+
+    private static int ultimoLayoutCajas = -1;
+
+private void OnLayoutCajasChanged(int anterior, int nuevo)
+{
+    AplicarLayoutCajas(nuevo);
+}
+
+private void AplicarLayoutCajas(int indice)
+{
+    if (layoutsCajas == null || indice < 0) return;
+    Debug.Log($"[Cajas] Layout activo: {indice}");
+
+    for (int i = 0; i < layoutsCajas.Length; i++)
+    {
+        if (layoutsCajas[i] != null)
+            layoutsCajas[i].SetActive(i == indice);
+    }
 }
 
 
@@ -149,6 +180,21 @@ public class MatchManager : NetworkBehaviour
 
     matchStarted.OnValueChanged += OnMatchStartedChanged;
 
+layoutCajasIndex.OnValueChanged += OnLayoutCajasChanged;
+
+if (IsServer && layoutsCajas != null && layoutsCajas.Length > 0)
+{
+    int nuevo = Random.Range(0, layoutsCajas.Length);
+
+    // Si hay más de uno, evitamos repetir el layout anterior
+    if (layoutsCajas.Length > 1 && nuevo == ultimoLayoutCajas)
+        nuevo = (nuevo + 1 + Random.Range(0, layoutsCajas.Length - 1)) % layoutsCajas.Length;
+
+    ultimoLayoutCajas = nuevo;
+    layoutCajasIndex.Value = nuevo;
+}
+
+AplicarLayoutCajas(layoutCajasIndex.Value);
     if (startMatchButton != null)
     {
         startMatchButton.onClick.AddListener(OnStartButtonClicked);
@@ -208,6 +254,7 @@ if (!IsServer)
 {
     matchStarted.OnValueChanged -= OnMatchStartedChanged;
 
+layoutCajasIndex.OnValueChanged -= OnLayoutCajasChanged;
     equiposTexto.OnValueChanged -= OnEquiposTextoChanged;
     if (NetworkManager.Singleton != null)
         NetworkManager.Singleton.OnClientDisconnectCallback -= OnClientDisconnectedEquipos;
@@ -1012,6 +1059,7 @@ private void AnnounceTeamResultClientRpc(int equipoGanador)
             $"Animación {spawnPoint.LobbyAnimation} asignada a {player.name}"
         );
     }
+
 
     // ---------- Spawns normales ----------
 
