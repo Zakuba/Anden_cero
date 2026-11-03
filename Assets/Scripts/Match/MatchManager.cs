@@ -52,6 +52,30 @@ public class MatchManager : NetworkBehaviour
     private int nextSpawnAlfa;
     private int nextSpawnBeta;
 
+    // Copias mezcladas de los puntos de spawn (se rehacen en cada partida)
+    private List<Transform> spawnsMezclados = new List<Transform>();
+    private List<Transform> alfaMezclados = new List<Transform>();
+    private List<Transform> betaMezclados = new List<Transform>();
+
+    private static List<Transform> Mezclar(Transform[] origen)
+    {
+    var lista = new List<Transform>();
+    if (origen == null) return lista;
+
+    foreach (var t in origen)
+        if (t != null) lista.Add(t);
+
+    // Fisher-Yates
+    for (int i = lista.Count - 1; i > 0; i--)
+    {
+        int j = Random.Range(0, i + 1);
+        (lista[i], lista[j]) = (lista[j], lista[i]);
+    }
+    return lista;
+}
+
+
+
     [Header("Spawns de resultados (Battle Royale)")]
     [SerializeField] private Transform puntoVictoria;
     [SerializeField] private Transform puntoVictoria2; // segundo lugar del podio para el equipo ganador (2 vs 2)
@@ -415,6 +439,11 @@ private void OnClientDisconnectedEquipos(ulong clientId)
         eliminatedPlayers.Clear();
         nextSpawnAlfa = 0;
         nextSpawnBeta = 0;
+        nextSpawnIndex = 0;
+        spawnsMezclados = Mezclar(spawnPoints);
+        alfaMezclados = Mezclar(spawnPointsAlfa);
+        betaMezclados = Mezclar(spawnPointsBeta);
+
 
         matchEnded = false;
         checkScheduled = false;
@@ -995,37 +1024,30 @@ private void AssignSpawn(PlayerStateManager player)
 
     Transform point = null;
 
-    // Modo equipos: cada equipo aparece en su lado del mapa
+    // Modo equipos: cada equipo aparece en su lado, en puntos al azar
     if (modoEquipos)
     {
         int equipo = GetEquipo(player.OwnerClientId);
-        Transform[] puntos =
-            equipo == 0 ? spawnPointsAlfa :
-            equipo == 1 ? spawnPointsBeta :
-            null;
 
-        if (puntos != null && puntos.Length > 0)
+        if (equipo == 0 && alfaMezclados.Count > 0)
         {
-            if (equipo == 0)
-            {
-                point = puntos[nextSpawnAlfa % puntos.Length];
-                nextSpawnAlfa++;
-            }
-            else
-            {
-                point = puntos[nextSpawnBeta % puntos.Length];
-                nextSpawnBeta++;
-            }
+            point = alfaMezclados[nextSpawnAlfa % alfaMezclados.Count];
+            nextSpawnAlfa++;
+        }
+        else if (equipo == 1 && betaMezclados.Count > 0)
+        {
+            point = betaMezclados[nextSpawnBeta % betaMezclados.Count];
+            nextSpawnBeta++;
         }
     }
 
-    // Resto de mapas (o si no hay puntos de equipo configurados): reparto por orden
+    // Resto de mapas: todos los puntos mezclados
     if (point == null)
     {
-        if (spawnPoints == null || spawnPoints.Length == 0)
+        if (spawnsMezclados.Count == 0)
             return;
 
-        point = spawnPoints[nextSpawnIndex % spawnPoints.Length];
+        point = spawnsMezclados[nextSpawnIndex % spawnsMezclados.Count];
         nextSpawnIndex++;
     }
 
