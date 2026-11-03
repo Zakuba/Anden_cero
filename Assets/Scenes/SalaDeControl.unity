@@ -6328,6 +6328,10 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6030919849349125509, guid: 4f6ea2c54a86e7a48b158c12f51502ea, type: 3}
+      propertyPath: resultsText
+      value: 
+      objectReference: {fileID: 851790413}
+    - target: {fileID: 6030919849349125509, guid: 4f6ea2c54a86e7a48b158c12f51502ea, type: 3}
       propertyPath: waitingText
       value: 
       objectReference: {fileID: 0}
@@ -30276,6 +30280,10 @@ PrefabInstance:
       propertyPath: globalVolume
       value: 
       objectReference: {fileID: 272988505}
+    - target: {fileID: 8424462286231207699, guid: e69b7f0d04a0fe943b96f5a2debe5d2e, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -30297,6 +30305,28 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 8424462286231207699, guid: e69b7f0d04a0fe943b96f5a2debe5d2e, type: 3}
   m_PrefabInstance: {fileID: 851790410}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &851790413 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2492075082405679479, guid: e69b7f0d04a0fe943b96f5a2debe5d2e, type: 3}
+  m_PrefabInstance: {fileID: 851790410}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshProUGUI
+--- !u!114 &851790414 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5393056100213257189, guid: e69b7f0d04a0fe943b96f5a2debe5d2e, type: 3}
+  m_PrefabInstance: {fileID: 851790410}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Button
 --- !u!4 &852054919 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5301027919848840836, guid: 611590c46e3e47d4b9eb12aab6295a68, type: 3}
@@ -31821,7 +31851,7 @@ PrefabInstance:
     - target: {fileID: 1463029365554816394, guid: a9da96fc8c16bc945ab354a39b0ed073, type: 3}
       propertyPath: stopServerButton
       value: 
-      objectReference: {fileID: 1168123468}
+      objectReference: {fileID: 851790414}
     - target: {fileID: 1463029365554816394, guid: a9da96fc8c16bc945ab354a39b0ed073, type: 3}
       propertyPath: stopServerButtonMenu
       value: 
@@ -43106,6 +43136,14 @@ PrefabInstance:
       propertyPath: 'brokenHeartIcons.Array.data[2]'
       value: 
       objectReference: {fileID: 1577345400}
+    - target: {fileID: 4847587230589880963, guid: 4d4c679d21400084e87954f8d4319a26, type: 3}
+      propertyPath: m_fontAsset
+      value: 
+      objectReference: {fileID: 11400000, guid: 59654baa40088b34a98cd2f6131f4979, type: 2}
+    - target: {fileID: 4847587230589880963, guid: 4d4c679d21400084e87954f8d4319a26, type: 3}
+      propertyPath: m_hasFontAssetChanged
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4891665941861383964, guid: 4d4c679d21400084e87954f8d4319a26, type: 3}
       propertyPath: m_text
       value: Sala de Control
@@ -43315,17 +43353,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4d4c679d21400084e87954f8d4319a26, type: 3}
---- !u!114 &1168123468 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 2660711825699141831, guid: 4d4c679d21400084e87954f8d4319a26, type: 3}
-  m_PrefabInstance: {fileID: 1168123466}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Button
 --- !u!1001 &1169215531
 PrefabInstance:
   m_ObjectHideFlags: 0
