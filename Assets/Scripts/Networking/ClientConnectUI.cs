@@ -159,21 +159,25 @@ public class ClientConnectUI : MonoBehaviour
         connectButton.interactable = true;
     }
 
-       private void OnClientDisconnected(ulong clientId)
+    private void OnClientDisconnected(ulong clientId)
+{
+    if (isAttemptingConnection)
     {
-        if (isAttemptingConnection)
-        {
-            // Hay que leer el motivo ANTES de Shutdown(), porque después se borra
-            string motivo = NetworkManager.Singleton.DisconnectReason;
+        // Hay que leer el motivo ANTES de Shutdown(), porque después se borra
+        string motivo = NetworkManager.Singleton.DisconnectReason;
 
-            NetworkManager.Singleton.Shutdown();
+        NetworkManager.Singleton.Shutdown();
 
-            if (!string.IsNullOrEmpty(motivo))
-                FailConnection(motivo);
-            else
-                FailConnection();
-        }
+        bool motivoTecnico = string.IsNullOrEmpty(motivo)
+            || motivo.Contains("Disconnect Event")
+            || motivo.Contains("ClosedByRemote");
+
+        if (motivoTecnico)
+            FailConnection("No se pudo entrar: la sala está llena o la partida ya comenzó.");
+        else
+            FailConnection(motivo);
     }
+}
 
     private void FailConnection(string mensaje = "Conexión fallida. Verifica IP o Puerto.")
     {
