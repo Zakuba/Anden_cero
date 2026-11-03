@@ -20018,6 +20018,10 @@ PrefabInstance:
       propertyPath: globalVolume
       value: 
       objectReference: {fileID: 420186775}
+    - target: {fileID: 8424462286231207699, guid: e69b7f0d04a0fe943b96f5a2debe5d2e, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
