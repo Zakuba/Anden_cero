@@ -6350,7 +6350,7 @@ PrefabInstance:
     - target: {fileID: 6030919849349125509, guid: 4f6ea2c54a86e7a48b158c12f51502ea, type: 3}
       propertyPath: resultsPanel
       value: 
-      objectReference: {fileID: 1168123469}
+      objectReference: {fileID: 851790412}
     - target: {fileID: 6030919849349125509, guid: 4f6ea2c54a86e7a48b158c12f51502ea, type: 3}
       propertyPath: puntoDerrota1
       value: 
@@ -30238,7 +30238,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4973057883409202767, guid: e69b7f0d04a0fe943b96f5a2debe5d2e, type: 3}
       propertyPath: m_Name
-      value: Canvas Pausa
+      value: Canvas Overlay
       objectReference: {fileID: 0}
     - target: {fileID: 5893777262970615953, guid: e69b7f0d04a0fe943b96f5a2debe5d2e, type: 3}
       propertyPath: m_AnchorMax.x
@@ -30292,6 +30292,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Button
+--- !u!1 &851790412 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8424462286231207699, guid: e69b7f0d04a0fe943b96f5a2debe5d2e, type: 3}
+  m_PrefabInstance: {fileID: 851790410}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &852054919 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5301027919848840836, guid: 611590c46e3e47d4b9eb12aab6295a68, type: 3}
@@ -43049,6 +43054,14 @@ PrefabInstance:
       propertyPath: bombIcon
       value: 
       objectReference: {fileID: 2126011817}
+    - target: {fileID: 2360233304308923293, guid: 4d4c679d21400084e87954f8d4319a26, type: 3}
+      propertyPath: notificationPanel
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 2360233304308923293, guid: 4d4c679d21400084e87954f8d4319a26, type: 3}
+      propertyPath: achievementTitleText
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 2447156896332289926, guid: 4d4c679d21400084e87954f8d4319a26, type: 3}
       propertyPath: m_Name
       value: Canvas Variant
@@ -43249,7 +43262,7 @@ PrefabInstance:
       objectReference: {fileID: 241765556}
     - target: {fileID: 8448841585960942331, guid: 4d4c679d21400084e87954f8d4319a26, type: 3}
       propertyPath: m_RenderMode
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8448841585960942331, guid: 4d4c679d21400084e87954f8d4319a26, type: 3}
       propertyPath: m_SortingOrder
@@ -43291,12 +43304,14 @@ PrefabInstance:
       propertyPath: m_AnchorMin.x
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 2360233304308923293, guid: 4d4c679d21400084e87954f8d4319a26, type: 3}
     m_RemovedGameObjects:
     - {fileID: 6820059762914285165, guid: 4d4c679d21400084e87954f8d4319a26, type: 3}
     - {fileID: 1798532510140340460, guid: 4d4c679d21400084e87954f8d4319a26, type: 3}
     - {fileID: 6277125567616358586, guid: 4d4c679d21400084e87954f8d4319a26, type: 3}
     - {fileID: 7654274564425570295, guid: 4d4c679d21400084e87954f8d4319a26, type: 3}
+    - {fileID: 7104250199157339417, guid: 4d4c679d21400084e87954f8d4319a26, type: 3}
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4d4c679d21400084e87954f8d4319a26, type: 3}
@@ -43311,11 +43326,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Button
---- !u!1 &1168123469 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 8825872478504095694, guid: 4d4c679d21400084e87954f8d4319a26, type: 3}
-  m_PrefabInstance: {fileID: 1168123466}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1169215531
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -77838,6 +77848,7 @@ SceneRoots:
   - {fileID: 1187192613}
   - {fileID: 1928163777}
   - {fileID: 241765555}
+  - {fileID: 851790410}
   - {fileID: 1168123466}
   - {fileID: 885411042}
   - {fileID: 184830714}
@@ -77856,4 +77867,3 @@ SceneRoots:
   - {fileID: 272988504}
   - {fileID: 1640455963}
   - {fileID: 1433742818}
-  - {fileID: 851790410}
