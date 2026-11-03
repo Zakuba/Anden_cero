@@ -46979,17 +46979,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 6745445488758287017, guid: 5882c21bfce896e4daa5ed0d146c70d9, type: 3}
   m_PrefabInstance: {fileID: 668189886}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &668632021 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 5672260040695140218, guid: e69b7f0d04a0fe943b96f5a2debe5d2e, type: 3}
-  m_PrefabInstance: {fileID: 1210185422}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshProUGUI
 --- !u!4 &669097694 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8649641963997785572, guid: 74041acf00146d442b15dec90c15c5cc, type: 3}
@@ -68162,11 +68151,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 966182389}
   m_CullTransparentMesh: 1
---- !u!1 &966236980 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 7155881451154377387, guid: e69b7f0d04a0fe943b96f5a2debe5d2e, type: 3}
-  m_PrefabInstance: {fileID: 1210185422}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &966248099
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -87046,6 +87030,10 @@ PrefabInstance:
       propertyPath: m_AnchorMin.x
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1548797410180461683, guid: e69b7f0d04a0fe943b96f5a2debe5d2e, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2454290436586645957, guid: e69b7f0d04a0fe943b96f5a2debe5d2e, type: 3}
       propertyPath: m_Pivot.x
       value: 0
@@ -87177,10 +87165,7 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 4973057883409202767, guid: e69b7f0d04a0fe943b96f5a2debe5d2e, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1210185426}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e69b7f0d04a0fe943b96f5a2debe5d2e, type: 3}
 --- !u!114 &1210185423 stripped
 MonoBehaviour:
@@ -87193,11 +87178,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Button
---- !u!1 &1210185424 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 4973057883409202767, guid: e69b7f0d04a0fe943b96f5a2debe5d2e, type: 3}
-  m_PrefabInstance: {fileID: 1210185422}
-  m_PrefabAsset: {fileID: 0}
 --- !u!114 &1210185425 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 5393056100213257189, guid: e69b7f0d04a0fe943b96f5a2debe5d2e, type: 3}
@@ -87209,20 +87189,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Button
---- !u!114 &1210185426
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1210185424}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a4430c16598ea35419bb3be5f8149851, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::NotificationManager
-  notificationPanel: {fileID: 966236980}
-  achievementTitleText: {fileID: 668632021}
 --- !u!114 &1210185427 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 2492075082405679479, guid: e69b7f0d04a0fe943b96f5a2debe5d2e, type: 3}

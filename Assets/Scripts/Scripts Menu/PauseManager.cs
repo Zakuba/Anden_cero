@@ -96,8 +96,8 @@ public class PauseManager : MonoBehaviour
         if (pauseMenuCanvas != null) pauseMenuCanvas.SetActive(false);
 
         // Ocultar y bloquear el cursor de nuevo para jugar en tercera persona
-        Cursor.lockState = CursorLockMode.Locked;
-        Cursor.visible = false;
+        //Cursor.lockState = CursorLockMode.Locked;
+        //Cursor.visible = false;
     }
 
     public void AbrirOpcionesDesdePausa()
