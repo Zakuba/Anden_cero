@@ -60,6 +60,11 @@ public class PlayerStateManager : NetworkBehaviour
     private static readonly Dictionary<ulong, (int kills, float lastKillTime)> killsWindowByAttacker 
         = new Dictionary<ulong, (int kills, float lastKillTime)>();
 
+    // Seguimiento del tiempo de supervivencia en el cliente local
+    private float matchStartTime = 0f;
+    private float survivalDuration = 0f;
+    private bool isTrackingSurvival = false;
+
     private void Awake()
     {
         if (characterController == null)
@@ -70,6 +75,12 @@ public class PlayerStateManager : NetworkBehaviour
     {
         if (!IsOwner)
             return;
+
+        // Si la partida está activa y seguimos vivos, sumamos el tiempo sobrevivido
+        if (isTrackingSurvival && currentState.Value == PlayerState.Vivo)
+        {
+            survivalDuration = Time.time - matchStartTime;
+        }
 
         if (localLivesUI == null)
         {
@@ -287,6 +298,12 @@ if (attackerClientId != 999999 &&
     private void OnStateChanged(PlayerState previous, PlayerState current)
     {
         ApplyStateProperties(current);
+        // Si el cliente dueño local muere, congelamos el tiempo sobrevivido final
+        if (IsOwner && current == PlayerState.Muerto && isTrackingSurvival)
+        {
+            survivalDuration = Time.time - matchStartTime;
+            isTrackingSurvival = false;
+        }
     }
 
     private void ApplyStateProperties(PlayerState state)
@@ -375,6 +392,11 @@ if (attackerClientId != 999999 &&
     private void OnMatchStartedChanged(bool oldValue, bool newValue)
     {
         ApplyStateProperties(currentState.Value);
+        
+        if (IsOwner && newValue)
+        {
+            IniciarConteoSupervivencia();
+        }
     }
 
     [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Everyone)]
@@ -454,4 +476,28 @@ if (attackerClientId != 999999 &&
             }
         }
     }
+
+    /// <summary>
+    /// Llamado cuando la partida arranca efectivamente en el MatchManager.
+    /// </summary>
+    public void IniciarConteoSupervivencia()
+    {
+        if (!IsOwner) return;
+
+        matchStartTime = Time.time;
+        survivalDuration = 0f;
+        isTrackingSurvival = true;
+    }
+
+    /// <summary>
+    /// Retorna el tiempo que resistió el jugador en la partida actual y detiene el contador.
+    /// </summary>
+    public float FinalizarConteoSupervivencia()
+    {
+        if (!IsOwner) return 0f;
+
+        isTrackingSurvival = false;
+        return survivalDuration;
+    }
+
 }

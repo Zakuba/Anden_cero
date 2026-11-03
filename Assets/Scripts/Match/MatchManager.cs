@@ -641,6 +641,9 @@ if (modoEquipos)
     {
         matchEnded = true;
 
+        // GUARDADO DE ESTADÍSTICAS ACUMULADAS
+        GuardarEstadisticasPartidaLocal();
+
         ActivarResultsCamera();
 
         if (resultsPanel != null)
@@ -705,6 +708,9 @@ if (modoEquipos)
     {
         matchEnded = true;
 
+        // GUARDADO DE ESTADÍSTICAS ACUMULADAS
+        GuardarEstadisticasPartidaLocal();
+
         // Si el ganador activó el easter egg, su cliente no debe
         // cambiar a la cámara ni mostrar el panel de resultados.
         // Los demás jugadores sí ven los resultados normalmente.
@@ -748,6 +754,9 @@ if (modoEquipos)
 private void AnnounceTeamResultClientRpc(int equipoGanador)
 {
     matchEnded = true;
+
+    // GUARDADO DE ESTADÍSTICAS ACUMULADAS
+    GuardarEstadisticasPartidaLocal();
 
     ActivarResultsCamera();
 
@@ -1128,5 +1137,36 @@ private void AssignSpawn(PlayerStateManager player)
         StartCoroutine(
             SendSpawnNextFrame(handler, point.position, point.rotation)
         );
+    }
+
+    /// <summary>
+    /// Registra la partida completada y suma el tiempo sobrevivido en el perfil local (JSON).
+    /// </summary>
+    private void GuardarEstadisticasPartidaLocal()
+    {
+        float tiempoSobrevivido = 0f;
+
+        // Buscamos al jugador local para extraer el tiempo que sobrevivió
+        if (NetworkManager.Singleton != null && NetworkManager.Singleton.LocalClient != null)
+        {
+            var localPlayerObj = NetworkManager.Singleton.LocalClient.PlayerObject;
+            if (localPlayerObj != null)
+            {
+                PlayerStateManager localState = localPlayerObj.GetComponent<PlayerStateManager>();
+                if (localState != null)
+                {
+                    tiempoSobrevivido = localState.FinalizarConteoSupervivencia();
+                }
+            }
+        }
+
+        // Carga, suma acumulativa y guardado en JSON local
+        PlayerData data = PersistenceManager.LoadData();
+        data.partidasJugadas++;
+        data.tiempoTotalSobrevivido += tiempoSobrevivido;
+
+        PersistenceManager.SaveData(data);
+
+        Debug.Log($"[Estadísticas] Guardadas: Partidas={data.partidasJugadas}, TiempoTotal={data.tiempoTotalSobrevivido:F1}s (+{tiempoSobrevivido:F1}s)");
     }
 }

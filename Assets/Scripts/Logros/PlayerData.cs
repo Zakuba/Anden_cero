@@ -4,6 +4,9 @@ using System.Collections.Generic;
 [Serializable]
 public class PlayerData
 {
+    // Estadísticas acumulativas
+    public int partidasJugadas = 0;             // NUEVO: Total de partidas acumuladas
+    public float tiempoTotalSobrevivido = 0f;     // NUEVO: Tiempo acumulado en segundos (todos los modos excepto minijuego)
     public string nombreJugador;
     public string avatarBase64 = "";
     // Contadores de estadísticas
