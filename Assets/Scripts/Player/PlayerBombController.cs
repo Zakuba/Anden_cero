@@ -78,6 +78,12 @@ public class PlayerBombController : NetworkBehaviour
     {
         if (!IsOwner) return;
 
+        // Si estamos en el minijuego, anular cualquier intento de plantar bombas
+        if (MiniJuegoManager.Instance != null && !MiniJuegoManager.Instance.IsGameActive)
+        {
+            return;
+        }
+
         if (stateManager != null &&
             stateManager.currentState.Value != PlayerState.Vivo)
             return;

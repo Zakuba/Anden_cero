@@ -72,6 +72,9 @@ public class MiniJuegoManager : MonoBehaviour
     private Vector3 lastPlayerPosition;
     private float stationaryTimer = 0f;
 
+    // Propiedad pública para consultar el estado desde los scripts del jugador
+    public bool IsGameActive => isGameActive;
+
     private void Awake()
     {
         if (Instance == null) Instance = this;
@@ -160,14 +163,28 @@ public class MiniJuegoManager : MonoBehaviour
             }
         }
 
-        // Aplicar animación de lobby del punto asignado
-        if (localPlayer != null && lobbySpawnPoint != null)
+        if (localPlayer != null)
         {
-            LobbySpawnPoint lsp = lobbySpawnPoint.GetComponent<LobbySpawnPoint>();
-            PlayerCharacterVisual visual = localPlayer.GetComponent<PlayerCharacterVisual>();
-            if (lsp != null && visual != null)
+            // 1. Apagar el plantado de bombas desde el momento del lobby
+            PlayerBombController bombController = localPlayer.GetComponent<PlayerBombController>();
+            if (bombController != null)
             {
-                visual.SetLobbyAnimation(lsp.LobbyAnimation);
+                bombController.enabled = false;
+            }
+
+            // 2. Apagar el CharacterController mientras espera
+            CharacterController cc = localPlayer.GetComponent<CharacterController>();
+            if (cc != null) cc.enabled = false;
+
+            // 3. Animación de espera
+            if (lobbySpawnPoint != null)
+            {
+                LobbySpawnPoint lsp = lobbySpawnPoint.GetComponent<LobbySpawnPoint>();
+                PlayerCharacterVisual visual = localPlayer.GetComponent<PlayerCharacterVisual>();
+                if (lsp != null && visual != null)
+                {
+                    visual.SetLobbyAnimation(lsp.LobbyAnimation);
+                }
             }
         }
     }

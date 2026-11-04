@@ -30,6 +30,12 @@ public class PlayerBatMechanic : NetworkBehaviour
     {
         if (!IsOwner) return;
 
+        // Si estamos en la escena del minijuego y aún no se inició la partida, bloquear bateo
+        if (MiniJuegoManager.Instance != null && !MiniJuegoManager.Instance.IsGameActive)
+        {
+            return;
+        }
+
         if (MatchManager.Instance != null && !MatchManager.Instance.IsMatchRunning) return;
         if (stateManager != null && stateManager.currentState.Value != PlayerState.Vivo) return;
 

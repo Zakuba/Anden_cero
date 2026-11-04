@@ -80,6 +80,13 @@ public class PlayerMovimientoOnline : NetworkBehaviour
 
     private void Update()
     {
+        // Si estamos en la escena del minijuego y aún no se presionó empezar, no mover al jugador
+        if (MiniJuegoManager.Instance != null && !MiniJuegoManager.Instance.IsGameActive)
+        {
+            movementInput = Vector3.zero;
+            return;
+        }
+
         // 1. Si el juego está pausado, ignoramos todo input. En primera persona se libera el cursor.
         if (PauseManager.IsGamePaused)
         {
