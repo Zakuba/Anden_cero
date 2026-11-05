@@ -132,6 +132,13 @@ public class PerimeterCollapse : NetworkBehaviour
                 player.TakeDamageServerRpc();
             }
         }
+
+         // Drones: contacto con la zona = mueren (igual que con una explosión)
+        foreach (var drone in FindObjectsByType<DroneBomberAI>(FindObjectsSortMode.None))
+        {
+            if (IsInCollapsedCell(drone.transform.position))
+                drone.TakeDamage();
+        }
     }
 
     private bool IsInCollapsedCell(Vector3 p)
