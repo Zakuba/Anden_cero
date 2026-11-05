@@ -24,7 +24,7 @@ public class HostSessionUI : MonoBehaviour
         TMP_Text label = stopServerButton.GetComponentInChildren<TMP_Text>();
         if (label != null)
         {
-            label.text = isHost ? "Detener Servidor" : "Desconectar";
+            label.text = isHost ? "Salir de Partida" : "Salir de Partida";
         }
 
         if (waitingIndicator != null)
