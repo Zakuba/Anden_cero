@@ -457,6 +457,16 @@ private void OnClientDisconnectedEquipos(ulong clientId)
 {
     if (equipos.Remove(clientId))
         PublicarEquipos();
+
+    // Si se fue en plena partida, lo sacamos de la lista
+    // y revisamos si ya quedó un ganador.
+    registeredPlayers.RemoveAll(p => p == null || p.OwnerClientId == clientId);
+
+    if (matchStarted.Value && !matchEnded && !checkScheduled)
+    {
+        checkScheduled = true;
+        StartCoroutine(CheckVictoryNextFrame());
+    }
 }
 
 
