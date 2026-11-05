@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 3463362646219364689}
   - component: {fileID: 4391632415698409567}
   - component: {fileID: 4307239054857432225}
+  - component: {fileID: 9008230770958251784}
   m_Layer: 0
   m_Name: Pre_D5
   m_TagString: Destructible
@@ -112,3 +113,19 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1.7967334, y: 1.6374925, z: 1.7768781}
   m_Center: {x: 0, y: 0.81874627, z: -0.00000014901161}
+--- !u!208 &9008230770958251784
+NavMeshObstacle:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8924405287751649696}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Shape: 1
+  m_Extents: {x: 0.5, y: 0.81900007, z: 0.5}
+  m_MoveThreshold: 0.1
+  m_Carve: 1
+  m_CarveOnlyStationary: 1
+  m_Center: {x: 0, y: 0.81900007, z: 0}
+  m_TimeToStationary: 0.5

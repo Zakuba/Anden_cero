@@ -483,6 +483,7 @@ GameObject:
   - component: {fileID: 12773386250832174}
   - component: {fileID: 1099037814452948023}
   - component: {fileID: 6231932104397955299}
+  - component: {fileID: -1097364107285002381}
   m_Layer: 0
   m_Name: Pre_ND4
   m_TagString: Indestructible
@@ -612,6 +613,22 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 7.81221, y: 7.667, z: 17.396294}
   m_Center: {x: -0.49131116, y: 4.2373257, z: -0.0339584}
+--- !u!208 &-1097364107285002381
+NavMeshObstacle:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3006937139290097833}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Shape: 1
+  m_Extents: {x: 3.108, y: 3.834, z: 10}
+  m_MoveThreshold: 0.1
+  m_Carve: 1
+  m_CarveOnlyStationary: 1
+  m_Center: {x: 0, y: 4.237, z: -2.1980002}
+  m_TimeToStationary: 0.5
 --- !u!1 &3368005474921735288
 GameObject:
   m_ObjectHideFlags: 0

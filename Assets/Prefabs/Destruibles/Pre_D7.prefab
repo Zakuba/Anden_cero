@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 5815757284551246368}
   - component: {fileID: 353634658092884725}
   - component: {fileID: 8281862042952980889}
+  - component: {fileID: 232829423074567987}
   m_Layer: 0
   m_Name: Pre_D7
   m_TagString: Destructible
@@ -112,3 +113,19 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1.7307589, y: 1.7151022, z: 1.7199842}
   m_Center: {x: -0.42820236, y: 0.8575511, z: -0.43135315}
+--- !u!208 &232829423074567987
+NavMeshObstacle:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1123414176545157544}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Shape: 1
+  m_Extents: {x: 0.5, y: 0.85800004, z: 0.5}
+  m_MoveThreshold: 0.1
+  m_Carve: 1
+  m_CarveOnlyStationary: 1
+  m_Center: {x: -0.42800003, y: 0.85800004, z: -0.43100002}
+  m_TimeToStationary: 0.5
