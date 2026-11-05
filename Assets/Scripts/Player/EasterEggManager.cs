@@ -62,40 +62,48 @@ public class EasterEggManager : NetworkBehaviour
         swapped.OnValueChanged -= OnSwappedChanged;
     }
 
-    // Lo llama el servidor cuando el jugador gana sin colocar bombas.
-    public void TriggerFromServer()
+ public void TriggerFromServer(Transform podiumPoint)
+{
+    if (!IsServer || swapped.Value)
+        return;
+
+    Vector3 pos = transform.position;
+    Quaternion rot = transform.rotation;
+    int anim = 0;
+
+    if (podiumPoint != null)
     {
-        if (!IsServer || swapped.Value)
-            return;
+        pos = podiumPoint.position;
+        rot = podiumPoint.rotation;
 
-        // Primero generamos la copia visual en todos los clientes.
-        CreatePodiumVisualRpc();
-
-        // Después activamos el estado del easter egg.
-        swapped.Value = true;
-
-        // Finalmente, trasladamos al jugador real.
-        TriggerOwnerRpc();
+        LobbySpawnPoint spawnPoint = podiumPoint.GetComponent<LobbySpawnPoint>();
+        if (spawnPoint != null)
+            anim = spawnPoint.LobbyAnimation;
     }
+
+    // Primero generamos la copia visual en el podio, en todos los clientes.
+    CreatePodiumVisualRpc(pos, rot, anim);
+
+    swapped.Value = true;
+
+    TriggerOwnerRpc();
+}
 
     // ---------- COPIA VISUAL DEL PODIO ----------
 
-    [Rpc(SendTo.ClientsAndHost)]
-    private void CreatePodiumVisualRpc()
+[Rpc(SendTo.ClientsAndHost)]
+private void CreatePodiumVisualRpc(Vector3 pos, Quaternion rot, int animationIndex)
+{
+    PlayerCharacterVisual visual = GetComponent<PlayerCharacterVisual>();
+
+    if (visual == null)
     {
-        PlayerCharacterVisual visual =
-            GetComponent<PlayerCharacterVisual>();
-
-        if (visual == null)
-        {
-            Debug.LogWarning(
-                "[EasterEgg] No se encontró PlayerCharacterVisual."
-            );
-            return;
-        }
-
-        visual.CreatePodiumVisualCopy();
+        Debug.LogWarning("[EasterEgg] No se encontró PlayerCharacterVisual.");
+        return;
     }
+
+    visual.CreatePodiumVisualCopy(pos, rot, animationIndex);
+}
 
     // ---------- TELETRANSPORTE DEL GANADOR ----------
 

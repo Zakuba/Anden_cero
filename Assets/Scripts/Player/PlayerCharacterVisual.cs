@@ -213,7 +213,7 @@ public class PlayerCharacterVisual : NetworkBehaviour
 
     // ---------- COPIA VISUAL DEL PODIO ----------
 
-    public void CreatePodiumVisualCopy()
+    public void CreatePodiumVisualCopy(Vector3 position, Quaternion rotation, int animationIndex)
     {
         // Evita duplicar el modelo si el método se llama más de una vez.
         if (podiumVisualCopy != null)
@@ -256,11 +256,14 @@ public class PlayerCharacterVisual : NetworkBehaviour
         }
 
         // Copiamos solamente el contenedor visual, no el Player completo.
+        Vector3 copyPos = position + rotation * modelsRoot.localPosition;
+        Quaternion copyRot = rotation * modelsRoot.localRotation;
+
         podiumVisualCopy = Instantiate(
             modelsRoot.gameObject,
-            modelsRoot.position,
-            modelsRoot.rotation
-        );
+            copyPos,
+            copyRot
+);
 
         podiumVisualCopy.name =
             "PodiumVisual_" + OwnerClientId;
@@ -303,7 +306,7 @@ public class PlayerCharacterVisual : NetworkBehaviour
         {
             copiedAnimator.SetInteger(
                 "LobbyAnimation",
-                lobbyAnimationIndex.Value
+                animationIndex
             );
         }
 

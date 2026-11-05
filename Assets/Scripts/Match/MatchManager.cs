@@ -655,12 +655,11 @@ if (modoEquipos)
                 winner.AwardInvincibleSurvivorAchievementClientRpc();
             }
 
-            TeleportPlayersToResultPositions(winner);
-
-            // Comprobamos y activamos el easter egg antes de anunciar
-            // los resultados. El resultado indica al cliente ganador
-            // si debe omitir la pantalla de resultados.
+            // Primero comprobamos el easter egg. Si se activa, el jugador real
+            // no va al podio: en su lugar queda la copia visual.
             bool winnerHasEasterEgg = TryTriggerEasterEgg(winner);
+
+TeleportPlayersToResultPositions(winner, winnerHasEasterEgg);
 
             AnnounceResultClientRpc(
                 winner.OwnerClientId,
@@ -713,7 +712,7 @@ if (modoEquipos)
             "Se activa el easter egg y se omitirá su pantalla de resultados."
         );
 
-        egg.TriggerFromServer();
+        egg.TriggerFromServer(puntoVictoria);
         return true;
     }
 
@@ -863,15 +862,17 @@ private void AnnounceTeamResultClientRpc(int equipoGanador)
     // ---------- Posiciones de resultados ----------
 
     private void TeleportPlayersToResultPositions(
-        PlayerStateManager winner)
+    PlayerStateManager winner,
+    bool saltarGanador = false)
     {
         if (!IsServer || winner == null)
             return;
 
         Debug.Log("Intentando teletransportar jugadores a resultados.");
 
-        // El ganador siempre va al punto de victoria.
-        TeleportPlayerToPoint(winner, puntoVictoria);
+        // El ganador va al punto de victoria, salvo que haya activado el easter egg.
+        if (!saltarGanador)
+              TeleportPlayerToPoint(winner, puntoVictoria);
 
         // Los perdedores se ordenan según el momento en que fueron eliminados.
         Transform[] defeatPoints =
