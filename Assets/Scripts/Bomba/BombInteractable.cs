@@ -37,6 +37,23 @@ public class BombInteractable : NetworkBehaviour
         isMoving.Value = true;
     }
 
+    /// <summary>
+    /// Comprueba si la bomba está apoyada en el suelo antes de permitir el bateo.
+    /// </summary>
+    public bool IsGrounded()
+    {
+        // El centro de la bomba está a +0.5m del suelo. Lanzamos un rayo hacia abajo de 0.65m.
+        Vector3 origin = transform.position + Vector3.up * 0.1f;
+        if (Physics.Raycast(origin, Vector3.down, out RaycastHit hit, 0.65f, ~0, QueryTriggerInteraction.Ignore))
+        {
+            if (hit.collider.gameObject != gameObject && !hit.collider.isTrigger)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
     private void Update()
     {
         if (!IsServer || !isMoving.Value) return;
@@ -55,17 +72,15 @@ public class BombInteractable : NetworkBehaviour
         }
     }
 
-private void SnapToFloorBelow()
-{
-    // Lanza el rayo hacia abajo partiendo desde el centro de la bomba
-    Vector3 origin = transform.position + Vector3.up * 0.1f;
-    if (Physics.Raycast(origin, Vector3.down, out RaycastHit hit, 6f, ~0, QueryTriggerInteraction.Ignore))
+    private void SnapToFloorBelow()
     {
-        if (hit.collider.gameObject != gameObject)
+        Vector3 origin = transform.position + Vector3.up * 0.1f;
+        if (Physics.Raycast(origin, Vector3.down, out RaycastHit hit, 6f, ~0, QueryTriggerInteraction.Ignore))
         {
-            // hit.point.y es la superficie del suelo; sumamos 0.5f para que la bomba no se entierre al caer
-            transform.position = new Vector3(transform.position.x, hit.point.y + 0.5f, transform.position.z);
+            if (hit.collider.gameObject != gameObject)
+            {
+                transform.position = new Vector3(transform.position.x, hit.point.y + 0.5f, transform.position.z);
+            }
         }
     }
-}
 }

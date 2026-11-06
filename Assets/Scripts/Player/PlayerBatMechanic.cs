@@ -71,6 +71,13 @@ private void TryBatLocal()
                 continue;
             }
 
+            // NUEVA VALIDACIÓN: Si la bomba está cayendo o en el aire, se ignora
+            if (!bomb.IsGrounded())
+            {
+                Debug.LogWarning("[Bat-Local] Descartada: la bomba está en el aire.");
+                continue;
+            }
+
             float verticalDiff = Mathf.Abs(bomb.transform.position.y - (transform.position.y - 1f));
             if (verticalDiff > 2.5f)
             {
@@ -140,6 +147,9 @@ private void RequestBatBombServerRpc(NetworkObjectReference bombRef, Vector3 dir
 
     BombInteractable bomb = bombNetObj.GetComponent<BombInteractable>();
     if (bomb == null || bomb.isMoving.Value) return;
+
+    // NUEVA VALIDACIÓN EN SERVIDOR: Rechazar si no está en el suelo o ya se está moviendo
+    if (bomb == null || bomb.isMoving.Value || !bomb.IsGrounded()) return;
 
     Vector3 diff = bomb.transform.position - transform.position;
     diff.y = 0;
