@@ -65,7 +65,7 @@ public class WaveHUD : MonoBehaviour
         lastWave = wave;
 
         if (waveText != null)
-            waveText.text = "Oleada " + wave;
+            waveText.text = "- Oleada " + wave;
     }
 
     private void UpdateEnemies(int count)
@@ -74,7 +74,7 @@ public class WaveHUD : MonoBehaviour
         lastEnemies = count;
 
         if (enemiesText != null)
-            enemiesText.text = "Enemigos: " + count;
+            enemiesText.text = "- Enemigos: " + count;
     }
 
         private void UpdateTimer(WaveManager wm)
@@ -85,7 +85,7 @@ public class WaveHUD : MonoBehaviour
         if (total == lastTimerSeconds) return;
         lastTimerSeconds = total;
 
-        timerText.text = string.Format("{0:00}:{1:00}", total / 60, total % 60);
+        timerText.text = string.Format("- Tiempo: " + "{0:00}:{1:00}", total / 60, total % 60);
     }
 
     private void UpdateBanner(WaveManager wm, WavePhase phase)
@@ -100,7 +100,7 @@ public class WaveHUD : MonoBehaviour
             if (seconds != lastCountdown || lastPhase != WavePhase.Rest)
             {
                 lastCountdown = seconds;
-                bannerText.text = "Oleada " + wm.CurrentWave + " en " + seconds + " s";
+                bannerText.text = "- Oleada " + wm.CurrentWave + " en " + seconds + " s";
             }
 
             bannerText.gameObject.SetActive(true);
@@ -112,7 +112,7 @@ public class WaveHUD : MonoBehaviour
         {
             lastCountdown = -1;
             combatBannerUntil = Time.time + combatBannerSeconds;
-            bannerText.text = "¡Oleada " + wm.CurrentWave + "!";
+            bannerText.text = "- ¡Oleada " + wm.CurrentWave + "!";
         }
 
         bannerText.gameObject.SetActive(Time.time < combatBannerUntil);
@@ -130,7 +130,7 @@ public class WaveHUD : MonoBehaviour
         lastDifficulty = wm.Difficulty;
 
         SurvivalDifficultyProfile profile = wm.GetProfile(wm.Difficulty);
-        difficultyText.text = "Dificultad: " +
+        difficultyText.text = "- Dificultad: " +
             (profile != null ? profile.displayName : wm.Difficulty.ToString());
     }
 }
