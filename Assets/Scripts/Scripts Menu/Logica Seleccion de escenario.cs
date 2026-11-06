@@ -15,7 +15,8 @@ public class SelectorEscenario : MonoBehaviour
     {
         "Andén Central",
         "Túneles y Vías",
-        "Sala de Control"
+        "Sala de Control",
+        "MiniJuego"
     };
 
     [Header("Fondos de los Escenarios")]
@@ -65,6 +66,13 @@ public class SelectorEscenario : MonoBehaviour
         CambiarEscenarioConEstatica();
     }
 
+    public void seleccionEscenarioMiniJuego(){
+        if (escenarios.Length == 0) return;
+
+        indiceActual = 3;
+
+        CambiarEscenarioConEstatica();
+    }
 
     public void SiguienteEscenario()
     {

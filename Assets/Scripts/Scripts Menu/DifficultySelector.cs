@@ -12,7 +12,7 @@ public class DifficultySelector : MonoBehaviour
     [Tooltip("Color del gráfico del botón elegido. Con blanco no se tiñe.")]
     [SerializeField] private Color selectedColor = Color.white;
     [Tooltip("Color de los botones no elegidos.")]
-    [SerializeField] private Color unselectedColor = new Color(1f, 1f, 1f, 0.6f);
+    [SerializeField] private Color unselectedColor = new Color(1f, 1f, 1f, 1f);
     [Tooltip("Escala del botón elegido (1 = sin cambio).")]
     [SerializeField] private float selectedScale = 1.1f;
 

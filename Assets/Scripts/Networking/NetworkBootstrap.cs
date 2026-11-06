@@ -10,9 +10,6 @@ public class NetworkBootstrap : MonoBehaviour
     [Header("Botón iniciar juego")]
     [SerializeField] private Button hostButton;
 
-    [Header("Botón Minijuego")]
-    [SerializeField] private Button minijuegoButton;
-
     [Header("Selector de escenario")]
     [SerializeField] private SelectorEscenario selectorEscenario;
 
@@ -31,16 +28,11 @@ public class NetworkBootstrap : MonoBehaviour
         {
             hostButton.onClick.AddListener(OnHostClicked);
         }
-
-        if (minijuegoButton != null)
-        {
-            minijuegoButton.onClick.AddListener(OnMinijuegoClicked);
-        }
     }
 
     private void Start()
     {
-        if (usarRelay && (hostButton != null || minijuegoButton != null))
+        if (usarRelay && hostButton != null)
         {
             StartCoroutine(EsperarServicios());
         }
@@ -48,11 +40,10 @@ public class NetworkBootstrap : MonoBehaviour
 
     private IEnumerator EsperarServicios()
     {
-        // Los botones quedan apagados hasta que Unity Services esté listo
+        // El botón queda apagado hasta que Unity Services esté listo
         if (hostButton != null) hostButton.interactable = false;
-        if (minijuegoButton != null) minijuegoButton.interactable = false;
 
-        // Esperamos como máximo 8 segundos para no dejar los botones muertos
+        // Esperamos como máximo 8 segundos para no dejar el botón muerto
         float espera = 0f;
         while (!UnityServicesInitializer.IsReady && espera < 8f)
         {
@@ -61,7 +52,6 @@ public class NetworkBootstrap : MonoBehaviour
         }
 
         if (hostButton != null) hostButton.interactable = true;
-        if (minijuegoButton != null) minijuegoButton.interactable = true;
 
         if (!UnityServicesInitializer.IsReady)
         {
@@ -146,53 +136,6 @@ public class NetworkBootstrap : MonoBehaviour
 
             GUIUtility.systemCopyBuffer = joinCode;
             Debug.Log("Código de sala (copiado al portapapeles): " + joinCode);
-        }
-
-        IniciarHostYCargarEscena(mapaSeleccionado);
-    }
-
-    private async void OnMinijuegoClicked()
-    {
-        if (mensajeErrorSala != null)
-        {
-            mensajeErrorSala.gameObject.SetActive(false);
-        }
-
-        if (NetworkManager.Singleton == null)
-        {
-            Debug.LogError("No se encontró el NetworkManager en la escena.");
-            return;
-        }
-
-        if (!NetworkManager.Singleton.NetworkConfig.EnableSceneManagement)
-        {
-            Debug.LogWarning(
-                "Enable Scene Management debe estar tildado " +
-                "en el NetworkManager para cargar escenas en red."
-            );
-        }
-
-        string mapaSeleccionado = "MiniJuego";
-        Debug.Log("Mapa seleccionado: " + mapaSeleccionado);
-
-        ConfigurarCallbackConexion();
-
-        if (usarRelay)
-        {
-            minijuegoButton.interactable = false;
-
-            string joinCode = await RelayManager.CreateRelay(MatchManager.MaxPlayers - 1);
-
-            if (this == null) return;
-
-            minijuegoButton.interactable = true;
-
-            if (string.IsNullOrEmpty(joinCode))
-            {
-                MostrarErrorSala("No se pudo crear la sala online. Revisá tu conexión a internet.");
-                return;
-            }
-
         }
 
         IniciarHostYCargarEscena(mapaSeleccionado);
