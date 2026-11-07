@@ -28,8 +28,6 @@ public class TutorialMenuController : MonoBehaviour
     [SerializeField] private TMP_Text titleText;
     [SerializeField] private TMP_Text descriptionText;
 
-    [Header("Cierre")]
-    [SerializeField] private bool closeWithEscape = true;
     [Tooltip("Se invoca con el botón Volver y con ESC. Configurar acá: apagar este panel y prender el menú principal.")]
     [SerializeField] private UnityEvent onCloseRequested;
 
@@ -77,7 +75,6 @@ public class TutorialMenuController : MonoBehaviour
 
     private void Update()
     {
-        if (closeWithEscape && EscapePressed()) RequestClose();
     }
 
     // ---------------------------------------------------------------- API pública
@@ -230,16 +227,5 @@ public class TutorialMenuController : MonoBehaviour
         if (reference != null) return true;
         Debug.LogError($"[Tutorial] Falta asignar '{fieldName}' en {name}.", this);
         return false;
-    }
-
-    // Compatible con el Input Manager clásico y con el nuevo Input System.
-    private static bool EscapePressed()
-    {
-#if ENABLE_INPUT_SYSTEM && !ENABLE_LEGACY_INPUT_MANAGER
-        return UnityEngine.InputSystem.Keyboard.current != null
-            && UnityEngine.InputSystem.Keyboard.current.escapeKey.wasPressedThisFrame;
-#else
-        return Input.GetKeyDown(KeyCode.Escape);
-#endif
     }
 }

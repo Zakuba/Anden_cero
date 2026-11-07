@@ -28635,6 +28635,10 @@ PrefabInstance:
       propertyPath: m_AnchorMax.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1517238061049269273, guid: e25ad569e77cd3b42a334c6034920200, type: 3}
+      propertyPath: m_text
+      value: TUTORIAL
+      objectReference: {fileID: 0}
     - target: {fileID: 2514330587444272174, guid: e25ad569e77cd3b42a334c6034920200, type: 3}
       propertyPath: m_AnchorMax.x
       value: 0
@@ -28671,6 +28675,10 @@ PrefabInstance:
       propertyPath: videoPlayer
       value: 
       objectReference: {fileID: 1031651005}
+    - target: {fileID: 6823811979126774578, guid: e25ad569e77cd3b42a334c6034920200, type: 3}
+      propertyPath: closeWithEscape
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8838253357103731182, guid: e25ad569e77cd3b42a334c6034920200, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
