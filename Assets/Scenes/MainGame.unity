@@ -22517,12 +22517,16 @@ PrefabInstance:
       value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 4101285175671802608, guid: 4d4c679d21400084e87954f8d4319a26, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4101285175671802608, guid: 4d4c679d21400084e87954f8d4319a26, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 530.3
+      value: 515
       objectReference: {fileID: 0}
     - target: {fileID: 4101285175671802608, guid: 4d4c679d21400084e87954f8d4319a26, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 429
+      value: 400
       objectReference: {fileID: 0}
     - target: {fileID: 4210397853580490690, guid: 4d4c679d21400084e87954f8d4319a26, type: 3}
       propertyPath: m_SizeDelta.x
@@ -22802,9 +22806,7 @@ PrefabInstance:
       objectReference: {fileID: 21300000, guid: e8204f79d51361d4da0fbc84555ac6e6, type: 3}
     - target: {fileID: 8287007710773813441, guid: 4d4c679d21400084e87954f8d4319a26, type: 3}
       propertyPath: m_text
-      value: 'FPS: ---
-
-        PING:------'
+      value: 'FPS: --- PING:------'
       objectReference: {fileID: 0}
     - target: {fileID: 8448841585960942331, guid: 4d4c679d21400084e87954f8d4319a26, type: 3}
       propertyPath: m_Camera
