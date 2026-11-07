@@ -15,5 +15,5 @@ MonoBehaviour:
   buttonLabel: Corazones
   title: Vidas de los Jugadores
   description: "Cada jugador cuenta con corazones, cada vez que reciben da\xF1o se
-    les rompe un corazon. Al llegar a 0 corazones mueren. "
+    les rompe un corazon y es aturdido por un segundo. "
   clip: {fileID: 0}

@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2acfd618851f3aa4d9aa7235ee61d1e6, type: 3}
+  m_Name: TutorialSection 9
+  m_EditorClassIdentifier: Assembly-CSharp::TutorialSectionSO
+  buttonLabel: Sanador
+  title: Dron Aliado Sanador
+  description: El unico dron aliado, el dron sanador se mueve por las casillas y
+    deja hamburguesas que curan una vida al jugador. Pero puede morir.
+  clip: {fileID: 32900000, guid: 89e3b555c498211428cd178fc01b70b2, type: 3}
