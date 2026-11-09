@@ -16,4 +16,4 @@ MonoBehaviour:
   title: Drones
   description: "Hay drones que recorren los escenarios. Estos pueden morir al recibir
     una exploci\xF3n de la bomba del jugador."
-  clip: {fileID: 32900000, guid: 89e3b555c498211428cd178fc01b70b2, type: 3}
+  clip: {fileID: 32900000, guid: 4fc20ac78915ddb479b2b19129e997a3, type: 3}

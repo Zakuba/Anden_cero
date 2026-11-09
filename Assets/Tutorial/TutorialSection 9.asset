@@ -16,4 +16,4 @@ MonoBehaviour:
   title: Dron Aliado Sanador
   description: El unico dron aliado, el dron sanador se mueve por las casillas y
     deja hamburguesas que curan una vida al jugador. Pero puede morir.
-  clip: {fileID: 32900000, guid: 89e3b555c498211428cd178fc01b70b2, type: 3}
+  clip: {fileID: 32900000, guid: 16b79ce1af3fa7e48aa7b29792ffc5c0, type: 3}

@@ -16,4 +16,4 @@ MonoBehaviour:
   title: Cierre de Perimetro
   description: "En el modo Battle Royale, el perimetro se ir\xE1 reduciendo. Si un
     jugador toca el perimetro, pierde una vida."
-  clip: {fileID: 32900000, guid: 89e3b555c498211428cd178fc01b70b2, type: 3}
+  clip: {fileID: 32900000, guid: ff5f0f2ea7b09414ba964e5a85d737cf, type: 3}

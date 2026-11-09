@@ -16,4 +16,4 @@ MonoBehaviour:
   title: Dron Bombardero
   description: "Los drones Bombarderos recorren las casillas y dejan bombas que da\xF1an
     a los jugadores."
-  clip: {fileID: 32900000, guid: 89e3b555c498211428cd178fc01b70b2, type: 3}
+  clip: {fileID: 32900000, guid: e5a98e761cd12f641bae608afdb2ba1f, type: 3}
