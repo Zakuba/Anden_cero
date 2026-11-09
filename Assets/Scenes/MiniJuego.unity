@@ -4362,7 +4362,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6365417209341764381, guid: 092faa92201d17a418f4a16e6e33df4b, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8571575373697758297, guid: 092faa92201d17a418f4a16e6e33df4b, type: 3}
       propertyPath: m_Enabled
@@ -12792,7 +12792,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1122379108
 Transform:
   m_ObjectHideFlags: 0
@@ -16176,7 +16176,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 26590386546668718, guid: d293970ab05ffd44dba80939076fa9c0, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2563392057035156470, guid: d293970ab05ffd44dba80939076fa9c0, type: 3}
       propertyPath: lobbyAnimation
@@ -25660,7 +25660,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1904381047541616693, guid: a3b744c071f35dc48aafd24f50b70308, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4526262321807008753, guid: a3b744c071f35dc48aafd24f50b70308, type: 3}
       propertyPath: m_LocalPosition.x
