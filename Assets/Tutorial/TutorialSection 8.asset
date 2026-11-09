@@ -16,4 +16,4 @@ MonoBehaviour:
   title: Dron Fusilero
   description: Los drones Fusileros patrullan las casillas, cuando detectan a un
     jugador empiezan a perseguirlo y disparale.
-  clip: {fileID: 32900000, guid: 89e3b555c498211428cd178fc01b70b2, type: 3}
+  clip: {fileID: 32900000, guid: 7b40324864114274c906abedbede3879, type: 3}
