@@ -15,4 +15,4 @@ MonoBehaviour:
   buttonLabel: Movimiento
   title: Movimiento
   description: Los jugadores pueden moverse con las teclas <WASD> por el escenario.
-  clip: {fileID: 32900000, guid: 89e3b555c498211428cd178fc01b70b2, type: 3}
+  clip: {fileID: 32900000, guid: 120898a74726d3d48af5d2137de6407f, type: 3}

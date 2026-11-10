@@ -16,4 +16,4 @@ MonoBehaviour:
   title: PowerUps
   description: Al romper una caja, pueden aparecer PowerUps en el piso. Al pasar
     por encima, los jugadores lo recogen se activan por 15s.
-  clip: {fileID: 32900000, guid: 89e3b555c498211428cd178fc01b70b2, type: 3}
+  clip: {fileID: 32900000, guid: 45c5f2aef1aada94f94e634b19bc5cae, type: 3}

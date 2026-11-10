@@ -15,4 +15,4 @@ MonoBehaviour:
   buttonLabel: BombaExtra
   title: Bomba Extra
   description: El jugador puede poner DOS bombas en lugar de solo UNA.
-  clip: {fileID: 32900000, guid: 89e3b555c498211428cd178fc01b70b2, type: 3}
+  clip: {fileID: 32900000, guid: ec69becc69ba9394687f9944f91741bc, type: 3}

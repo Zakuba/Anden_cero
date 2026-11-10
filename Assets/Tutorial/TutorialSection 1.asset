@@ -16,4 +16,4 @@ MonoBehaviour:
   title: Colocar Bombas
   description: "Los jugadores pueden colocar bombas con la tecla <ESPACIO>. Estas
     explotan pasado unos segundos y hacen da\xF1o."
-  clip: {fileID: 0}
+  clip: {fileID: 32900000, guid: 51ff5c254e76f7e459a72402c2f1b5df, type: 3}

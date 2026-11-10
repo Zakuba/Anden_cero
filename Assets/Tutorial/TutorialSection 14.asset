@@ -15,4 +15,4 @@ MonoBehaviour:
   buttonLabel: Expansor
   title: "Expansor de Explosi\xF3n"
   description: "La explosi\xF3n de la bomba se expande una casilla m\xE1s."
-  clip: {fileID: 32900000, guid: 89e3b555c498211428cd178fc01b70b2, type: 3}
+  clip: {fileID: 32900000, guid: 33c8b5cd779c8744eb4fb33c8ad2d3e5, type: 3}

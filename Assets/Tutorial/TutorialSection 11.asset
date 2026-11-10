@@ -15,4 +15,4 @@ MonoBehaviour:
   buttonLabel: Guante
   title: Guante de Empuje
   description: El Guante aumenta el empuje del bateo a 2 casillas.
-  clip: {fileID: 32900000, guid: 89e3b555c498211428cd178fc01b70b2, type: 3}
+  clip: {fileID: 32900000, guid: 33517755aedb0444ba1834f1b860189f, type: 3}

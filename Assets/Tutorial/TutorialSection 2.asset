@@ -16,4 +16,4 @@ MonoBehaviour:
   title: Batero de Bombas
   description: Con la tecla <E> se pueden batear las bombas colocadas o las de los
     rivales para moverlos de casilla.
-  clip: {fileID: 0}
+  clip: {fileID: 32900000, guid: 3ead6599085e2224eab854b3f4c9535b, type: 3}

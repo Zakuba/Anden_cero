@@ -15,4 +15,4 @@ MonoBehaviour:
   buttonLabel: Escudo
   title: "Escudo Antida\xF1o"
   description: "El escudo ignora el da\xF1o de un ataque."
-  clip: {fileID: 32900000, guid: 89e3b555c498211428cd178fc01b70b2, type: 3}
+  clip: {fileID: 32900000, guid: 234645d708695ad449e680e2671541a0, type: 3}

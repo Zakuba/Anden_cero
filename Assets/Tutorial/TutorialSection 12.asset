@@ -15,4 +15,4 @@ MonoBehaviour:
   buttonLabel: Botas
   title: Botas de Velocidad
   description: Las botas aumentan la velocidad del jugador.
-  clip: {fileID: 32900000, guid: 89e3b555c498211428cd178fc01b70b2, type: 3}
+  clip: {fileID: 32900000, guid: c9f1f2befdab0344a90d5ca02a60081e, type: 3}
