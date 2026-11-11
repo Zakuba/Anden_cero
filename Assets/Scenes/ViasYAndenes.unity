@@ -36460,7 +36460,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6030919849349125509, guid: 4f6ea2c54a86e7a48b158c12f51502ea, type: 3}
       propertyPath: layoutsCajas.Array.size
-      value: 3
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 6030919849349125509, guid: 4f6ea2c54a86e7a48b158c12f51502ea, type: 3}
       propertyPath: 'spawnPoints.Array.data[0]'
@@ -36490,6 +36490,10 @@ PrefabInstance:
       propertyPath: 'layoutsCajas.Array.data[0]'
       value: 
       objectReference: {fileID: 1392372549}
+    - target: {fileID: 6030919849349125509, guid: 4f6ea2c54a86e7a48b158c12f51502ea, type: 3}
+      propertyPath: 'layoutsCajas.Array.data[1]'
+      value: 
+      objectReference: {fileID: 1586415865}
     - target: {fileID: 6030919849349125509, guid: 4f6ea2c54a86e7a48b158c12f51502ea, type: 3}
       propertyPath: lobbySpawnPoints.Array.size
       value: 4
