@@ -14,6 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::TutorialSectionSO
   buttonLabel: Perimetro
   title: Cierre de Perimetro
-  description: "En el modo Battle Royale, el perimetro se ir\xE1 reduciendo. Si un
-    jugador toca el perimetro, pierde una vida."
+  description: "En el modo Battle Royale, el per\xEDmetro se ir\xE1 reduciendo. Si
+    un jugador toca el perimetro, pierde una vida."
   clip: {fileID: 32900000, guid: ff5f0f2ea7b09414ba964e5a85d737cf, type: 3}
