@@ -1,4 +1,3 @@
-
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -52,7 +51,7 @@ public class MatchManager : NetworkBehaviour
     private int nextSpawnAlfa;
     private int nextSpawnBeta;
 
-   
+
     // Copias mezcladas de los puntos de spawn (se rehacen en cada partida)
     private List<Transform> spawnsMezclados = new List<Transform>();
     private List<Transform> alfaMezclados = new List<Transform>();
@@ -60,50 +59,79 @@ public class MatchManager : NetworkBehaviour
 
     private static List<Transform> Mezclar(Transform[] origen)
     {
-    var lista = new List<Transform>();
-    if (origen == null) return lista;
+        var lista = new List<Transform>();
+        if (origen == null) return lista;
 
-    foreach (var t in origen)
-        if (t != null) lista.Add(t);
+        foreach (var t in origen)
+            if (t != null) lista.Add(t);
 
-    // Fisher-Yates
-    for (int i = lista.Count - 1; i > 0; i--)
-    {
-        int j = Random.Range(0, i + 1);
-        (lista[i], lista[j]) = (lista[j], lista[i]);
+        // Fisher-Yates
+        for (int i = lista.Count - 1; i > 0; i--)
+        {
+            int j = Random.Range(0, i + 1);
+            (lista[i], lista[j]) = (lista[j], lista[i]);
+        }
+        return lista;
     }
-    return lista;
-}
 
 
     [Header("Layouts de cajas")]
-[SerializeField] private GameObject[] layoutsCajas;
+    [SerializeField] private GameObject[] layoutsCajas;
 
-private readonly NetworkVariable<int> layoutCajasIndex =
-    new NetworkVariable<int>(
-        -1,
-        NetworkVariableReadPermission.Everyone,
-        NetworkVariableWritePermission.Server
-    );
+    private readonly NetworkVariable<int> layoutCajasIndex =
+        new NetworkVariable<int>(
+            -1,
+            NetworkVariableReadPermission.Everyone,
+            NetworkVariableWritePermission.Server
+        );
 
     private static int ultimoLayoutCajas = -1;
 
-private void OnLayoutCajasChanged(int anterior, int nuevo)
-{
-    AplicarLayoutCajas(nuevo);
-}
-
-private void AplicarLayoutCajas(int indice)
-{
-    if (layoutsCajas == null || indice < 0) return;
-    Debug.Log($"[Cajas] Layout activo: {indice}");
-
-    for (int i = 0; i < layoutsCajas.Length; i++)
+    private void OnLayoutCajasChanged(int anterior, int nuevo)
     {
-        if (layoutsCajas[i] != null)
-            layoutsCajas[i].SetActive(i == indice);
+        AplicarLayoutCajas(nuevo);
     }
-}
+
+    private void AplicarLayoutCajas(int indice)
+    {
+        if (layoutsCajas == null || indice < 0) return;
+        Debug.Log($"[Cajas] Layout activo: {indice}");
+
+        for (int i = 0; i < layoutsCajas.Length; i++)
+        {
+            if (layoutsCajas[i] != null)
+                layoutsCajas[i].SetActive(i == indice);
+        }
+    }
+
+
+    // ---------- Ambiente (día / noche) ----------
+
+    [Header("Ambiente (día / noche)")]
+    [SerializeField] private GameObject ambienteDia;
+    [SerializeField] private GameObject ambienteNoche;
+
+    // false = día, true = noche
+    private readonly NetworkVariable<bool> esDeNoche =
+        new NetworkVariable<bool>(
+            false,
+            NetworkVariableReadPermission.Everyone,
+            NetworkVariableWritePermission.Server
+        );
+
+    private void OnEsDeNocheChanged(bool anterior, bool nuevo)
+    {
+        AplicarAmbiente(nuevo);
+    }
+
+    private void AplicarAmbiente(bool noche)
+    {
+        // Siempre uno activo y el otro no: nunca los dos, nunca ninguno.
+        if (ambienteDia != null) ambienteDia.SetActive(!noche);
+        if (ambienteNoche != null) ambienteNoche.SetActive(noche);
+
+        Debug.Log($"[Ambiente] {(noche ? "Noche" : "Día")}");
+    }
 
 
 
@@ -171,102 +199,114 @@ private void AplicarLayoutCajas(int indice)
         ActivarLobbyCamera();
     }
 
-   public override void OnNetworkSpawn()
-{
-    JoinsClosed = false;
-
-    if (resultsPanel != null)
-        resultsPanel.SetActive(false);
-
-    matchStarted.OnValueChanged += OnMatchStartedChanged;
-
-layoutCajasIndex.OnValueChanged += OnLayoutCajasChanged;
-
-if (IsServer && layoutsCajas != null && layoutsCajas.Length > 0)
-{
-    int nuevo = Random.Range(0, layoutsCajas.Length);
-
-    // Si hay más de uno, evitamos repetir el layout anterior
-    if (layoutsCajas.Length > 1 && nuevo == ultimoLayoutCajas)
-        nuevo = (nuevo + 1 + Random.Range(0, layoutsCajas.Length - 1)) % layoutsCajas.Length;
-
-    ultimoLayoutCajas = nuevo;
-    layoutCajasIndex.Value = nuevo;
-}
-
-AplicarLayoutCajas(layoutCajasIndex.Value);
-    if (startMatchButton != null)
+    public override void OnNetworkSpawn()
     {
-        startMatchButton.onClick.AddListener(OnStartButtonClicked);
-        startMatchButton.gameObject.SetActive(
-            IsHost && !matchStarted.Value
-        );
-        startMatchButton.interactable = false;
-    }
+        JoinsClosed = false;
 
-    if (waitingText != null)
-        waitingText.SetActive(IsHost && !matchStarted.Value);
+        if (resultsPanel != null)
+            resultsPanel.SetActive(false);
 
-    if (waitingForHostText != null)
-        waitingForHostText.SetActive(!IsHost && !matchStarted.Value);
+        matchStarted.OnValueChanged += OnMatchStartedChanged;
 
-    // El host ve el código de sala mientras espera.
-    if (roomCodeText != null)
-    {
-        bool mostrarCodigo = IsHost
-            && !matchStarted.Value
-            && !string.IsNullOrEmpty(RelayManager.JoinCodeActual);
+        // ----- Layouts de cajas -----
+        layoutCajasIndex.OnValueChanged += OnLayoutCajasChanged;
 
-        roomCodeText.gameObject.SetActive(mostrarCodigo);
+        if (IsServer && layoutsCajas != null && layoutsCajas.Length > 0)
+        {
+            int nuevo = Random.Range(0, layoutsCajas.Length);
 
-        if (mostrarCodigo)
-            roomCodeText.text =
-                "Código de sala: " + RelayManager.JoinCodeActual;
-    }
+            // Si hay más de uno, evitamos repetir el layout anterior
+            if (layoutsCajas.Length > 1 && nuevo == ultimoLayoutCajas)
+                nuevo = (nuevo + 1 + Random.Range(0, layoutsCajas.Length - 1)) % layoutsCajas.Length;
 
-    // Equipos: escuchar cambios y limpiar al desconectarse un cliente.
-    equiposTexto.OnValueChanged += OnEquiposTextoChanged;
-if (!IsServer)
-    ReconstruirEquipos(equiposTexto.Value.ToString()); // para quien entra con el estado ya armado
-    if (IsServer)
-        NetworkManager.OnClientDisconnectCallback += OnClientDisconnectedEquipos;
+            ultimoLayoutCajas = nuevo;
+            layoutCajasIndex.Value = nuevo;
+        }
 
-    if (IsServer)
-    {
-        foreach (var p in FindObjectsByType<PlayerStateManager>(
+        AplicarLayoutCajas(layoutCajasIndex.Value);
+
+        // ----- Ambiente (día / noche) -----
+        // Orden: primero suscribirse, después elige el servidor, al final aplicar el valor actual.
+        esDeNoche.OnValueChanged += OnEsDeNocheChanged;
+
+        if (IsServer)
+            esDeNoche.Value = Random.value < 0.5f;
+
+        AplicarAmbiente(esDeNoche.Value);
+
+        if (startMatchButton != null)
+        {
+            startMatchButton.onClick.AddListener(OnStartButtonClicked);
+            startMatchButton.gameObject.SetActive(
+                IsHost && !matchStarted.Value
+            );
+            startMatchButton.interactable = false;
+        }
+
+        if (waitingText != null)
+            waitingText.SetActive(IsHost && !matchStarted.Value);
+
+        if (waitingForHostText != null)
+            waitingForHostText.SetActive(!IsHost && !matchStarted.Value);
+
+        // El host ve el código de sala mientras espera.
+        if (roomCodeText != null)
+        {
+            bool mostrarCodigo = IsHost
+                && !matchStarted.Value
+                && !string.IsNullOrEmpty(RelayManager.JoinCodeActual);
+
+            roomCodeText.gameObject.SetActive(mostrarCodigo);
+
+            if (mostrarCodigo)
+                roomCodeText.text =
+                    "Código de sala: " + RelayManager.JoinCodeActual;
+        }
+
+        // Equipos: escuchar cambios y limpiar al desconectarse un cliente.
+        equiposTexto.OnValueChanged += OnEquiposTextoChanged;
+        if (!IsServer)
+            ReconstruirEquipos(equiposTexto.Value.ToString()); // para quien entra con el estado ya armado
+        if (IsServer)
+            NetworkManager.OnClientDisconnectCallback += OnClientDisconnectedEquipos;
+
+        if (IsServer)
+        {
+            foreach (var p in FindObjectsByType<PlayerStateManager>(
+                         FindObjectsSortMode.None))
+            {
+                RegisterPlayer(p);
+            }
+        }
+
+        // Conectar los jugadores existentes en cada cliente.
+        foreach (PlayerStateManager player in
+                 FindObjectsByType<PlayerStateManager>(
                      FindObjectsSortMode.None))
         {
-            RegisterPlayer(p);
+            if (player != null)
+                player.ConectarMatchManager(this);
         }
     }
 
-    // Conectar los jugadores existentes en cada cliente.
-    foreach (PlayerStateManager player in
-             FindObjectsByType<PlayerStateManager>(
-                 FindObjectsSortMode.None))
+    public override void OnNetworkDespawn()
     {
-        if (player != null)
-            player.ConectarMatchManager(this);
+        matchStarted.OnValueChanged -= OnMatchStartedChanged;
+
+        layoutCajasIndex.OnValueChanged -= OnLayoutCajasChanged;
+        esDeNoche.OnValueChanged -= OnEsDeNocheChanged;
+        equiposTexto.OnValueChanged -= OnEquiposTextoChanged;
+        if (NetworkManager.Singleton != null)
+            NetworkManager.Singleton.OnClientDisconnectCallback -= OnClientDisconnectedEquipos;
+
+        if (startMatchButton != null)
+            startMatchButton.onClick.RemoveListener(OnStartButtonClicked);
+
+        JoinsClosed = false;
+
+        if (Instance == this)
+            Instance = null;
     }
-}
-
- public override void OnNetworkDespawn()
-{
-    matchStarted.OnValueChanged -= OnMatchStartedChanged;
-
-layoutCajasIndex.OnValueChanged -= OnLayoutCajasChanged;
-    equiposTexto.OnValueChanged -= OnEquiposTextoChanged;
-    if (NetworkManager.Singleton != null)
-        NetworkManager.Singleton.OnClientDisconnectCallback -= OnClientDisconnectedEquipos;
-
-    if (startMatchButton != null)
-        startMatchButton.onClick.RemoveListener(OnStartButtonClicked);
-
-    JoinsClosed = false;
-
-    if (Instance == this)
-        Instance = null;
-}
 
     private void OnMatchStartedChanged(bool oldValue, bool newValue)
     {
@@ -316,158 +356,158 @@ layoutCajasIndex.OnValueChanged -= OnLayoutCajasChanged;
         return registeredPlayers.Count;
     }
 
-private void RefreshStartButton()
-{
-    if (startMatchButton == null || matchStarted.Value)
-        return;
-
-    startMatchButton.interactable =
-        ConnectedPlayersCount() >= MinPlayersToStart &&
-        EquiposListosParaIniciar();
-}
-
-// ---------- Equipos ----------
-
-// Fuente de verdad en el servidor; en los clientes es una copia reconstruida.
-private readonly Dictionary<ulong, int> equipos = new Dictionary<ulong, int>();
-
-// El servidor publica todo el estado como un solo texto: "clientId:equipo,clientId:equipo"
-private readonly NetworkVariable<Unity.Collections.FixedString128Bytes> equiposTexto =
-    new NetworkVariable<Unity.Collections.FixedString128Bytes>(
-        default,
-        NetworkVariableReadPermission.Everyone,
-        NetworkVariableWritePermission.Server);
-
-public event System.Action EquiposChanged;
-
-public int GetEquipo(ulong clientId)
-{
-    return equipos.TryGetValue(clientId, out int e) ? e : -1;
-}
-
-public int ContarEquipo(int equipo)
-{
-    int n = 0;
-    foreach (var kv in equipos)
-        if (kv.Value == equipo) n++;
-    return n;
-}
-
-public List<ulong> ClientesDeEquipo(int equipo)
-{
-    var lista = new List<ulong>();
-    foreach (var kv in equipos)
-        if (kv.Value == equipo) lista.Add(kv.Key);
-    return lista;
-}
-
-// Devuelve true si los dos jugadores están en el mismo equipo (incluye comparar a un jugador consigo mismo).
-// Solo tiene efecto en el modo equipos; en los demás mapas siempre devuelve false.
-public bool EsMismoEquipo(ulong clientA, ulong clientB)
-{
-    if (!modoEquipos) return false;
-
-    int a = GetEquipo(clientA);
-    int b = GetEquipo(clientB);
-
-    return a != -1 && a == b;
-}
-
-// En el modo equipos hace falta al menos un jugador en cada equipo para iniciar.
-// En los demás mapas siempre devuelve true, así que nada cambia ahí.
-private bool EquiposListosParaIniciar()
-{
-    if (!modoEquipos) return true;
-
-    return ContarEquipo(0) >= 1 && ContarEquipo(1) >= 1;
-}
-
-// Solo servidor: escribe el estado completo y avisa a la interfaz.
-private void PublicarEquipos()
-{
-    var sb = new System.Text.StringBuilder();
-    foreach (var kv in equipos)
+    private void RefreshStartButton()
     {
-        if (sb.Length > 0) sb.Append(',');
-        sb.Append(kv.Key).Append(':').Append(kv.Value);
+        if (startMatchButton == null || matchStarted.Value)
+            return;
+
+        startMatchButton.interactable =
+            ConnectedPlayersCount() >= MinPlayersToStart &&
+            EquiposListosParaIniciar();
     }
-    equiposTexto.Value = sb.ToString();
-    EquiposChanged?.Invoke();
-    RefreshStartButton(); // <-- nueva
-}
 
-// En los clientes: reconstruye la copia local desde el texto.
-private void ReconstruirEquipos(string texto)
-{
-    equipos.Clear();
-    if (!string.IsNullOrEmpty(texto))
+    // ---------- Equipos ----------
+
+    // Fuente de verdad en el servidor; en los clientes es una copia reconstruida.
+    private readonly Dictionary<ulong, int> equipos = new Dictionary<ulong, int>();
+
+    // El servidor publica todo el estado como un solo texto: "clientId:equipo,clientId:equipo"
+    private readonly NetworkVariable<Unity.Collections.FixedString128Bytes> equiposTexto =
+        new NetworkVariable<Unity.Collections.FixedString128Bytes>(
+            default,
+            NetworkVariableReadPermission.Everyone,
+            NetworkVariableWritePermission.Server);
+
+    public event System.Action EquiposChanged;
+
+    public int GetEquipo(ulong clientId)
     {
-        foreach (string par in texto.Split(','))
+        return equipos.TryGetValue(clientId, out int e) ? e : -1;
+    }
+
+    public int ContarEquipo(int equipo)
+    {
+        int n = 0;
+        foreach (var kv in equipos)
+            if (kv.Value == equipo) n++;
+        return n;
+    }
+
+    public List<ulong> ClientesDeEquipo(int equipo)
+    {
+        var lista = new List<ulong>();
+        foreach (var kv in equipos)
+            if (kv.Value == equipo) lista.Add(kv.Key);
+        return lista;
+    }
+
+    // Devuelve true si los dos jugadores están en el mismo equipo (incluye comparar a un jugador consigo mismo).
+    // Solo tiene efecto en el modo equipos; en los demás mapas siempre devuelve false.
+    public bool EsMismoEquipo(ulong clientA, ulong clientB)
+    {
+        if (!modoEquipos) return false;
+
+        int a = GetEquipo(clientA);
+        int b = GetEquipo(clientB);
+
+        return a != -1 && a == b;
+    }
+
+    // En el modo equipos hace falta al menos un jugador en cada equipo para iniciar.
+    // En los demás mapas siempre devuelve true, así que nada cambia ahí.
+    private bool EquiposListosParaIniciar()
+    {
+        if (!modoEquipos) return true;
+
+        return ContarEquipo(0) >= 1 && ContarEquipo(1) >= 1;
+    }
+
+    // Solo servidor: escribe el estado completo y avisa a la interfaz.
+    private void PublicarEquipos()
+    {
+        var sb = new System.Text.StringBuilder();
+        foreach (var kv in equipos)
         {
-            string[] p = par.Split(':');
-            if (p.Length == 2 && ulong.TryParse(p[0], out ulong id) && int.TryParse(p[1], out int eq))
-                equipos[id] = eq;
+            if (sb.Length > 0) sb.Append(',');
+            sb.Append(kv.Key).Append(':').Append(kv.Value);
+        }
+        equiposTexto.Value = sb.ToString();
+        EquiposChanged?.Invoke();
+        RefreshStartButton(); // <-- nueva
+    }
+
+    // En los clientes: reconstruye la copia local desde el texto.
+    private void ReconstruirEquipos(string texto)
+    {
+        equipos.Clear();
+        if (!string.IsNullOrEmpty(texto))
+        {
+            foreach (string par in texto.Split(','))
+            {
+                string[] p = par.Split(':');
+                if (p.Length == 2 && ulong.TryParse(p[0], out ulong id) && int.TryParse(p[1], out int eq))
+                    equipos[id] = eq;
+            }
+        }
+        EquiposChanged?.Invoke();
+    }
+
+    private void OnEquiposTextoChanged(Unity.Collections.FixedString128Bytes anterior,
+                                       Unity.Collections.FixedString128Bytes nuevo)
+    {
+        if (IsServer) return; // el servidor ya tiene el estado correcto
+        ReconstruirEquipos(nuevo.ToString());
+    }
+
+    // Solo servidor: al entrar, va al equipo con menos jugadores.
+    private void AsignarEquipoInicial(ulong clientId)
+    {
+        if (!IsServer || !modoEquipos || equipos.ContainsKey(clientId)) return;
+
+        int equipo = ContarEquipo(0) <= ContarEquipo(1) ? 0 : 1;
+        equipos[clientId] = equipo;
+        PublicarEquipos();
+        Debug.Log($"[Equipos] Cliente {clientId} -> {(Equipo)equipo}");
+    }
+
+    // El jugador pide cambiar de equipo; el servidor valida.
+    [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Everyone)]
+    public void CambiarEquipoRpc(int equipo, RpcParams rpcParams = default)
+    {
+        if (!modoEquipos) return;
+
+        ulong clientId = rpcParams.Receive.SenderClientId;
+
+        if (matchStarted.Value) return;                  // ya empezó
+        if (equipo < 0 || equipo > 1) return;            // valor inválido
+        if (!equipos.ContainsKey(clientId)) return;      // jugador sin equipo
+        if (equipos[clientId] == equipo) return;         // ya está ahí
+        if (ContarEquipo(equipo) >= MaxPorEquipo)        // equipo lleno
+        {
+            Debug.Log($"[Equipos] {(Equipo)equipo} está lleno, rechazado el cambio de {clientId}");
+            return;
+        }
+
+        equipos[clientId] = equipo;
+        PublicarEquipos();
+        Debug.Log($"[Equipos] Cliente {clientId} cambió a {(Equipo)equipo}");
+    }
+
+    private void OnClientDisconnectedEquipos(ulong clientId)
+    {
+        if (equipos.Remove(clientId))
+            PublicarEquipos();
+
+        // Si se fue en plena partida, lo sacamos de la lista
+        // y revisamos si ya quedó un ganador.
+        registeredPlayers.RemoveAll(p => p == null || p.OwnerClientId == clientId);
+
+        if (matchStarted.Value && !matchEnded && !checkScheduled)
+        {
+            checkScheduled = true;
+            StartCoroutine(CheckVictoryNextFrame());
         }
     }
-    EquiposChanged?.Invoke();
-}
-
-private void OnEquiposTextoChanged(Unity.Collections.FixedString128Bytes anterior,
-                                   Unity.Collections.FixedString128Bytes nuevo)
-{
-    if (IsServer) return; // el servidor ya tiene el estado correcto
-    ReconstruirEquipos(nuevo.ToString());
-}
-
-// Solo servidor: al entrar, va al equipo con menos jugadores.
-private void AsignarEquipoInicial(ulong clientId)
-{
-    if (!IsServer || !modoEquipos || equipos.ContainsKey(clientId)) return;
-
-    int equipo = ContarEquipo(0) <= ContarEquipo(1) ? 0 : 1;
-    equipos[clientId] = equipo;
-    PublicarEquipos();
-    Debug.Log($"[Equipos] Cliente {clientId} -> {(Equipo)equipo}");
-}
-
-// El jugador pide cambiar de equipo; el servidor valida.
-[Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Everyone)]
-public void CambiarEquipoRpc(int equipo, RpcParams rpcParams = default)
-{
-    if (!modoEquipos) return;
-
-    ulong clientId = rpcParams.Receive.SenderClientId;
-
-    if (matchStarted.Value) return;                  // ya empezó
-    if (equipo < 0 || equipo > 1) return;            // valor inválido
-    if (!equipos.ContainsKey(clientId)) return;      // jugador sin equipo
-    if (equipos[clientId] == equipo) return;         // ya está ahí
-    if (ContarEquipo(equipo) >= MaxPorEquipo)        // equipo lleno
-    {
-        Debug.Log($"[Equipos] {(Equipo)equipo} está lleno, rechazado el cambio de {clientId}");
-        return;
-    }
-
-    equipos[clientId] = equipo;
-    PublicarEquipos();
-    Debug.Log($"[Equipos] Cliente {clientId} cambió a {(Equipo)equipo}");
-}
-
-private void OnClientDisconnectedEquipos(ulong clientId)
-{
-    if (equipos.Remove(clientId))
-        PublicarEquipos();
-
-    // Si se fue en plena partida, lo sacamos de la lista
-    // y revisamos si ya quedó un ganador.
-    registeredPlayers.RemoveAll(p => p == null || p.OwnerClientId == clientId);
-
-    if (matchStarted.Value && !matchEnded && !checkScheduled)
-    {
-        checkScheduled = true;
-        StartCoroutine(CheckVictoryNextFrame());
-    }
-}
 
 
     // ---------- Inicio de partida ----------
@@ -481,16 +521,16 @@ private void OnClientDisconnectedEquipos(ulong clientId)
     }
 
     private void StartMatch()
-{
-    if (matchStarted.Value ||
-        ConnectedPlayersCount() < MinPlayersToStart)
-        return;
-
-    if (!EquiposListosParaIniciar())
     {
-        Debug.Log("[Equipos] No se puede iniciar: falta al menos un jugador en cada equipo.");
-        return;
-    }
+        if (matchStarted.Value ||
+            ConnectedPlayersCount() < MinPlayersToStart)
+            return;
+
+        if (!EquiposListosParaIniciar())
+        {
+            Debug.Log("[Equipos] No se puede iniciar: falta al menos un jugador en cada equipo.");
+            return;
+        }
 
         JoinsClosed = true;
         eliminatedPlayers.Clear();
@@ -514,7 +554,7 @@ private void OnClientDisconnectedEquipos(ulong clientId)
                 continue;
 
             // Reiniciamos el rastreador de daño para la nueva partida
-            player.ResetMatchDamageTracker();    
+            player.ResetMatchDamageTracker();
 
             PlayerCharacterVisual visual =
                 player.GetComponent<PlayerCharacterVisual>();
@@ -601,44 +641,44 @@ private void OnClientDisconnectedEquipos(ulong clientId)
         // ---------- Modo Battle Royale ----------
         // ---------- Modo 2 vs 2 (por equipos) ----------
 
-if (modoEquipos)
-{
-    bool hayAlfa = false;
-    bool hayBeta = false;
-
-    foreach (PlayerStateManager p in alive)
-    {
-        int e = GetEquipo(p.OwnerClientId);
-        if (e == 0) hayAlfa = true;
-        else if (e == 1) hayBeta = true;
-    }
-
-    // Siguen vivos jugadores de los dos equipos: la partida continúa
-    if (hayAlfa && hayBeta)
-        yield break;
-
-    // Quedan vivos de un solo equipo: ese equipo gana
-    if (hayAlfa || hayBeta)
-    {
-        matchEnded = true;
-
-        int equipoGanador = hayAlfa ? 0 : 1;
-        Debug.Log($"[Equipos] Gana el equipo {(Equipo)equipoGanador}");
-
-        // Logro "Superviviente invencible" para los ganadores vivos que no recibieron daño
-        foreach (PlayerStateManager p in alive)
+        if (modoEquipos)
         {
-            if (!p.HasTakenDamageThisMatch)
-                p.AwardInvincibleSurvivorAchievementClientRpc();
+            bool hayAlfa = false;
+            bool hayBeta = false;
+
+            foreach (PlayerStateManager p in alive)
+            {
+                int e = GetEquipo(p.OwnerClientId);
+                if (e == 0) hayAlfa = true;
+                else if (e == 1) hayBeta = true;
+            }
+
+            // Siguen vivos jugadores de los dos equipos: la partida continúa
+            if (hayAlfa && hayBeta)
+                yield break;
+
+            // Quedan vivos de un solo equipo: ese equipo gana
+            if (hayAlfa || hayBeta)
+            {
+                matchEnded = true;
+
+                int equipoGanador = hayAlfa ? 0 : 1;
+                Debug.Log($"[Equipos] Gana el equipo {(Equipo)equipoGanador}");
+
+                // Logro "Superviviente invencible" para los ganadores vivos que no recibieron daño
+                foreach (PlayerStateManager p in alive)
+                {
+                    if (!p.HasTakenDamageThisMatch)
+                        p.AwardInvincibleSurvivorAchievementClientRpc();
+                }
+
+                TeleportPlayersToTeamResultPositions(equipoGanador);
+                AnnounceTeamResultClientRpc(equipoGanador);
+                yield break;
+            }
+
+            // Si no quedó nadie vivo, sigue el código de empate de abajo
         }
-
-        TeleportPlayersToTeamResultPositions(equipoGanador);
-        AnnounceTeamResultClientRpc(equipoGanador);
-        yield break;
-    }
-
-    // Si no quedó nadie vivo, sigue el código de empate de abajo
-}
 
         if (alive.Count == 1)
         {
@@ -659,7 +699,7 @@ if (modoEquipos)
             // no va al podio: en su lugar queda la copia visual.
             bool winnerHasEasterEgg = TryTriggerEasterEgg(winner);
 
-TeleportPlayersToResultPositions(winner, winnerHasEasterEgg);
+            TeleportPlayersToResultPositions(winner, winnerHasEasterEgg);
 
             AnnounceResultClientRpc(
                 winner.OwnerClientId,
@@ -836,34 +876,34 @@ TeleportPlayersToResultPositions(winner, winnerHasEasterEgg);
     }
 
     [Rpc(SendTo.ClientsAndHost)]
-private void AnnounceTeamResultClientRpc(int equipoGanador)
-{
-    matchEnded = true;
+    private void AnnounceTeamResultClientRpc(int equipoGanador)
+    {
+        matchEnded = true;
 
-    // GUARDADO DE ESTADÍSTICAS ACUMULADAS
-    GuardarEstadisticasPartidaLocal();
+        // GUARDADO DE ESTADÍSTICAS ACUMULADAS
+        GuardarEstadisticasPartidaLocal();
 
-    ActivarResultsCamera();
+        ActivarResultsCamera();
 
-    if (resultsPanel != null)
-        resultsPanel.SetActive(true);
+        if (resultsPanel != null)
+            resultsPanel.SetActive(true);
 
-    if (resultsText == null)
-        return;
+        if (resultsText == null)
+            return;
 
-    string nombreGanador = ((Equipo)equipoGanador).ToString();
-    int miEquipo = GetEquipo(NetworkManager.Singleton.LocalClientId);
+        string nombreGanador = ((Equipo)equipoGanador).ToString();
+        int miEquipo = GetEquipo(NetworkManager.Singleton.LocalClientId);
 
-    resultsText.text = miEquipo == equipoGanador
-        ? $"¡Ganó tu equipo!\nEquipo {nombreGanador}"
-        : $"Perdió tu equipo.\nGana el equipo {nombreGanador}";
-}
+        resultsText.text = miEquipo == equipoGanador
+            ? $"¡Ganó tu equipo!\nEquipo {nombreGanador}"
+            : $"Perdió tu equipo.\nGana el equipo {nombreGanador}";
+    }
 
     // ---------- Posiciones de resultados ----------
 
     private void TeleportPlayersToResultPositions(
-    PlayerStateManager winner,
-    bool saltarGanador = false)
+        PlayerStateManager winner,
+        bool saltarGanador = false)
     {
         if (!IsServer || winner == null)
             return;
@@ -872,7 +912,7 @@ private void AnnounceTeamResultClientRpc(int equipoGanador)
 
         // El ganador va al punto de victoria, salvo que haya activado el easter egg.
         if (!saltarGanador)
-              TeleportPlayerToPoint(winner, puntoVictoria);
+            TeleportPlayerToPoint(winner, puntoVictoria);
 
         // Los perdedores se ordenan según el momento en que fueron eliminados.
         Transform[] defeatPoints =
@@ -899,41 +939,41 @@ private void AnnounceTeamResultClientRpc(int equipoGanador)
     }
 
     private void TeleportPlayersToTeamResultPositions(int equipoGanador)
-{
-    if (!IsServer) return;
-
-    // Los dos del equipo ganador (vivos o caídos) van al podio de victoria
-    Transform[] winnerPoints =
     {
-        puntoVictoria,
-        puntoVictoria2 != null ? puntoVictoria2 : puntoVictoria
-    };
+        if (!IsServer) return;
 
-    int w = 0;
-    foreach (PlayerStateManager p in registeredPlayers)
-    {
-        if (p == null || GetEquipo(p.OwnerClientId) != equipoGanador)
-            continue;
+        // Los dos del equipo ganador (vivos o caídos) van al podio de victoria
+        Transform[] winnerPoints =
+        {
+            puntoVictoria,
+            puntoVictoria2 != null ? puntoVictoria2 : puntoVictoria
+        };
 
-        TeleportPlayerToPoint(p, winnerPoints[Mathf.Min(w, winnerPoints.Length - 1)]);
-        w++;
+        int w = 0;
+        foreach (PlayerStateManager p in registeredPlayers)
+        {
+            if (p == null || GetEquipo(p.OwnerClientId) != equipoGanador)
+                continue;
+
+            TeleportPlayerToPoint(p, winnerPoints[Mathf.Min(w, winnerPoints.Length - 1)]);
+            w++;
+        }
+
+        // El equipo perdedor va a los puntos de derrota, en orden de eliminación
+        Transform[] defeatPoints = { puntoDerrota1, puntoDerrota2, puntoDerrota3 };
+
+        int l = 0;
+        foreach (PlayerStateManager p in eliminatedPlayers)
+        {
+            if (p == null || GetEquipo(p.OwnerClientId) == equipoGanador)
+                continue;
+
+            if (l >= defeatPoints.Length) break;
+
+            TeleportPlayerToPoint(p, defeatPoints[l]);
+            l++;
+        }
     }
-
-    // El equipo perdedor va a los puntos de derrota, en orden de eliminación
-    Transform[] defeatPoints = { puntoDerrota1, puntoDerrota2, puntoDerrota3 };
-
-    int l = 0;
-    foreach (PlayerStateManager p in eliminatedPlayers)
-    {
-        if (p == null || GetEquipo(p.OwnerClientId) == equipoGanador)
-            continue;
-
-        if (l >= defeatPoints.Length) break;
-
-        TeleportPlayerToPoint(p, defeatPoints[l]);
-        l++;
-    }
-}
 
     private void TeleportPlayersToDrawPositions(
         List<PlayerStateManager> players)
@@ -1074,46 +1114,46 @@ private void AnnounceTeamResultClientRpc(int equipoGanador)
 
     // ---------- Spawns normales ----------
 
-private void AssignSpawn(PlayerStateManager player)
-{
-    var handler = player.GetComponent<PlayerSpawnHandler>();
-
-    if (handler == null)
-        return;
-
-    Transform point = null;
-
-    // Modo equipos: cada equipo aparece en su lado, en puntos al azar
-    if (modoEquipos)
+    private void AssignSpawn(PlayerStateManager player)
     {
-        int equipo = GetEquipo(player.OwnerClientId);
+        var handler = player.GetComponent<PlayerSpawnHandler>();
 
-        if (equipo == 0 && alfaMezclados.Count > 0)
-        {
-            point = alfaMezclados[nextSpawnAlfa % alfaMezclados.Count];
-            nextSpawnAlfa++;
-        }
-        else if (equipo == 1 && betaMezclados.Count > 0)
-        {
-            point = betaMezclados[nextSpawnBeta % betaMezclados.Count];
-            nextSpawnBeta++;
-        }
-    }
-
-    // Resto de mapas: todos los puntos mezclados
-    if (point == null)
-    {
-        if (spawnsMezclados.Count == 0)
+        if (handler == null)
             return;
 
-        point = spawnsMezclados[nextSpawnIndex % spawnsMezclados.Count];
-        nextSpawnIndex++;
-    }
+        Transform point = null;
 
-    StartCoroutine(
-        SendSpawnNextFrame(handler, point.position, point.rotation)
-    );
-}
+        // Modo equipos: cada equipo aparece en su lado, en puntos al azar
+        if (modoEquipos)
+        {
+            int equipo = GetEquipo(player.OwnerClientId);
+
+            if (equipo == 0 && alfaMezclados.Count > 0)
+            {
+                point = alfaMezclados[nextSpawnAlfa % alfaMezclados.Count];
+                nextSpawnAlfa++;
+            }
+            else if (equipo == 1 && betaMezclados.Count > 0)
+            {
+                point = betaMezclados[nextSpawnBeta % betaMezclados.Count];
+                nextSpawnBeta++;
+            }
+        }
+
+        // Resto de mapas: todos los puntos mezclados
+        if (point == null)
+        {
+            if (spawnsMezclados.Count == 0)
+                return;
+
+            point = spawnsMezclados[nextSpawnIndex % spawnsMezclados.Count];
+            nextSpawnIndex++;
+        }
+
+        StartCoroutine(
+            SendSpawnNextFrame(handler, point.position, point.rotation)
+        );
+    }
 
     [Rpc(SendTo.ClientsAndHost)]
     private void DisableCharacterControllerClientRpc(

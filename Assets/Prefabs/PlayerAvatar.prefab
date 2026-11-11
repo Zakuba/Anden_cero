@@ -993,6 +993,8 @@ MonoBehaviour:
   ShowTopMostFoldoutHeaderGroup: 1
   nameLabel: {fileID: 6299771097589838645}
   hideOwnTagAfterSwap: 1
+  colorAlfa: {r: 0.25, g: 0.6, b: 1, a: 1}
+  colorBeta: {r: 1, g: 0.55, b: 0.15, a: 1}
 --- !u!1 &6712508448699446590
 GameObject:
   m_ObjectHideFlags: 0
@@ -2003,7 +2005,8 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
-    m_RemovedGameObjects: []
+    m_RemovedGameObjects:
+    - {fileID: 1224857708587609581, guid: 36c152553dff99b41a0286357d4d7b6a, type: 3}
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 36c152553dff99b41a0286357d4d7b6a, type: 3}
