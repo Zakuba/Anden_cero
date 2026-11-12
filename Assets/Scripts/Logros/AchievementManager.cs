@@ -1,3 +1,4 @@
+
 using UnityEngine;
 using System.Collections.Generic;
 
@@ -6,15 +7,27 @@ public class AchievementManager : MonoBehaviour
     public static AchievementManager Instance;
 
     [Header("Catálogo de Logros")]
-    [Tooltip("Arrastra aquí los ScriptableObjects de tus logros creados.")]
+    [Tooltip("Arrastra aquí los ScriptableObjects de tus logros.")]
     [SerializeField] private List<AchievementSO> achievementsCatalog;
 
-    [Header("Objetos asociados al logro")]
-    [SerializeField] private string achievementId = "bateador_experto";
-    [SerializeField] private GameObject btnDesbloqueado;
-    [SerializeField] private GameObject objetoDesbloqueado;
-    [SerializeField] private GameObject btnBloqueado;
-    [SerializeField] private GameObject objetoBloqueado;
+    [System.Serializable]
+    public class AchievementVisuals
+    {
+        [Header("Identificación")]
+        public string achievementId;
+
+        [Header("Objetos del logro desbloqueado")]
+        public GameObject btnDesbloqueado;
+        public GameObject objetoDesbloqueado;
+
+        [Header("Objetos del logro bloqueado")]
+        public GameObject btnBloqueado;
+        public GameObject objetoBloqueado;
+    }
+
+    [Header("Configuración visual de logros")]
+    [Tooltip("Cada elemento representa un logro y sus objetos asociados.")]
+    [SerializeField] private List<AchievementVisuals> achievementsVisuals;
 
     private PlayerData currentData;
 
@@ -33,132 +46,156 @@ public class AchievementManager : MonoBehaviour
     private void Start()
     {
         currentData = PersistenceManager.LoadData();
-
         ActualizarObjetosLogro();
     }
-    // El récord de supervivencia lo guarda MatchManager por su cuenta.
-    // Lo releemos antes de guardar para no pisarlo con una copia vieja.
+
+    // ---------- GUARDADO ----------
+
     private void GuardarProgreso()
     {
-        // Recargar el récord desde el disco para no pisarlo con datos viejos
         PlayerData guardado = PersistenceManager.LoadData();
 
-        currentData.mejorTiempoSupervivencia = guardado.mejorTiempoSupervivencia;
-        currentData.mejorOleadaSupervivencia = guardado.mejorOleadaSupervivencia;
-        currentData.mejorTiempoParaOleada = guardado.mejorTiempoParaOleada;
+        currentData.mejorTiempoSupervivencia =
+            guardado.mejorTiempoSupervivencia;
+
+        currentData.mejorOleadaSupervivencia =
+            guardado.mejorOleadaSupervivencia;
+
+        currentData.mejorTiempoParaOleada =
+            guardado.mejorTiempoParaOleada;
 
         PersistenceManager.SaveData(currentData);
     }
 
-    /// <summary>
-    /// Llamado localmente cada vez que el jugador dueño batea una bomba.
-    /// </summary>
+    // ---------- ESTADÍSTICAS ----------
+
     public void AddBatStat()
     {
         currentData.bombsBatted++;
+
         CheckAchievement("bateador_experto", currentData.bombsBatted);
-        
-        // Guardamos el progreso incrementalmente
+
         GuardarProgreso();
     }
 
+    // ---------- COMPROBACIÓN DE LOGROS ----------
+
     private void CheckAchievement(string targetId, int currentAmount)
     {
-        // Si ya lo tiene desbloqueado, lo ignoramos
-        if (currentData.unlockedAchievements.Contains(targetId)) return;
+        if (currentData.unlockedAchievements.Contains(targetId))
+            return;
 
-        AchievementSO achievement = achievementsCatalog.Find(a => a.id == targetId);
-        
-        if (achievement != null && currentAmount >= achievement.targetGoal)
+        AchievementSO achievement =
+            achievementsCatalog.Find(a => a.id == targetId);
+
+        if (achievement != null &&
+            currentAmount >= achievement.targetGoal)
         {
             UnlockAchievement(achievement);
         }
     }
 
-private void UnlockAchievement(AchievementSO achievement)
+    // ---------- DESBLOQUEO ----------
+
+    private void UnlockAchievement(AchievementSO achievement)
     {
         currentData.unlockedAchievements.Add(achievement.id);
+
         GuardarProgreso();
 
         ActualizarObjetosLogro();
 
         if (NotificationManager.Instance != null)
         {
-            // Pasamos título y descripción
-            NotificationManager.Instance.ShowAchievement(achievement.title, achievement.description);
+            NotificationManager.Instance.ShowAchievement(
+                achievement.title,
+                achievement.description
+            );
         }
         else
         {
-            Debug.LogWarning("Logro obtenido: " + achievement.title + " (Falta NotificationManager en escena)");
+            Debug.LogWarning(
+                "Logro obtenido: " + achievement.title +
+                " (Falta NotificationManager en escena)"
+            );
         }
     }
 
-/// <summary>
-/// Método público para desbloquear logros usando directamente su ID (ej: "primera_baja").
-/// </summary>
+    /// <summary>
+    /// Desbloquea un logro directamente mediante su ID.
+    /// Ejemplo: UnlockAchievement("primera_baja");
+    /// </summary>
     public void UnlockAchievement(string targetId)
     {
         if (currentData == null)
             currentData = PersistenceManager.LoadData();
 
-        // Si ya está desbloqueado, lo descartamos
         if (currentData.unlockedAchievements.Contains(targetId))
             return;
 
-        // Busca el ScriptableObject en la lista que tenés en el Inspector
-        AchievementSO achievement = achievementsCatalog.Find(a => a.id == targetId);
+        AchievementSO achievement =
+            achievementsCatalog.Find(a => a.id == targetId);
 
         if (achievement != null)
         {
-            // Llama a tu método privado pasando el ScriptableObject
             UnlockAchievement(achievement);
         }
         else
         {
-            Debug.LogWarning($"[AchievementManager] No se encontró ningún logro en el catálogo con el id: {targetId}");
+            Debug.LogWarning(
+                $"[AchievementManager] No se encontró ningún logro " +
+                $"con el ID: {targetId}"
+            );
         }
     }
 
-private void ActualizarObjetosLogro()
-{
-    if (currentData == null) return;
+    // ---------- ACTUALIZACIÓN VISUAL ----------
 
-    bool desbloqueado = currentData.unlockedAchievements.Contains(achievementId);
-
-    if (objetoDesbloqueado != null)
+    private void ActualizarObjetosLogro()
     {
-        objetoDesbloqueado.SetActive(desbloqueado);
+        if (currentData == null)
+            return;
+
+        foreach (AchievementVisuals visual in achievementsVisuals)
+        {
+            if (visual == null)
+                continue;
+
+            bool desbloqueado =
+                currentData.unlockedAchievements.Contains(
+                    visual.achievementId
+                );
+
+            if (visual.objetoDesbloqueado != null)
+                visual.objetoDesbloqueado.SetActive(desbloqueado);
+
+            if (visual.btnDesbloqueado != null)
+                visual.btnDesbloqueado.SetActive(desbloqueado);
+
+            if (visual.objetoBloqueado != null)
+                visual.objetoBloqueado.SetActive(!desbloqueado);
+
+            if (visual.btnBloqueado != null)
+                visual.btnBloqueado.SetActive(!desbloqueado);
+        }
     }
 
-    if (btnDesbloqueado != null)
-    {
-        btnDesbloqueado.SetActive(desbloqueado);
-    }
-
-    if (objetoBloqueado != null)
-    {
-        objetoBloqueado.SetActive(!desbloqueado);
-    }
-
-    if (btnBloqueado != null)
-    {
-        btnBloqueado.SetActive(!desbloqueado);
-    }
-}
-
+    // ---------- DEBUG ----------
 
     private void Update()
     {
-        // Solo funciona en el Editor de Unity
 #if UNITY_EDITOR
         if (Input.GetKeyDown(KeyCode.F1))
         {
-            // Suma 50 bateos al instante para forzar el logro
             for (int i = 0; i < 50; i++)
             {
                 AddBatStat();
             }
-            Debug.Log("Logro forzado. Total actual: " + currentData.bombsBatted);
+
+            Debug.Log(
+                "Logro forzado. Total actual: " +
+                currentData.bombsBatted
+            );
         }
 #endif
     }
