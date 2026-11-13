@@ -1,5 +1,12 @@
 fileFormatVersion: 2
 guid: 691d717b499154e4dadbb4200ae82563
+AssetOrigin:
+  serializedVersion: 1
+  productId: 322860
+  packageName: '[FREE] Low Poly Sci-Fi Computers Demo - 4 Retro Sample Props'
+  packageVersion: 1.0
+  assetPath: Assets/Cosmic_Retro_Computer_1_FREE/Textures/CosmicRetroComputer_Texture_1.png
+  uploadId: 901952
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -67,20 +74,20 @@ TextureImporter:
   swizzle: 50462976
   cookieLightType: 0
   platformSettings:
-  - serializedVersion: 3
+  - serializedVersion: 4
     buildTarget: DefaultTexturePlatform
-    maxTextureSize: 32
+    maxTextureSize: 1024
     resizeAlgorithm: 0
     textureFormat: 3
     textureCompression: 0
     compressionQuality: 50
-    crunchedCompression: 0
+    crunchedCompression: 1
     allowsAlphaSplitting: 0
     overridden: 0
     ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
-  - serializedVersion: 3
+  - serializedVersion: 4
     buildTarget: Standalone
     maxTextureSize: 2048
     resizeAlgorithm: 0
@@ -93,10 +100,24 @@ TextureImporter:
     ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WebGL
+    maxTextureSize: 32
+    resizeAlgorithm: 0
+    textureFormat: 3
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
     sprites: []
     outline: []
+    customData: 
     physicsShape: []
     bones: []
     spriteID: 
@@ -106,16 +127,11 @@ TextureImporter:
     edges: []
     weights: []
     secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
     nameFileIdTable: {}
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
   assetBundleName: 
   assetBundleVariant: 
-AssetOrigin:
-  serializedVersion: 1
-  productId: 322860
-  packageName: '[FREE] Low Poly Sci-Fi Computers Demo - 4 Retro Sample Props'
-  packageVersion: 1.0
-  assetPath: Assets/Cosmic_Retro_Computer_1_FREE/Textures/CosmicRetroComputer_Texture_1.png
-  uploadId: 901952
