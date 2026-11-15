@@ -183,4 +183,13 @@ public class PlayerMovimientoOnline : NetworkBehaviour
         Vector3 finalVelocity = (moveDirection * effectiveSpeed) + (Vector3.up * verticalVelocity);
         controller.Move(finalVelocity * Time.deltaTime);
     }
+
+    private void OnControllerColliderHit(ControllerColliderHit hit)
+{
+    // Ignorar el suelo que pisamos
+    if (hit.normal.y > 0.7f) return;
+
+    Debug.LogWarning($"[Choque Puerta] Chocando contra: '{hit.gameObject.name}' | Padre: '{hit.transform.parent?.name}'");
+}
+
 }
