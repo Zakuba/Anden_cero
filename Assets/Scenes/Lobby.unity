@@ -24651,6 +24651,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1685728136}
     m_Modifications:
+    - target: {fileID: 407664100016102935, guid: 57ab80b865c24e5fa1de6a0734c04dd5, type: 3}
+      propertyPath: m_RenderMode
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1446479704125452240, guid: 57ab80b865c24e5fa1de6a0734c04dd5, type: 3}
       propertyPath: m_LocalScale.x
       value: 1.3147744
@@ -24706,6 +24710,10 @@ PrefabInstance:
     - target: {fileID: 3023045017317756691, guid: 57ab80b865c24e5fa1de6a0734c04dd5, type: 3}
       propertyPath: m_Name
       value: FX_Fire_Card_01
+      objectReference: {fileID: 0}
+    - target: {fileID: 8521461283547199737, guid: 57ab80b865c24e5fa1de6a0734c04dd5, type: 3}
+      propertyPath: InitialModule.maxNumParticles
+      value: 10
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
