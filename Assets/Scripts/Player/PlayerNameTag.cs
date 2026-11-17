@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using TMPro;
 using Unity.Collections;
 using Unity.Netcode;
@@ -23,6 +24,36 @@ private int ultimoEquipoAplicado = -2;
 
     private EasterEggManager swap;
 
+    // ---------- API pública: nombre de cualquier jugador por clientId ----------
+
+    // Todos los PlayerNameTag spawneados en esta instancia (host o cliente), por clientId dueño.
+    private static readonly Dictionary<ulong, PlayerNameTag> tags = new();
+    private ulong registeredId;
+
+    // Se dispara cuando aparece un jugador o cambia el nombre de alguno.
+    // Las pantallas que muestran nombres se suscriben para refrescarse.
+    public static event System.Action OnAnyNameChanged;
+
+    [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
+    private static void ResetStatics()
+    {
+        tags.Clear();
+        OnAnyNameChanged = null;
+    }
+
+    public static string FallbackName(ulong clientId) => $"Jugador {clientId + 1}";
+
+    // Nombre elegido por el jugador. Si todavía no llegó o no existe, devuelve "Jugador N".
+    public static string GetName(ulong clientId)
+    {
+        if (tags.TryGetValue(clientId, out PlayerNameTag tag) && tag != null)
+        {
+            string n = tag.playerName.Value.ToString();
+            if (!string.IsNullOrWhiteSpace(n)) return n;
+        }
+        return FallbackName(clientId);
+    }
+
     private void Awake()
 {
     swap = GetComponent<EasterEggManager>();
@@ -35,24 +66,32 @@ private int ultimoEquipoAplicado = -2;
     {
         playerName.OnValueChanged += OnNameChanged;
 
+        registeredId = OwnerClientId;
+        tags[registeredId] = this;
+
         if (IsOwner)
         {
             string saved = PersistenceManager.LoadData().nombreJugador;
-            if (string.IsNullOrWhiteSpace(saved)) saved = $"Jugador {OwnerClientId}";
+            if (string.IsNullOrWhiteSpace(saved)) saved = FallbackName(OwnerClientId);
             playerName.Value = saved.Trim();
         }
 
         Refresh(playerName.Value);
+        OnAnyNameChanged?.Invoke();
     }
 
     public override void OnNetworkDespawn()
     {
         playerName.OnValueChanged -= OnNameChanged;
+
+        if (tags.TryGetValue(registeredId, out PlayerNameTag actual) && actual == this)
+            tags.Remove(registeredId);
     }
 
     private void OnNameChanged(FixedString64Bytes oldValue, FixedString64Bytes newValue)
     {
         Refresh(newValue);
+        OnAnyNameChanged?.Invoke();
     }
 
     private void Refresh(FixedString64Bytes value)

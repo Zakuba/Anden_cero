@@ -36,6 +36,9 @@ public class SelectorEquipo : MonoBehaviour
 
         mm.EquiposChanged += Refrescar;
         mm.MatchStartedChanged += OnMatchStartedChanged;
+        
+        // 🚀 Suscribimos al evento para que se actualice cuando llegue el nombre tarde
+        PlayerNameTag.OnAnyNameChanged += Refrescar;
 
         panel.SetActive(true);
         Refrescar();
@@ -66,12 +69,15 @@ public class SelectorEquipo : MonoBehaviour
         var clientes = mm.ClientesDeEquipo(equipo);
         string t = $"{titulo} ({clientes.Count}/{MatchManager.MaxPorEquipo})";
         foreach (ulong id in clientes)
-            t += $"\nJugador {id + 1}" + (id == yo ? " (vos)" : "");
+            t += $"\n{PlayerNameTag.GetName(id)}" + (id == yo ? " (vos)" : "");
         return t;
     }
 
     private void OnDestroy()
     {
+        // 🧹 Limpiamos la suscripción al destruir el objeto
+        PlayerNameTag.OnAnyNameChanged -= Refrescar;
+
         if (mm == null) return;
         mm.EquiposChanged -= Refrescar;
         mm.MatchStartedChanged -= OnMatchStartedChanged;

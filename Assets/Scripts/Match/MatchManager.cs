@@ -867,7 +867,7 @@ public class MatchManager : NetworkBehaviour
             resultsText.text = "¡Ganaste!";
         else
             resultsText.text =
-                $"Perdiste. Jugador {winnerClientId} gana la partida.";
+                $"Perdiste. {PlayerNameTag.GetName(winnerClientId)} gana la partida.";
 
         if (!isDraw && winnerRef.TryGet(out NetworkObject winnerObj))
         {

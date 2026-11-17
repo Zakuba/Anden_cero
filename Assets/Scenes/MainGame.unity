@@ -47823,7 +47823,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6610401786560847455, guid: 74ff17e80f5460f41a7bee02e717d23b, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -89105,7 +89105,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &1025803565
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -89120,7 +89120,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.NetworkObject
   GlobalObjectIdHash: 2077160914
   InScenePlacedSourceGlobalObjectIdHash: 0
-  m_InScenePlacedDisabledByDefault: 1
+  m_InScenePlacedDisabledByDefault: 0
   DeferredDespawnTick: 0
   Ownership: 1
   AlwaysReplicateAsRoot: 0
@@ -155931,6 +155931,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 95e28ad10130bc34e8c50a3b6aa94316, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LuzAlarma
+  velocidadRotacion: 180
 --- !u!114 &1789237485
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -162680,6 +162681,77 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 4282421219620489292, guid: e2d98a84f7bc5234da3ec9787cd05a65, type: 3}
   m_PrefabInstance: {fileID: 317651971}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1853316847
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1853316850}
+  - component: {fileID: 1853316849}
+  - component: {fileID: 1853316848}
+  m_Layer: 0
+  m_Name: Box Volume
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1853316848
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1853316847}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 172515602e62fb746b5d573b38a5fe58, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.RenderPipelines.Core.Runtime::UnityEngine.Rendering.Volume
+  m_IsGlobal: 0
+  priority: 0
+  blendDistance: 1
+  weight: 1
+  sharedProfile: {fileID: 11400000, guid: 54b2148d27eb07d4490e1374a35996be, type: 2}
+--- !u!65 &1853316849
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1853316847}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 50.179035, y: 17.32734, z: 56.16462}
+  m_Center: {x: 9.83745, y: -16.43182, z: 9.684437}
+--- !u!4 &1853316850
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1853316847}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0.97, y: 22.201836, z: -0.62}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1854272825
 GameObject:
   m_ObjectHideFlags: 0
@@ -168355,7 +168427,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1917036122
 Transform:
   m_ObjectHideFlags: 0
@@ -191935,6 +192007,7 @@ SceneRoots:
   - {fileID: 574193558}
   - {fileID: 770462247}
   - {fileID: 484368190}
+  - {fileID: 1853316850}
   - {fileID: 1574839149}
   - {fileID: 1210185422}
   - {fileID: 309012924}
