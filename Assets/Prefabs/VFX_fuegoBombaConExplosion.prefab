@@ -144,6 +144,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7f2d74ee69a6132499bcc4dea0d256d8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FireHazard
+  attackerClientId: 999999
 --- !u!1001 &500151068836136407
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -207,6 +208,14 @@ PrefabInstance:
     - target: {fileID: 4248089855141994, guid: 2dc5347a44240ea4597cafb2d1d7c160, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 198267365771992106, guid: 2dc5347a44240ea4597cafb2d1d7c160, type: 3}
+      propertyPath: InitialModule.maxNumParticles
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 198603822557443130, guid: 2dc5347a44240ea4597cafb2d1d7c160, type: 3}
+      propertyPath: InitialModule.maxNumParticles
+      value: 20
       objectReference: {fileID: 0}
     - target: {fileID: 199514448747821932, guid: 2dc5347a44240ea4597cafb2d1d7c160, type: 3}
       propertyPath: m_Materials.Array.size
@@ -289,6 +298,14 @@ PrefabInstance:
     - target: {fileID: 4489549471446060, guid: a9f3cc968bdb1cd4d800ee747b078afc, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 198646264072700126, guid: a9f3cc968bdb1cd4d800ee747b078afc, type: 3}
+      propertyPath: InitialModule.maxNumParticles
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 198680998364678852, guid: a9f3cc968bdb1cd4d800ee747b078afc, type: 3}
+      propertyPath: InitialModule.maxNumParticles
+      value: 20
       objectReference: {fileID: 0}
     - target: {fileID: 199792694481075188, guid: a9f3cc968bdb1cd4d800ee747b078afc, type: 3}
       propertyPath: m_Materials.Array.size
