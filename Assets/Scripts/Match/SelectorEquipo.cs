@@ -54,7 +54,7 @@ public class SelectorEquipo : MonoBehaviour
         int miEquipo = mm.GetEquipo(yo);
 
         textoAlfa.text = ArmarTexto("EQUIPO ALFA", 0, yo);
-        textoBeta.text = ArmarTexto("EQUIPO BETA", 1, yo);
+        textoBeta.text = ArmarTexto("EQUIPO BRAVO", 1, yo);
 
         // Se puede cambiar solo a un equipo donde no estés y que no esté lleno.
         botonAlfa.interactable = miEquipo != 0 && mm.ContarEquipo(0) < MatchManager.MaxPorEquipo;
