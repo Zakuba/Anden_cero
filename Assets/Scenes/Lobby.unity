@@ -30025,7 +30025,7 @@ PrefabInstance:
     - target: {fileID: 831824961946009616, guid: c56d7696f9248984f910c57af59f0f58, type: 3}
       propertyPath: m_Mesh
       value: 
-      objectReference: {fileID: 4300000, guid: 348cbcfac5870634b9fdc3a01b80633a, type: 2}
+      objectReference: {fileID: 4300000, guid: 62c19e689244f5442bf5e5f0551ea9a5, type: 2}
     - target: {fileID: 1040623067239028085, guid: c56d7696f9248984f910c57af59f0f58, type: 3}
       propertyPath: m_Enabled
       value: 0
@@ -30187,6 +30187,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5211825258554112465, guid: c56d7696f9248984f910c57af59f0f58, type: 3}
+      propertyPath: m_Name
+      value: Ventilacion
+      objectReference: {fileID: 0}
+    - target: {fileID: 5211825258554112465, guid: c56d7696f9248984f910c57af59f0f58, type: 3}
       propertyPath: m_StaticEditorFlags
       value: 2147483647
       objectReference: {fileID: 0}
@@ -30232,7 +30236,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6004673816912533508, guid: c56d7696f9248984f910c57af59f0f58, type: 3}
       propertyPath: m_Enabled
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6685423586273614754, guid: c56d7696f9248984f910c57af59f0f58, type: 3}
       propertyPath: m_Enabled
