@@ -9836,6 +9836,11 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 1835001211714528853, guid: d6b56504304c325419b598fe3ddb95ed, type: 3}
   m_PrefabInstance: {fileID: 144343240}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &144579665 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8367195499770782567, guid: 4d4c679d21400084e87954f8d4319a26, type: 3}
+  m_PrefabInstance: {fileID: 532677399}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &144869801
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -34967,7 +34972,7 @@ PrefabInstance:
     - target: {fileID: 4400034087685668446, guid: 4d4c679d21400084e87954f8d4319a26, type: 3}
       propertyPath: 'heartIcons.Array.data[3]'
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 1541287105}
     - target: {fileID: 4400034087685668446, guid: 4d4c679d21400084e87954f8d4319a26, type: 3}
       propertyPath: brokenHeartIcons.Array.size
       value: 4
@@ -34987,7 +34992,7 @@ PrefabInstance:
     - target: {fileID: 4400034087685668446, guid: 4d4c679d21400084e87954f8d4319a26, type: 3}
       propertyPath: 'brokenHeartIcons.Array.data[3]'
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 144579665}
     - target: {fileID: 4716037800236175204, guid: 4d4c679d21400084e87954f8d4319a26, type: 3}
       propertyPath: m_Layer
       value: 5
