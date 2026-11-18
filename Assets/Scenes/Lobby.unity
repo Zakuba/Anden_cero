@@ -10448,7 +10448,7 @@ Light:
   m_InnerSpotAngle: 21.80208
   m_CookieSize2D: {x: 0.5, y: 0.5}
   m_Shadows:
-    m_Type: 0
+    m_Type: 1
     m_Resolution: -1
     m_CustomResolution: -1
     m_Strength: 1
@@ -12562,7 +12562,7 @@ Light:
   m_InnerSpotAngle: 21.80208
   m_CookieSize2D: {x: 0.5, y: 0.5}
   m_Shadows:
-    m_Type: 0
+    m_Type: 1
     m_Resolution: -1
     m_CustomResolution: -1
     m_Strength: 1
@@ -24214,7 +24214,7 @@ Light:
   m_InnerSpotAngle: 62.016266
   m_CookieSize2D: {x: 0.5, y: 0.5}
   m_Shadows:
-    m_Type: 0
+    m_Type: 1
     m_Resolution: -1
     m_CustomResolution: -1
     m_Strength: 1
@@ -30008,7 +30008,7 @@ PrefabInstance:
       objectReference: {fileID: 4300000, guid: e2402ac8551b7724c9466bd21f2c4f85, type: 2}
     - target: {fileID: 1302206530961251079, guid: c56d7696f9248984f910c57af59f0f58, type: 3}
       propertyPath: m_Shadows.m_Type
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1362553271050176630, guid: c56d7696f9248984f910c57af59f0f58, type: 3}
       propertyPath: m_Enabled
@@ -30044,7 +30044,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4352342352618820020, guid: c56d7696f9248984f910c57af59f0f58, type: 3}
       propertyPath: m_Shadows.m_Type
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4583989969223378583, guid: c56d7696f9248984f910c57af59f0f58, type: 3}
       propertyPath: m_Enabled
@@ -30056,7 +30056,7 @@ PrefabInstance:
       objectReference: {fileID: 568177787}
     - target: {fileID: 5104319497847294012, guid: c56d7696f9248984f910c57af59f0f58, type: 3}
       propertyPath: m_Shadows.m_Type
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5286257632468234840, guid: c56d7696f9248984f910c57af59f0f58, type: 3}
       propertyPath: InitialModule.maxNumParticles
@@ -30072,6 +30072,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5958120270475619506, guid: c56d7696f9248984f910c57af59f0f58, type: 3}
       propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5994830843495499031, guid: c56d7696f9248984f910c57af59f0f58, type: 3}
+      propertyPath: m_Shadows.m_Type
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6740009141369647395, guid: c56d7696f9248984f910c57af59f0f58, type: 3}
