@@ -5135,7 +5135,7 @@ Light:
   m_GameObject: {fileID: 140909850}
   m_Enabled: 1
   serializedVersion: 13
-  m_Type: 2
+  m_Type: 0
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_Intensity: 36.82
   m_Range: 10
@@ -14841,7 +14841,7 @@ Light:
   m_GameObject: {fileID: 402056413}
   m_Enabled: 1
   serializedVersion: 13
-  m_Type: 2
+  m_Type: 0
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_Intensity: 36.82
   m_Range: 10
@@ -23489,7 +23489,7 @@ Light:
   m_GameObject: {fileID: 636518900}
   m_Enabled: 1
   serializedVersion: 13
-  m_Type: 2
+  m_Type: 0
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_Intensity: 36.82
   m_Range: 10
@@ -48801,7 +48801,7 @@ Light:
   m_GameObject: {fileID: 1216459979}
   m_Enabled: 1
   serializedVersion: 13
-  m_Type: 2
+  m_Type: 0
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_Intensity: 36.82
   m_Range: 10
@@ -57525,6 +57525,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6670246625801441325, guid: 9254dfdeef19c8d41954872dd2fa5bd5, type: 3}
       propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7247501731008219210, guid: 9254dfdeef19c8d41954872dd2fa5bd5, type: 3}
+      propertyPath: m_Type
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7247501731008219210, guid: 9254dfdeef19c8d41954872dd2fa5bd5, type: 3}
@@ -82428,6 +82432,10 @@ PrefabInstance:
     - target: {fileID: 6099201246641287363, guid: cf61fa18617b84044a7a5e27d47719dc, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7216218997755327258, guid: cf61fa18617b84044a7a5e27d47719dc, type: 3}
+      propertyPath: m_Shadows.m_Type
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 7002272496811574237, guid: cf61fa18617b84044a7a5e27d47719dc, type: 3}
