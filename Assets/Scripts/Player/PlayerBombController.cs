@@ -832,4 +832,14 @@ private void TrySpawnPowerUpDrop(Vector3 boxPosition)
     {
         activeBombs = count;
     }
+
+    public void ResetForNewMatchServer()
+    {
+        if (!IsServer) return;
+
+        StopAllCoroutines();
+        activeBombs = 0;
+        BombsPlacedThisMatch = 0;
+        UpdateBombCountClientRpc(0);
+    }
 }

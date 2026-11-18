@@ -16,10 +16,12 @@ public class PauseManager : MonoBehaviour
 
     private void Awake()
     {
-        if (_instance == null)
-            _instance = this;
-        else
-            Destroy(gameObject);
+        _instance = this;
+    }
+
+    private void OnDestroy()
+    {
+        if (_instance == this) _instance = null;
     }
 
     private void Start()

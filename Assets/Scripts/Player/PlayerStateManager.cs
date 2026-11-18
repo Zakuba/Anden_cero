@@ -447,6 +447,19 @@ if (attackerClientId != 999999 &&
         if (!IsServer) return;
         hasTakenDamageThisMatch = false;
     }
+    
+    public void ResetForNewMatchServer()
+    {
+        if (!IsServer) return;
+
+        StopAllCoroutines();               // aturdimiento / gracia del escudo pendientes
+        isShieldInvulnerable = false;
+        hasTakenDamageThisMatch = false;
+        killsWindowByAttacker.Remove(OwnerClientId);
+
+        currentLives.Value = maxLives;
+        currentState.Value = PlayerState.Vivo;
+    }
 
     [ClientRpc]
     public void AwardInvincibleSurvivorAchievementClientRpc()

@@ -4,6 +4,7 @@ using TMPro;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public enum MatchMode
 {
@@ -50,6 +51,16 @@ public class MatchManager : NetworkBehaviour
     [SerializeField] private Transform[] spawnPointsBeta;
     private int nextSpawnAlfa;
     private int nextSpawnBeta;
+
+    // Campos (junto a [Header("Resultados")])
+    [Header("Revancha")]
+    [Tooltip("Contenedor del botón y del texto. Va FUERA de resultsPanel.")]
+    [SerializeField] private GameObject rematchRoot;
+    [SerializeField] private Button rematchButton;              // solo el host
+    [SerializeField] private GameObject waitingForRematchText;  // "Esperando al host" (clientes)
+
+    private static bool revanchaPendiente;  // lo consume el MatchManager nuevo
+    private bool rematchRequested;
 
 
     // Copias mezcladas de los puntos de spawn (se rehacen en cada partida)
@@ -196,6 +207,9 @@ public class MatchManager : NetworkBehaviour
         if (roomCodeText != null)
             roomCodeText.gameObject.SetActive(false);
 
+        if (rematchRoot != null) 
+            rematchRoot.SetActive(false);
+
         ActivarLobbyCamera();
     }
 
@@ -205,6 +219,9 @@ public class MatchManager : NetworkBehaviour
 
         if (resultsPanel != null)
             resultsPanel.SetActive(false);
+        
+        if (rematchRoot != null) 
+            rematchRoot.SetActive(false);
 
         matchStarted.OnValueChanged += OnMatchStartedChanged;
 
@@ -243,6 +260,9 @@ public class MatchManager : NetworkBehaviour
             startMatchButton.interactable = false;
         }
 
+        if (rematchButton != null) 
+            rematchButton.onClick.AddListener(OnRematchClicked);
+
         if (waitingText != null)
             waitingText.SetActive(IsHost && !matchStarted.Value);
 
@@ -272,11 +292,14 @@ public class MatchManager : NetworkBehaviour
 
         if (IsServer)
         {
-            foreach (var p in FindObjectsByType<PlayerStateManager>(
-                         FindObjectsSortMode.None))
+            if (revanchaPendiente)
             {
-                RegisterPlayer(p);
+                revanchaPendiente = false;
+                ReiniciarJugadoresParaRevancha();
             }
+
+            foreach (var p in FindObjectsByType<PlayerStateManager>(FindObjectsSortMode.None))
+                RegisterPlayer(p);
         }
 
         // Conectar los jugadores existentes en cada cliente.
@@ -301,6 +324,9 @@ public class MatchManager : NetworkBehaviour
 
         if (startMatchButton != null)
             startMatchButton.onClick.RemoveListener(OnStartButtonClicked);
+
+        if (rematchButton != null) 
+            rematchButton.onClick.RemoveListener(OnRematchClicked);
 
         JoinsClosed = false;
 
@@ -509,6 +535,78 @@ public class MatchManager : NetworkBehaviour
         }
     }
 
+    // ---------- Revancha ----------
+
+    private void MostrarRevancha()
+    {
+        if (rematchRoot == null) return;
+
+        rematchRoot.SetActive(true);
+        bool soyHost = NetworkManager.Singleton != null && NetworkManager.Singleton.IsHost;
+
+        if (rematchButton != null)
+        {
+            rematchButton.gameObject.SetActive(soyHost);
+            rematchButton.interactable = true;
+        }
+        if (waitingForRematchText != null)
+            waitingForRematchText.SetActive(!soyHost);
+    }
+
+    private void OnRematchClicked()
+    {
+        if (!IsServer || !matchEnded || rematchRequested) return;
+
+        rematchRequested = true;
+        if (rematchButton != null) rematchButton.interactable = false;
+        StartCoroutine(RematchRoutine());
+    }
+
+    private IEnumerator RematchRoutine()
+    {
+        // Todo objeto de red dinámico que no sea un jugador (bombas, drops, drones, proyectiles)
+        // se elimina antes de recargar; si no, sobrevive a la carga de escena.
+        var aEliminar = new List<NetworkObject>();
+        foreach (NetworkObject obj in NetworkManager.SpawnManager.SpawnedObjectsList)
+            if (obj != null && !obj.IsPlayerObject && obj.IsSceneObject == false)
+                aEliminar.Add(obj);
+
+        foreach (NetworkObject obj in aEliminar)
+            if (obj != null && obj.IsSpawned)
+                obj.Despawn(true);
+
+        yield return null;
+
+        revanchaPendiente = true;
+        var estado = NetworkManager.SceneManager.LoadScene(
+            SceneManager.GetActiveScene().name, LoadSceneMode.Single);
+
+        if (estado != SceneEventProgressStatus.Started)
+        {
+            Debug.LogError($"[Revancha] No se pudo recargar la escena: {estado}");
+            revanchaPendiente = false;
+            rematchRequested = false;
+            if (rematchButton != null) rematchButton.interactable = true;
+        }
+    }
+
+    private void ReiniciarJugadoresParaRevancha()
+    {
+        foreach (var p in FindObjectsByType<PlayerStateManager>(FindObjectsSortMode.None))
+        {
+            if (p == null) continue;
+
+            p.ResetForNewMatchServer();
+
+            var bombas = p.GetComponent<PlayerBombController>();
+            if (bombas != null) bombas.ResetForNewMatchServer();
+
+            var egg = p.GetComponent<EasterEggManager>();
+            if (egg != null) egg.ResetFromServer();
+            var stats = p.GetComponent<PlayerStats>();
+            if (stats != null) stats.ResetForNewMatchServer();
+        }
+    }
 
     // ---------- Inicio de partida ----------
 
@@ -773,6 +871,8 @@ public class MatchManager : NetworkBehaviour
 
         if (resultsPanel != null)
             resultsPanel.SetActive(true);
+        
+        MostrarRevancha();
 
         PlayerData data = PersistenceManager.LoadData();
 
@@ -850,6 +950,7 @@ public class MatchManager : NetworkBehaviour
             Debug.Log(
                 "Ganador del easter egg: se omite la cámara y el panel de resultados."
             );
+            MostrarRevancha();
             return;
         }
 
@@ -860,6 +961,8 @@ public class MatchManager : NetworkBehaviour
 
         if (resultsText == null)
             return;
+
+        MostrarRevancha();
 
         if (isDraw)
             resultsText.text = "¡Empate!";
@@ -890,6 +993,8 @@ public class MatchManager : NetworkBehaviour
 
         if (resultsText == null)
             return;
+
+        MostrarRevancha();
 
         string nombreGanador = ((Equipo)equipoGanador).ToString();
         int miEquipo = GetEquipo(NetworkManager.Singleton.LocalClientId);

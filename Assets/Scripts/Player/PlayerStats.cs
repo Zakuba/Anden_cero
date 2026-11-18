@@ -131,6 +131,19 @@ public class PlayerStats : NetworkBehaviour
         }
     }
 
+    // Solo servidor. Quita el power-up activo y cancela su timer.
+    public void ResetForNewMatchServer()
+    {
+        if (!IsServer) return;
+
+        if (activeTimerRoutine != null)
+        {
+            StopCoroutine(activeTimerRoutine);
+            activeTimerRoutine = null;
+        }
+        activePowerUp.Value = PowerUpType.Ninguno;
+    }
+
     // --- SOLO PARA PROBAR, hasta que exista un pickup real por teclado ---
     #if UNITY_EDITOR
     private void Update()

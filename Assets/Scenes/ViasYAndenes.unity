@@ -10613,6 +10613,11 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 152267586}
   m_Mesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1 &157739960 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8367195499770782567, guid: 4d4c679d21400084e87954f8d4319a26, type: 3}
+  m_PrefabInstance: {fileID: 532677399}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &158024663 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 440266, guid: 18b3fbedd678f2b4190c7c8649439033, type: 3}
@@ -34932,6 +34937,14 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 8
       objectReference: {fileID: 0}
+    - target: {fileID: 4099882688146538084, guid: 4d4c679d21400084e87954f8d4319a26, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 411.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4099882688146538084, guid: 4d4c679d21400084e87954f8d4319a26, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -80
+      objectReference: {fileID: 0}
     - target: {fileID: 4101285175671802608, guid: 4d4c679d21400084e87954f8d4319a26, type: 3}
       propertyPath: m_LocalPosition.z
       value: 0
@@ -34963,7 +34976,7 @@ PrefabInstance:
     - target: {fileID: 4400034087685668446, guid: 4d4c679d21400084e87954f8d4319a26, type: 3}
       propertyPath: 'heartIcons.Array.data[3]'
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 1036012402}
     - target: {fileID: 4400034087685668446, guid: 4d4c679d21400084e87954f8d4319a26, type: 3}
       propertyPath: brokenHeartIcons.Array.size
       value: 4
@@ -34983,7 +34996,7 @@ PrefabInstance:
     - target: {fileID: 4400034087685668446, guid: 4d4c679d21400084e87954f8d4319a26, type: 3}
       propertyPath: 'brokenHeartIcons.Array.data[3]'
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 157739960}
     - target: {fileID: 4716037800236175204, guid: 4d4c679d21400084e87954f8d4319a26, type: 3}
       propertyPath: m_Layer
       value: 5
@@ -35296,11 +35309,27 @@ PrefabInstance:
       propertyPath: m_Maskable
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 8025398423804816693, guid: 4d4c679d21400084e87954f8d4319a26, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 410.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8025398423804816693, guid: 4d4c679d21400084e87954f8d4319a26, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -80
+      objectReference: {fileID: 0}
     - target: {fileID: 8287007710773813441, guid: 4d4c679d21400084e87954f8d4319a26, type: 3}
       propertyPath: m_text
       value: 'FPS: ---
 
         PING:------'
+      objectReference: {fileID: 0}
+    - target: {fileID: 8367195499770782567, guid: 4d4c679d21400084e87954f8d4319a26, type: 3}
+      propertyPath: m_Name
+      value: Corazon 4 ROTO
+      objectReference: {fileID: 0}
+    - target: {fileID: 8367195499770782567, guid: 4d4c679d21400084e87954f8d4319a26, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8448841585960942331, guid: 4d4c679d21400084e87954f8d4319a26, type: 3}
       propertyPath: m_Camera
@@ -35375,6 +35404,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 4166596138409104951, guid: 4d4c679d21400084e87954f8d4319a26, type: 3}
       insertIndex: -1
       addedObject: {fileID: 385164622}
+    - targetCorrespondingSourceObject: {fileID: 779798221406508418, guid: 4d4c679d21400084e87954f8d4319a26, type: 3}
+      insertIndex: 7
+      addedObject: {fileID: 1036012403}
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 2447156896332289926, guid: 4d4c679d21400084e87954f8d4319a26, type: 3}
       insertIndex: -1
@@ -35404,6 +35436,11 @@ RectTransform:
 --- !u!1 &532677403 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 6447190085316552817, guid: 4d4c679d21400084e87954f8d4319a26, type: 3}
+  m_PrefabInstance: {fileID: 532677399}
+  m_PrefabAsset: {fileID: 0}
+--- !u!224 &532677404 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 779798221406508418, guid: 4d4c679d21400084e87954f8d4319a26, type: 3}
   m_PrefabInstance: {fileID: 532677399}
   m_PrefabAsset: {fileID: 0}
 --- !u!114 &532677405
@@ -66390,6 +66427,81 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 3174923170551661957, guid: defb4cdc6208f004795f0160e8fb04ed, type: 3}
   m_PrefabInstance: {fileID: 1035399921}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1036012402
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1036012403}
+  - component: {fileID: 1036012405}
+  - component: {fileID: 1036012404}
+  m_Layer: 5
+  m_Name: Corazon 4
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &1036012403
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1036012402}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1.2, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 532677404}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 410, y: -79.22035}
+  m_SizeDelta: {x: 100, y: 100}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1036012404
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1036012402}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: 21300000, guid: 0b3a15b475c4c1f45b26ce15c0ffa71c, type: 3}
+  m_Type: 0
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
+--- !u!222 &1036012405
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1036012402}
+  m_CullTransparentMesh: 1
 --- !u!4 &1038058537 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7607225141990315688, guid: 176d3472983c3b541b17e78ff35b4fc8, type: 3}

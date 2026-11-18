@@ -1,6 +1,7 @@
 using Unity.Netcode;
 using UnityEngine;
 using Unity.Cinemachine;
+using UnityEngine.SceneManagement;
 
 // Movimiento simple, SOLO para validar la sincronizacion de HU-01.3.
 // El movimiento real en cuadricula es responsabilidad de HU-02.1.
@@ -47,6 +48,7 @@ public class PlayerMovimientoOnline : NetworkBehaviour
         if (IsOwner)
         {
             StartCoroutine(BindCameraWhenReady());
+            SceneManager.sceneLoaded += OnSceneLoadedRebindCamera;
         }
     }
 
@@ -185,11 +187,26 @@ public class PlayerMovimientoOnline : NetworkBehaviour
     }
 
     private void OnControllerColliderHit(ControllerColliderHit hit)
-{
-    // Ignorar el suelo que pisamos
-    if (hit.normal.y > 0.7f) return;
+    {
+        // Ignorar el suelo que pisamos
+        if (hit.normal.y > 0.7f) return;
 
-    Debug.LogWarning($"[Choque Puerta] Chocando contra: '{hit.gameObject.name}' | Padre: '{hit.transform.parent?.name}'");
-}
+        Debug.LogWarning($"[Choque Puerta] Chocando contra: '{hit.gameObject.name}' | Padre: '{hit.transform.parent?.name}'");
+    }
 
+
+
+
+
+    public override void OnNetworkDespawn()
+    {
+        SceneManager.sceneLoaded -= OnSceneLoadedRebindCamera;
+        base.OnNetworkDespawn();
+    }
+
+    private void OnSceneLoadedRebindCamera(Scene scene, LoadSceneMode mode)
+    {
+        if (mode == LoadSceneMode.Single && IsOwner)
+            StartCoroutine(BindCameraWhenReady());
+    }
 }

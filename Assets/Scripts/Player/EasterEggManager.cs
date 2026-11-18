@@ -211,7 +211,39 @@ private void CreatePodiumVisualRpc(Vector3 pos, Quaternion rot, int animationInd
 
     private void OnSwappedChanged(bool oldValue, bool newValue)
     {
-        ApplyVisuals(newValue);
+        if (newValue) ApplyVisuals(true);
+        else RevertVisuals();
+    }
+
+    private void RevertVisuals()
+    {
+        foreach (GameObject obj in objectsToDeactivate) if (obj != null) obj.SetActive(true);
+        foreach (GameObject obj in objectsToActivate)   if (obj != null) obj.SetActive(false);
+    }
+
+    public void ResetFromServer()
+    {
+        if (!IsServer || !swapped.Value) return;
+
+        swapped.Value = false;   // revierte los objetos en todas las instancias
+        ResetOwnerRpc();
+    }
+
+    [Rpc(SendTo.Owner)]
+    private void ResetOwnerRpc()
+    {
+        cameraSwitched = false;
+
+        if (playerCamera != null)
+        {
+            playerCamera.enabled = false;
+            playerCamera.transform.localRotation = Quaternion.identity;
+            AudioListener al = playerCamera.GetComponent<AudioListener>();
+            if (al != null) al.enabled = false;
+        }
+
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
     }
 
     private void ApplyVisuals(bool isSwapped)
