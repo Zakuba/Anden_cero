@@ -10417,6 +10417,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SM_Env_Tree_03
       objectReference: {fileID: 0}
+    - target: {fileID: 129346, guid: c50789636e1fc5c4b8a37e2700e4a3c1, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     - target: {fileID: 427308, guid: c50789636e1fc5c4b8a37e2700e4a3c1, type: 3}
       propertyPath: m_LocalScale.x
       value: 2.1667
@@ -24190,6 +24194,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1364099438250970, guid: 8b68a98b3c3a9b046b1a705f4349abb9, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     - target: {fileID: 1702718664521490, guid: 8b68a98b3c3a9b046b1a705f4349abb9, type: 3}
       propertyPath: m_IsActive
       value: 1
@@ -24334,7 +24342,10 @@ PrefabInstance:
       propertyPath: m_Enabled
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 64616796450311362, guid: 8b68a98b3c3a9b046b1a705f4349abb9, type: 3}
+    - {fileID: 64868429753083230, guid: 8b68a98b3c3a9b046b1a705f4349abb9, type: 3}
+    - {fileID: 64153561518701122, guid: 8b68a98b3c3a9b046b1a705f4349abb9, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects:
     - targetCorrespondingSourceObject: {fileID: 4513054597927342, guid: 8b68a98b3c3a9b046b1a705f4349abb9, type: 3}
