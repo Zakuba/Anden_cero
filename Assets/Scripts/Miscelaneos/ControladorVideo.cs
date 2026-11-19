@@ -53,6 +53,7 @@ public class ControladorVideo : MonoBehaviour
         yield return new WaitForSeconds(tiempoEspera);
 
         videoPlayer.time = 0;
+        AudioManager.Instance.StopMusic();
         videoPlayer.Play();
 
         reproduccionPendiente = null;

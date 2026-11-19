@@ -707,6 +707,7 @@ MonoBehaviour:
   globalVolume: {fileID: 0}
   fpsToggle: {fileID: 2441781187503744354}
   pingToggle: {fileID: 5382299962974975721}
+  mainAudioMixer: {fileID: 24100000, guid: dc787ea2a6887f34c9810868310e6a6c, type: 2}
 --- !u!1 &695285582548774040
 GameObject:
   m_ObjectHideFlags: 0
