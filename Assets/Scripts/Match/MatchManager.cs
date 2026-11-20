@@ -727,6 +727,11 @@ public class MatchManager : NetworkBehaviour
         if (!IsServer || winner == null)
             return false;
 
+        // El easter egg solo lo puede desbloquear el host:
+        // si un cliente lo activara y el host se desconectara, no se podría acceder.
+        if (winner.OwnerClientId != NetworkManager.ServerClientId)
+         return false;
+
         if (mode != MatchMode.BattleRoyale)
             return false;
 
