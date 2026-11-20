@@ -155,7 +155,8 @@ public class MatchManager : NetworkBehaviour
 
     [Header("Posiciones del lobby")]
     [SerializeField] private Transform[] lobbySpawnPoints;
-    private int nextLobbySpawnIndex;
+    // Qué punto del lobby ocupa cada jugador (se libera cuando se desconecta)
+private readonly Dictionary<ulong, int> lobbySlotPorCliente = new Dictionary<ulong, int>();
 
     private readonly NetworkVariable<bool> matchStarted =
         new NetworkVariable<bool>(
@@ -495,6 +496,7 @@ public class MatchManager : NetworkBehaviour
 
     private void OnClientDisconnectedEquipos(ulong clientId)
     {
+        lobbySlotPorCliente.Remove(clientId);
         if (equipos.Remove(clientId))
             PublicarEquipos();
 
@@ -1240,30 +1242,46 @@ public class MatchManager : NetworkBehaviour
 
     // ---------- Spawns del lobby ----------
 
-    private void AssignLobbySpawn(PlayerStateManager player)
+    private int BuscarSlotLobbyLibre()
+{
+    for (int i = 0; i < lobbySpawnPoints.Length; i++)
     {
-        if (lobbySpawnPoints == null || lobbySpawnPoints.Length == 0)
-            return;
-
-        Transform point = lobbySpawnPoints[
-            nextLobbySpawnIndex % lobbySpawnPoints.Length
-        ];
-
-        nextLobbySpawnIndex++;
-
-        // El lobby también utiliza el método compartido.
-        AssignCharacterAnimation(player, point);
-
-        PlayerSpawnHandler handler =
-            player.GetComponent<PlayerSpawnHandler>();
-
-        if (handler == null)
-            return;
-
-        StartCoroutine(
-            SendSpawnNextFrame(handler, point.position, point.rotation)
-        );
+        if (!lobbySlotPorCliente.ContainsValue(i))
+            return i;
     }
+
+    return 0; // todos ocupados (no debería pasar con 4 jugadores como máximo)
+}
+
+private void AssignLobbySpawn(PlayerStateManager player)
+{
+    if (lobbySpawnPoints == null || lobbySpawnPoints.Length == 0)
+        return;
+
+    ulong clientId = player.OwnerClientId;
+
+    // Si ya tenía lugar lo conserva; si no, toma el primero libre.
+    if (!lobbySlotPorCliente.TryGetValue(clientId, out int slot))
+    {
+        slot = BuscarSlotLobbyLibre();
+        lobbySlotPorCliente[clientId] = slot;
+    }
+
+    Transform point = lobbySpawnPoints[slot];
+
+    // El lobby también utiliza el método compartido.
+    AssignCharacterAnimation(player, point);
+
+    PlayerSpawnHandler handler =
+        player.GetComponent<PlayerSpawnHandler>();
+
+    if (handler == null)
+        return;
+
+    StartCoroutine(
+        SendSpawnNextFrame(handler, point.position, point.rotation)
+    );
+}
 
     /// <summary>
     /// Registra la partida completada y suma el tiempo sobrevivido en el perfil local (JSON).
