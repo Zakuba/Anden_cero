@@ -13,12 +13,18 @@ public class ExplosionBomba : MonoBehaviour
     [SerializeField] private float intervaloInicial = 0.5f;
     [SerializeField] private float intervaloFinal = 0.05f;
 
-    [Header("Colores")]
+    [Header("Colores (Alfa y modos sin equipos)")]
     [SerializeField] private Color colorNormal = Color.white;
     [SerializeField] private Color colorRojo = Color.red;
 
+    [Header("Equipo Beta (solo 2 vs 2)")]
+    [SerializeField] private Material materialBeta;
+    [SerializeField] private Material materialBetaParpadeo;
+
     private Renderer objetoRenderer;
     private BombInteractable bombLogic;
+    private Material materialOriginal;
+    private bool materialEsBeta;
 
     private void Awake()
     {
@@ -33,11 +39,63 @@ public class ExplosionBomba : MonoBehaviour
 
             if (objetoRenderer != null)
             {
-                objetoRenderer.material.color = colorNormal;
+                materialOriginal = objetoRenderer.sharedMaterial;
+                MostrarNormal();
             }
         }
 
         StartCoroutine(Titileo());
+    }
+
+    // Beta solo existe en el modo equipos, y solo si están asignados los dos materiales.
+    private bool EsEquipoBeta()
+    {
+        if (materialBeta == null || materialBetaParpadeo == null) return false;
+        if (bombLogic == null || MatchManager.Instance == null) return false;
+        if (!MatchManager.Instance.ModoEquipos) return false;
+
+        return MatchManager.Instance.GetEquipo(
+            bombLogic.currentOwnerClientId.Value) == 1;
+    }
+
+    // Vuelve al material original solo cuando hace falta (evita crear copias de más).
+    private void UsarMaterialAlfa()
+    {
+        if (!materialEsBeta) return;
+        materialEsBeta = false;
+        objetoRenderer.sharedMaterial = materialOriginal;
+    }
+
+    private void MostrarNormal()
+    {
+        if (objetoRenderer == null) return;
+
+        if (EsEquipoBeta())
+        {
+            materialEsBeta = true;
+            objetoRenderer.sharedMaterial = materialBeta;
+        }
+        else
+        {
+            UsarMaterialAlfa();
+            objetoRenderer.material.color = colorNormal;
+        }
+    }
+
+    private void MostrarParpadeo()
+    {
+        if (objetoRenderer == null) return;
+
+        if (EsEquipoBeta())
+        {
+            materialEsBeta = true;
+            objetoRenderer.sharedMaterial = materialBetaParpadeo;
+        }
+        else
+        {
+            UsarMaterialAlfa();
+            objetoRenderer.material.color = colorRojo;
+        }
     }
 
     private IEnumerator Titileo()
@@ -61,14 +119,10 @@ public class ExplosionBomba : MonoBehaviour
                 progreso
             );
 
-            if (objetoRenderer != null)
-                objetoRenderer.material.color = colorRojo;
-
+            MostrarParpadeo();
             yield return new WaitForSeconds(intervalo);
 
-            if (objetoRenderer != null)
-                objetoRenderer.material.color = colorNormal;
-
+            MostrarNormal();
             yield return new WaitForSeconds(intervalo);
 
             tiempoTranscurrido += intervalo * 2f;
@@ -79,6 +133,5 @@ public class ExplosionBomba : MonoBehaviour
         {
             objetoTitileo.SetActive(false);
         }
-
     }
 }

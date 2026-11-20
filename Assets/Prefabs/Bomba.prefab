@@ -130,7 +130,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.NetworkObject
-  GlobalObjectIdHash: 1906951499
+  GlobalObjectIdHash: 1155689460
   InScenePlacedSourceGlobalObjectIdHash: 0
   m_InScenePlacedDisabledByDefault: 0
   DeferredDespawnTick: 0
@@ -233,6 +233,8 @@ MonoBehaviour:
   intervaloFinal: 0.05
   colorNormal: {r: 1, g: 1, b: 1, a: 1}
   colorRojo: {r: 1, g: 0, b: 0, a: 1}
+  materialBeta: {fileID: 2100000, guid: 96e0655b5d4852d429f798f03865afba, type: 2}
+  materialBetaParpadeo: {fileID: 2100000, guid: 1205f10d8e96db04392ba3c9440f72fc, type: 2}
 --- !u!1001 &3611796558395130955
 PrefabInstance:
   m_ObjectHideFlags: 0
