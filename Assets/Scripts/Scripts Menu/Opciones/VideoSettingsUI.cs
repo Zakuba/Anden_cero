@@ -18,6 +18,7 @@ public class VideoSettingsUI : MonoBehaviour
 
     [Header("Referencias de UI - Audio")]
     [SerializeField] private Slider masterVolumeSlider;
+    [SerializeField] private Toggle muteMusicToggle;
 
     [Header("Post-Processing (URP)")]
     [SerializeField] private Volume globalVolume;
@@ -213,14 +214,32 @@ public class VideoSettingsUI : MonoBehaviour
 
     public void SetMasterVolume(float value)
     {
-        AudioListener.volume = value;
+        if (AudioManager.Instance != null)
+            AudioManager.Instance.SetMasterVolume(value);
 
         if (SettingsManager.Instance != null)
-        {
             SettingsManager.Instance.currentSettings.masterVolume = value;
-        }
     }
 
+    
+
+    private void SetupMusicToggle()
+    {
+        bool muted = SettingsManager.Instance != null
+            && SettingsManager.Instance.currentSettings.musicMuted;
+
+        muteMusicToggle.SetIsOnWithoutNotify(muted);
+        muteMusicToggle.onValueChanged.AddListener(SetMusicMuted);
+    }
+
+    public void SetMusicMuted(bool muted)
+    {
+        if (AudioManager.Instance != null)
+            AudioManager.Instance.SetMusicMuted(muted);
+
+        if (SettingsManager.Instance != null)
+            SettingsManager.Instance.currentSettings.musicMuted = muted;
+    }
     // ------------------------------------------------------------------
     //  CALIDAD
     // ------------------------------------------------------------------

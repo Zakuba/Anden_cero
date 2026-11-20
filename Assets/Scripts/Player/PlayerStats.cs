@@ -74,6 +74,8 @@ public class PlayerStats : NetworkBehaviour
     private void ActivatePowerUp(PowerUpType type)
     {
         activePowerUp.Value = type;
+        if (AudioManager.Instance != null)
+        AudioManager.Instance.PlaySfx(SfxId.PowerUpPickup);
 
         if (activeTimerRoutine != null)
         {

@@ -201,6 +201,7 @@ if (attackerClientId != 999999 &&
         hasTakenDamageThisMatch = true;
 
         currentLives.Value--;
+        if (AudioManager.Instance != null) AudioManager.Instance.PlaySfx(SfxId.PlayerHit);
 
         Debug.Log($"[DobleKill-Debug] {gameObject.name} recibió daño de ClientId: {attackerClientId}. Vidas restantes: {currentLives.Value}");
 
@@ -433,6 +434,8 @@ if (attackerClientId != 999999 &&
         if (currentLives.Value < maxLives)
         {
             currentLives.Value++;
+            if (AudioManager.Instance != null)
+            AudioManager.Instance.PlaySfx(SfxId.PowerUpPickup);
             return true; // Curación exitosa
         }
 

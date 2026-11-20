@@ -19,5 +19,6 @@ public class GameSettings
 
     // --- Audio ---
     public float masterVolume = 1.0f;
+    public bool musicMuted = false;
 
 }

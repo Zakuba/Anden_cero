@@ -274,6 +274,8 @@ public class DroneShooterAI : NetworkBehaviour
         GameObject proj = Instantiate(projectilePrefab, firePoint.position, firePoint.rotation);
         NetworkObject projNetObj = proj.GetComponent<NetworkObject>();
         projNetObj.Spawn(); // Sincroniza la bala en la red
+        if (AudioManager.Instance != null)
+        AudioManager.Instance.PlaySfx(SfxId.Shot);
     }
 
     private void RotateTowardsTarget()

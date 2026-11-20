@@ -245,6 +245,8 @@ public class PlayerBombController : NetworkBehaviour
                     CalculateExplosionCells(finalPos, attackerId);
 
                 SpawnVfxClientRpc(affectedCells.ToArray(), attackerId);
+                if (AudioManager.Instance != null)
+                AudioManager.Instance.PlaySfxAt(SfxId.Explosion, finalPos);
 
                 yield return new WaitForSeconds(0.05f);
 

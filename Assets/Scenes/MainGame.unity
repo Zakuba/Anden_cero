@@ -19120,6 +19120,50 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 117419922947476042, guid: c6f8d3f4defffc54594afcb1e6d05b29, type: 3}
+--- !u!1 &229372309
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 229372311}
+  - component: {fileID: 229372310}
+  m_Layer: 0
+  m_Name: AudioController
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &229372310
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 229372309}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 154ed89879b75224db34ab076ab609d5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AudioControllerGame
+--- !u!4 &229372311
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 229372309}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &229487052
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -113151,7 +113195,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1290939957}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 229372310}
+        m_TargetAssemblyTypeName: AudioControllerGame, Assembly-CSharp
+        m_MethodName: PlayInGameMusic
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1290939957
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -156100,6 +156156,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 95e28ad10130bc34e8c50a3b6aa94316, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LuzAlarma
+  velocidadRotacion: 180
 --- !u!114 &1789237485
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -184262,7 +184319,7 @@ AudioListener:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2098396250}
-  m_Enabled: 0
+  m_Enabled: 1
 --- !u!4 &2098396254
 Transform:
   m_ObjectHideFlags: 0
@@ -190567,6 +190624,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.x
       value: 95.45599
       objectReference: {fileID: 0}
+    - target: {fileID: 5327738778290722202, guid: 9254dfdeef19c8d41954872dd2fa5bd5, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 7247501731008219210, guid: 9254dfdeef19c8d41954872dd2fa5bd5, type: 3}
       propertyPath: m_Type
       value: 0
@@ -192213,6 +192274,7 @@ SceneRoots:
   - {fileID: 770462247}
   - {fileID: 484368190}
   - {fileID: 1853316850}
+  - {fileID: 229372311}
   - {fileID: 1574839149}
   - {fileID: 1210185422}
   - {fileID: 309012924}

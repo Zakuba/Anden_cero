@@ -35,7 +35,7 @@ public class NetworkBomb : NetworkBehaviour
             Vector3 pureFloorPos = GetFloorPosition(transform.position);
             transform.position = new Vector3(pureFloorPos.x, pureFloorPos.y + bombRadiusOffset, pureFloorPos.z);
             
-            StartCoroutine(BombExplosionRoutine());
+            StartCoroutine(BombExplosionRoutine(pureFloorPos));
         }
     }
 
@@ -80,9 +80,12 @@ public class NetworkBomb : NetworkBehaviour
         return pos;
     }
 
-    private IEnumerator BombExplosionRoutine()
+    private IEnumerator BombExplosionRoutine(Vector3 pos)
     {
         yield return new WaitForSeconds(bombTimer);
+
+        if (AudioManager.Instance != null)
+        AudioManager.Instance.PlaySfxAt(SfxId.Explosion, pos);
 
         // 1. Calcula la expansión usando las alturas puras del suelo
         List<Vector3> affectedCells = CalculateExplosionCells(transform.position);
