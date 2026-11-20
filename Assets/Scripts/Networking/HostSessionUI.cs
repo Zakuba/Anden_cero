@@ -1,3 +1,4 @@
+using System.Collections;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -34,12 +35,24 @@ public class HostSessionUI : MonoBehaviour
     }
 
     private void OnExitClicked()
+{
+    StartCoroutine(SalirYVolver());
+}
+
+private IEnumerator SalirYVolver()
+{
+    if (NetworkManager.Singleton != null)
     {
-        if (NetworkManager.Singleton != null)
-        {
-            NetworkManager.Singleton.Shutdown();
-            Debug.Log("Desconexion completada.");
-        }
-        SceneManager.LoadScene(lobbySceneName);
+        NetworkManager.Singleton.Shutdown();
+
+        // Esperamos a que Netcode termine de apagarse antes de cambiar de escena
+        while (NetworkManager.Singleton != null &&
+               NetworkManager.Singleton.ShutdownInProgress)
+            yield return null;
+
+        Debug.Log("Desconexion completada.");
     }
+
+    SceneManager.LoadScene(lobbySceneName);
+}
 }

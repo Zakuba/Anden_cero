@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
@@ -16,11 +17,23 @@ public class NewMonoBehaviourScript : MonoBehaviour
 
     private void OnExitClicked()
     {
+        StartCoroutine(SalirYVolver());
+    }
+
+    private IEnumerator SalirYVolver()
+    {
         if (NetworkManager.Singleton != null)
         {
             NetworkManager.Singleton.Shutdown();
+
+            // Esperamos a que Netcode termine de apagarse antes de cambiar de escena
+            while (NetworkManager.Singleton != null &&
+                   NetworkManager.Singleton.ShutdownInProgress)
+                yield return null;
+
             Debug.Log("Desconexion completada.");
         }
+
         SceneManager.LoadScene(lobbySceneName);
     }
 }
