@@ -20,7 +20,7 @@ public class MatchManager : NetworkBehaviour
     public static bool JoinsClosed { get; private set; }
 
     public const int MaxPlayers = 4;
-    private const int MinPlayersToStart = 1;
+    private int MinPlayersToStart => mode == MatchMode.BattleRoyale ? 2 : 1;
 
     [Header("Modo de juego")]
     [SerializeField] private MatchMode mode = MatchMode.BattleRoyale;

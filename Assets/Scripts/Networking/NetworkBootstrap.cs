@@ -116,13 +116,15 @@ public class NetworkBootstrap : MonoBehaviour
 
         Debug.Log("Mapa seleccionado: " + mapaSeleccionado);
 
-        ConfigurarCallbackConexion();
+        bool esMinijuego = mapaSeleccionado == "MiniJuego";
+        int maxJugadores = esMinijuego ? 1 : MatchManager.MaxPlayers;
+        ConfigurarCallbackConexion(maxJugadores, esMinijuego);
 
         if (usarRelay)
         {
             hostButton.interactable = false;
 
-            string joinCode = await RelayManager.CreateRelay(MatchManager.MaxPlayers - 1);
+            string joinCode = await RelayManager.CreateRelay(Mathf.Max(1, maxJugadores - 1));
 
             if (this == null) return;
 
@@ -141,27 +143,30 @@ public class NetworkBootstrap : MonoBehaviour
         IniciarHostYCargarEscena(mapaSeleccionado);
     }
 
-    private void ConfigurarCallbackConexion()
+ private void ConfigurarCallbackConexion(int maxJugadores, bool esMinijuego)
+{
+    // Rechaza entradas tarde y limita la cantidad de jugadores según el modo
+    NetworkManager.Singleton.ConnectionApprovalCallback = (request, response) =>
     {
-        // Rechaza entradas tarde y limita a MatchManager.MaxPlayers
-        NetworkManager.Singleton.ConnectionApprovalCallback = (request, response) =>
+        int connected = NetworkManager.Singleton.ConnectedClientsIds.Count;
+        bool hasRoom = connected < maxJugadores;
+        bool joinsOpen = !MatchManager.JoinsClosed;
+
+        response.Approved = hasRoom && joinsOpen;
+        response.CreatePlayerObject = true;
+        response.Pending = false;
+
+        if (!response.Approved)
         {
-            int connected = NetworkManager.Singleton.ConnectedClientsIds.Count;
-            bool hasRoom = connected < MatchManager.MaxPlayers;
-            bool joinsOpen = !MatchManager.JoinsClosed;
-
-            response.Approved = hasRoom && joinsOpen;
-            response.CreatePlayerObject = true;
-            response.Pending = false;
-
-            if (!response.Approved)
-            {
-                response.Reason = !joinsOpen
-                    ? "La partida ya comenzó."
-                    : $"La sala está llena (máximo {MatchManager.MaxPlayers} jugadores).";
-            }
-        };
-    }
+            if (!joinsOpen)
+                response.Reason = "La partida ya comenzó.";
+            else if (esMinijuego)
+                response.Reason = "El minijuego es de un solo jugador.";
+            else
+                response.Reason = $"La sala está llena (máximo {maxJugadores} jugadores).";
+        }
+    };
+}
 
     private void IniciarHostYCargarEscena(string escena)
     {
