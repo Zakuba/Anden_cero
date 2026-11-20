@@ -276,15 +276,33 @@ if (attackerClientId != 999999 &&
         isShieldInvulnerable = false;
     }
 
-    [Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Everyone)]
-    public void InstantKillServerRpc()
+[Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Everyone)]
+public void InstantKillServerRpc()
+{
+    // Un jugador que ya está en el Easter Egg no puede morir.
+    EasterEggManager egg = GetComponent<EasterEggManager>();
+    if (egg != null && egg.IsSwapped)
+        return;
+
+    if (currentState.Value == PlayerState.Muerto)
+        return;
+
+    hasTakenDamageThisMatch = true;
+    currentLives.Value = 0;
+    currentState.Value = PlayerState.Muerto;
+}
+
+    // Solo servidor. Si el ganador estaba aturdido cuando se activó el Easter Egg, lo deja vivo y sin inmunidades.
+    public void LiberarParaEasterEgg()
     {
-        if (currentState.Value == PlayerState.Muerto)
-            return;
-        hasTakenDamageThisMatch = true;
-        currentLives.Value = 0;
-        currentState.Value = PlayerState.Muerto;
-    }
+    if (!IsServer) return;
+
+    StopAllCoroutines();
+    isShieldInvulnerable = false;
+
+    if (currentState.Value == PlayerState.Aturdido)
+        currentState.Value = PlayerState.Vivo;
+}
 
     private IEnumerator StunRoutine()
     {
@@ -345,12 +363,14 @@ if (attackerClientId != 999999 &&
         bool partidaIniciada = MatchManager.Instance == null || MatchManager.Instance.IsMatchRunning;
         bool isDead = (state == PlayerState.Muerto);
 
-        // 4. El CharacterController solo funciona durante la partida
-        // y mientras el jugador no esté muerto.
+        // En el Easter Egg la partida ya terminó, pero el jugador tiene que poder moverse.
+        EasterEggManager egg = GetComponent<EasterEggManager>();
+        bool enEasterEgg = egg != null && egg.IsSwapped;
+
         if (characterController != null)
         {
-            characterController.enabled = partidaIniciada && !isDead;
-        }
+          characterController.enabled = (partidaIniciada || enEasterEgg) && !isDead;
+        }      
 
         // 5. El collider fantasma solo funciona al morir.
         if (ghostTriggerCollider != null)

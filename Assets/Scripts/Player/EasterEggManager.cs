@@ -86,6 +86,10 @@ public class EasterEggManager : NetworkBehaviour
 
     swapped.Value = true;
 
+    PlayerStateManager estado = GetComponent<PlayerStateManager>();
+    if (estado != null)
+    estado.LiberarParaEasterEgg();
+
     TriggerOwnerRpc();
 }
 
@@ -210,9 +214,14 @@ private void CreatePodiumVisualRpc(Vector3 pos, Quaternion rot, int animationInd
     // ---------- CAMBIO DE OBJETOS ----------
 
     private void OnSwappedChanged(bool oldValue, bool newValue)
-    {
-        ApplyVisuals(newValue);
-    }
+{
+    ApplyVisuals(newValue);
+
+    // Reevalúa colisiones: en el Easter Egg el jugador tiene que poder moverse.
+    PlayerStateManager estado = GetComponent<PlayerStateManager>();
+    if (estado != null)
+        estado.ActualizarColisionesPartida();
+}
 
     private void ApplyVisuals(bool isSwapped)
     {
