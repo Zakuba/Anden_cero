@@ -57675,6 +57675,10 @@ PrefabInstance:
       propertyPath: m_Shadows.m_Type
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 5327738778290722202, guid: 9254dfdeef19c8d41954872dd2fa5bd5, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6670246625801441325, guid: 9254dfdeef19c8d41954872dd2fa5bd5, type: 3}
       propertyPath: m_IsActive
       value: 0

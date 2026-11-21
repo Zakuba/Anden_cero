@@ -200,6 +200,8 @@ private void CreatePodiumVisualRpc(Vector3 pos, Quaternion rot, int animationInd
 
         playerCamera.gameObject.SetActive(true);
         playerCamera.enabled = true;
+        if (AudioManager.Instance != null)
+        AudioManager.Instance.StopMusic();
 
         AudioListener al =
             playerCamera.GetComponent<AudioListener>();
